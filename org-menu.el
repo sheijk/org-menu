@@ -21,6 +21,14 @@
     ("R" "refile" org-refile)
     ("C-w" "cut tree" org-cut-special)
     ("C-y" "yank tree" org-paste-special)]
+   ["Make new"
+    ("mh" "headline" org-insert-heading)
+    ("mH" "headline (after)" org-insert-heading-after-current)
+    ("mt" "todo" org-insert-todo-heading)
+    ("md" "drawer" org-insert-drawer)
+    ("mi" "item" org-insert-item)
+    ("mD" "dynamic block" org-insert-dblock)
+    ("mS" "structure" org-insert-structure-template)]
    ["Toggle"
     ("-" "list item" org-toggle-item :if-not org-at-table-p)
     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
@@ -68,6 +76,16 @@
     ("gd" "all" shk-org-set-startup-visibility)]
    [("q" "quit" transient-quit-all)]])
 
+(define-transient-command shk-org-eval-menu
+  "Evaluation"
+  [:description
+   "Evaluation"
+   [("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)) :if org-at-table-p)
+    ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)) :if org-at-table-p)
+    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)) :if org-at-table-p)]
+   [("f" "format" org-table-align :if org-at-table-p)
+    ("q" "quit" transient-quit-all)]])
+
 (define-transient-command shk-org-menu
   "Org mode"
   [:description
@@ -81,4 +99,5 @@
     ("N" "next (same level)" shk-org-next-heading :transient t)]
    [("s" "structure" shk-org-structure-menu)
     ("v" "visibility" shk-org-visibility-menu)
+    ("e" "evaluation" shk-org-eval-menu)
     ("q" "quit" transient-quit-all)]])
