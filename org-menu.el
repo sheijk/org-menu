@@ -80,9 +80,15 @@
   "Evaluation"
   [:description
    "Evaluation"
-   [("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)) :if org-at-table-p)
-    ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)) :if org-at-table-p)
-    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)) :if org-at-table-p)]
+   ["Table"
+    :if org-at-table-p
+    ("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)))
+    ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)))
+    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))]
+   ["Source"
+    :if org-in-src-block-p
+    ("e" "run block" org-babel-execute-src-block)
+    ("c" "check headers" org-babel-check-src-block)]
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
@@ -97,7 +103,12 @@
     ("c" "cycle folding" org-cycle :transient t)
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
     ("N" "next (same level)" shk-org-next-heading :transient t)]
-   [("s" "structure" shk-org-structure-menu)
+   ["Go to"
+    ("gb" "goto src block" org-babel-goto-named-src-block)
+    ("gr" "goto result block" org-babel-goto-named-result)
+    ("gh" "goto heading" imenu)]
+   ["More"
+    ("s" "structure" shk-org-structure-menu)
     ("v" "visibility" shk-org-visibility-menu)
     ("e" "evaluation" shk-org-eval-menu)
     ("q" "quit" transient-quit-all)]])
