@@ -35,20 +35,6 @@
     ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)]
    [("q" "quit" transient-quit-all)]])
 
-(defun shk-org-tree-show-all ()
-  (interactive)
-  (org-show-set-visibility 'tree))
-
-(defun shk-org-set-startup-visibility ()
-  "Will set visibility like it is after loading the org document."
-  (interactive)
-  (org-set-startup-visibility))
-
-(defun shk-org-reveal-full ()
-  "Will make current tree and all parent and sibling nodes visible."
-  (interactive)
-  (org-reveal t))
-
 (define-transient-command shk-org-visibility-menu
   "Visibility"
   [:description
@@ -66,14 +52,13 @@
     ("t" "content" shk-org-show-content :if-not org-at-block-p :transient t)
     ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
     ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
-    ("r" "reveal" shk-org-reveal-full :if-not org-at-block-p :transient t)
-    ]
+    ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
    ["Global"
     ("C" "cycle global" org-global-cycle :transient t)
     ("go" "overview" org-overview)
     ("gc" "content" org-content)
     ("ga" "all" org-show-all)
-    ("gd" "all" shk-org-set-startup-visibility)]
+    ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    [("q" "quit" transient-quit-all)]])
 
 (define-transient-command shk-org-eval-menu
