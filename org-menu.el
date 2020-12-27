@@ -7,7 +7,9 @@
    "Edit document structure"
    ["Navigate"
     ("p" "prev" org-previous-visible-heading :transient t)
-    ("n" "next" org-next-visible-heading :transient t)]
+    ("n" "next" org-next-visible-heading :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("u" "up" outline-up-heading :transient t)]
    ["Move"
     ("P" "move prev" org-metaup :transient t)
     ("N" "move next" org-metadown :transient t)
@@ -43,11 +45,20 @@
   "Visibility"
   [:description
    "Visibility"
+   ["Navigate"
+    ("p" "prev" org-previous-visible-heading :transient t)
+    ("n" "next" org-next-visible-heading :transient t)
+    ("u" "up" outline-up-heading :transient t)
+    ("P" "prev (same level)" shk-org-prev-heading :transient t)
+    ("N" "next (same level)" shk-org-next-heading :transient t)]
    ["Tree"
     ("c" "cycle" org-cycle :transient t)
-    ("a" "all" shk-org-tree-show-all)
-    ("t" "hide" org-hide-block-toggle :if org-at-block-p)
-    ("R" "reveal" shk-org-reveal-full)
+    ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
+    ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
+    ("t" "content" shk-org-show-content :if-not org-at-block-p :transient t)
+    ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
+    ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
+    ("r" "reveal" shk-org-reveal-full :if-not org-at-block-p :transient t)
     ]
    ["Global"
     ("C" "cycle global" org-global-cycle :transient t)
@@ -65,9 +76,9 @@
     ("p" "prev" org-previous-visible-heading :transient t)
     ("n" "next" org-next-visible-heading :transient t)
     ("u" "up" outline-up-heading :transient t)
+    ("c" "cycle folding" org-cycle :transient t)
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
     ("N" "next (same level)" shk-org-next-heading :transient t)]
-   [("e" "edit structure" shk-org-structure-menu)
+   [("s" "structure" shk-org-structure-menu)
     ("v" "visibility" shk-org-visibility-menu)
     ("q" "quit" transient-quit-all)]])
-
