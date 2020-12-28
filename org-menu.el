@@ -77,6 +77,24 @@
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
+(define-transient-command shk-org-insert-menu
+  "Insert"
+  [:description
+   "Insert"
+   ["Navigate"
+    ("p" "prev" org-previous-visible-heading :transient t)
+    ("n" "next" org-next-visible-heading :transient t)
+    ("u" "up" outline-up-heading :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("P" "prev (same level)" shk-org-prev-heading :transient t)
+    ("N" "next (same level)" shk-org-next-heading :transient t)]
+   ["Time"
+    ("." "time stamp" org-time-stamp)
+    ("!" "inactive" org-time-stamp-inactive)
+    ("t." "now" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))
+    ("t!" "now (inactive)" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))]
+   [("q" "quit" transient-quit-all)]])
+
 (define-transient-command shk-org-menu
   "Org mode"
   [:description
@@ -89,11 +107,12 @@
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
     ("N" "next (same level)" shk-org-next-heading :transient t)]
    ["Go to"
-    ("gb" "goto src block" org-babel-goto-named-src-block)
+    ("gs" "goto src block" org-babel-goto-named-src-block)
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
    ["More"
     ("s" "structure" shk-org-structure-menu)
     ("v" "visibility" shk-org-visibility-menu)
     ("e" "evaluation" shk-org-eval-menu)
+    ("i" "insert" shk-org-insert-menu)
     ("q" "quit" transient-quit-all)]])
