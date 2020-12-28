@@ -38,6 +38,7 @@
     ("t" "todo" org-todo :transient t)
     ("T" "tags" org-set-tags-command :transient t)
     ("A" "archive" org-toggle-archive-tag :transient t)
+    ("/" "comment" org-toggle-comment :transient t)
     ("C-w" "cut tree" org-cut-special :transient t)
     ("C-y" "yank tree" org-paste-special :transient t)]
    ["Make new"
@@ -48,9 +49,6 @@
     ("mi" "item" org-insert-item)
     ("mD" "dynamic block" org-insert-dblock)
     ("mS" "structure" org-insert-structure-template)]
-   ["Formatting"
-    ("/" "comment" org-toggle-comment :transient t)
-    (":" "fixed width" org-toggle-fixed-width :transient t)]
    [("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-structure)
@@ -183,7 +181,38 @@
     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
    [("q" "quit" transient-quit-all)]])
 
-;; Has a Navigation menu, already
+;; shk-org-menu-list has a Navigation menu, already
+
+(defun shk-org-menu-comment-line ()
+  "Toggles line comment w/o moving cursor"
+  (interactive)
+  (save-excursion (comment-line 1)))
+
+(defun shk-org-menu-insert-text (left right)
+  "Will insert left|right and put the curser at |"
+  (if (region-active-p)
+      (progn
+        (insert left)
+        (exchange-point-and-mark)
+        (insert right))
+    (insert left)
+    (insert right)
+    (backward-char (length right))))
+
+(transient-define-prefix shk-org-menu-text ()
+  "Operations on org-mode text"
+  ["Text"
+   ["Line"
+    (":" "fixed width" org-toggle-fixed-width :transient t)
+    (";" "comment" shk-org-menu-comment-line :transient t)]
+   ["Formatting"
+    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
+    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
+    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
+    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))
+    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
+    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
+   [("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -194,7 +223,8 @@
     ("gh" "goto heading" imenu)]
    ["Elements"
     ("t" "table" shk-org-menu-table)
-    ("l" "list" shk-org-menu-list)]
+    ("l" "list" shk-org-menu-list)
+    ("f" "format" shk-org-menu-text)]
    ["Tasks"
     ("s" "structure" shk-org-menu-structure)
     ("v" "visibility" shk-org-menu-visibility)
