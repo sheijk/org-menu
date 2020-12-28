@@ -5,7 +5,7 @@
   '(("p" "prev" org-previous-visible-heading :transient t)
     ("n" "next" org-next-visible-heading :transient t)
     ("c" "cycle" org-cycle :transient t)
-    ("u" "up" outline-up-heading :transient t)
+    ("u" "parent" outline-up-heading :transient t)
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
     ("N" "next (same level)" shk-org-next-heading :transient t)
     ("'" "by name" imenu :transient t))
@@ -25,21 +25,21 @@
 (transient-define-prefix shk-org-menu-structure ()
   "A menu to change the org-mode structure"
   ["Edit document structure"
-   ["Move"
-    ("P" "move prev" org-metaup :transient t)
-    ("N" "move next" org-metadown :transient t)
-    ("F" "indent tree" org-shiftmetaright :transient t)
-    ("B" "unindent tree" org-shiftmetaleft :transient t)
+   ["Move headline"
+    ("P" "move up" org-metaup :transient t)
+    ("N" "move down" org-metadown :transient t)
+    ("F" "indent" org-shiftmetaright :transient t)
+    ("B" "unindent" org-shiftmetaleft :transient t)
     ("f" "indent line" org-metaright :transient t)
-    ("b" "unindent line" org-metaleft :transient t)]
-   ["Edit"
-    ("r" "refile" org-refile :transient t)
-    ("C-w" "cut tree" org-cut-special :transient t)
-    ("C-y" "yank tree" org-paste-special)
+    ("b" "unindent line" org-metaleft :transient t)
+    ("r" "refile" org-refile :transient t)]
+   ["Headline"
     ("t" "todo" org-todo :transient t)
     ("T" "tags" org-set-tags-command :transient t)
+    ("A" "archive" org-toggle-archive-tag :transient t)
     ("/" "comment" org-toggle-comment :transient t)
-    ("A" "archive" org-toggle-archive-tag :transient t)]
+    ("C-w" "cut tree" org-cut-special :transient t)
+    ("C-y" "yank tree" org-paste-special)]
    ["Make new"
     ("mh" "headline" org-insert-heading)
     ("mH" "headline (after)" org-insert-heading-after-current)
@@ -126,15 +126,15 @@
   "Operations on org-mode tables"
   ["Tables"
    ["Navigate"
-    ("n" "down" next-line :transient t)
     ("p" "up" previous-line :transient t)
-    ("f" "right" org-table-next-field :transient t)
-    ("b" "left" org-table-previous-field :transient t)]
+    ("n" "down" next-line :transient t)
+    ("b" "left" org-table-previous-field :transient t)
+    ("f" "right" org-table-next-field :transient t)]
    ["Move"
-    ("N" "down" org-table-move-row-down :transient t)
     ("P" "up" org-table-move-row-up :transient t)
-    ("F" "right" org-table-move-column-right :transient t)
-    ("B" "left" org-table-move-column-left :transient t)]
+    ("N" "down" org-table-move-row-down :transient t)
+    ("B" "left" org-table-move-column-left :transient t)
+    ("F" "right" org-table-move-column-right :transient t)]
    ["Formulas"
     ("e" "edit" org-table-edit-formulas)
     ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))))
