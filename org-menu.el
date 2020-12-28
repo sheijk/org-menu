@@ -88,10 +88,17 @@
     :if org-in-src-block-p
     ("e" "run block" org-babel-execute-src-block)
     ("c" "check headers" org-babel-check-src-block)]
+   ["More"
+    ("c" "update checkbox count" org-update-checkbox-count)]
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-eval)
+
+(defun shk-org-menu-insert-block (str)
+  "Insert an org mode block of type `str'"
+  (interactive)
+  (insert (format "#+begin_%s\n#+end_%s\n" str str)))
 
 (transient-define-prefix shk-org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -102,6 +109,14 @@
     ("!" "inactive" org-time-stamp-inactive)
     ("t." "now" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))
     ("t!" "now (inactive)" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))]
+   ["Blocks"
+    ("bs" "source" (lambda () (interactive) (shk-org-menu-insert-block "src")))
+    ("be" "example" (lambda () (interactive) (shk-org-menu-insert-block "example")))
+    ("bv" "verbatim" (lambda () (interactive) (shk-org-menu-insert-block "verbatim")))
+    ("ba" "ascii" (lambda () (interactive) (shk-org-menu-insert-block "ascii")))
+    ("bq" "quote" (lambda () (interactive) (shk-org-menu-insert-block "quote")))]
+   ["Templates"
+    ("S" "structure template" org-insert-structure-template)]
    [("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-insert)
