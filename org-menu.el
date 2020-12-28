@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; transient interface for org
 
-(define-transient-command shk-org-structure-menu
+(define-transient-command shk-org-menu-structure
   "Edit structure of org file"
   [:description
    "Edit document structure"
@@ -35,7 +35,7 @@
     ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)]
    [("q" "quit" transient-quit-all)]])
 
-(define-transient-command shk-org-visibility-menu
+(define-transient-command shk-org-menu-visibility
   "Visibility"
   [:description
    "Visibility"
@@ -61,7 +61,7 @@
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    [("q" "quit" transient-quit-all)]])
 
-(define-transient-command shk-org-eval-menu
+(define-transient-command shk-org-menu-eval
   "Evaluation"
   [:description
    "Evaluation"
@@ -77,7 +77,7 @@
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
-(define-transient-command shk-org-insert-menu
+(define-transient-command shk-org-menu-insert
   "Insert"
   [:description
    "Insert"
@@ -111,8 +111,8 @@
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
    ["More"
-    ("s" "structure" shk-org-structure-menu)
-    ("v" "visibility" shk-org-visibility-menu)
-    ("e" "evaluation" shk-org-eval-menu)
-    ("i" "insert" shk-org-insert-menu)
+    ("s" "structure" shk-org-menu-structure)
+    ("v" "visibility" shk-org-menu-visibility)
+    ("e" "evaluation" shk-org-menu-eval)
+    ("i" "insert" shk-org-menu-insert)
     ("q" "quit" transient-quit-all)]])
