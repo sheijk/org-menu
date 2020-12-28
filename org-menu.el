@@ -148,7 +148,7 @@
     ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
     ("c" "column" org-table-eval-formula :transient t)
     ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
-    ("D" "debug" org-table-toggle-coordinate-overlays :transient t)]
+    ("D" "debug" org-table-toggle-formula-debugger :transient t)]
    ["Field"
     ("E" "edit" org-table-edit-field :transient t)
     ("SPC" "blank" org-table-blank-field :transient t)
