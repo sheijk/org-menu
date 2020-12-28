@@ -34,7 +34,7 @@
     ("f" "indent line" org-metaright :transient t)
     ("b" "unindent line" org-metaleft :transient t)]
    ["Edit"
-    ("R" "refile" org-refile :transient t)
+    ("r" "refile" org-refile :transient t)
     ("C-w" "cut tree" org-cut-special :transient t)
     ("C-y" "yank tree" org-paste-special)]
    ["Make new"
@@ -121,6 +121,29 @@
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-insert)
 
+(transient-define-prefix shk-org-menu-table ()
+  "Operations on org-mode tables"
+  [:description
+   "Tables"
+   ["Navigate"
+    ("n" "down" next-line :transient t)
+    ("p" "up" previous-line :transient t)
+    ("f" "right" org-table-next-field :transient t)
+    ("b" "left" org-table-previous-field :transient t)]
+   ["Move"
+    ("N" "down" org-table-move-row-down :transient t)
+    ("P" "up" org-table-move-row-up :transient t)
+    ("F" "right" org-table-move-column-right :transient t)
+    ("B" "left" org-table-move-column-left :transient t)]
+   ["Formulas"
+    ("e" "edit" org-table-edit-formulas)
+    ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))))
+    ("-" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
+    ("c" "column" org-table-eval-formula)]
+   ["Evaluate"
+    ("x" "evaluate" shk-org-menu-eval)]
+   [("q" "quit" transient-quit-all)]])
+
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   [:description
@@ -129,10 +152,12 @@
     ("gs" "goto src block" org-babel-goto-named-src-block)
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
-   ["More"
+   ["Elements"
+    ("t" "table" shk-org-menu-table)]
+   ["Tasks"
     ("s" "structure" shk-org-menu-structure)
     ("v" "visibility" shk-org-menu-visibility)
-    ("e" "evaluation" shk-org-menu-eval)
+    ("x" "evaluation" shk-org-menu-eval)
     ("i" "insert" shk-org-menu-insert)
     ("q" "quit" transient-quit-all)]])
 
