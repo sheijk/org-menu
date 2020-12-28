@@ -22,7 +22,7 @@
              (not (ignore-errors (transient-get-suffix prefix (vector key))))))
          shk-org-menu-navigation-items)]))
 
-(transient-define-prefix shk-org-menu-structure ()
+(transient-define-prefix shk-org-menu-headline ()
   "A menu to change the org-mode structure"
   ["Edit document structure"
    ["Move headline"
@@ -44,14 +44,10 @@
    ["Make new"
     ("mh" "headline" org-insert-heading)
     ("mH" "headline (after)" org-insert-heading-after-current)
-    ("mt" "todo" org-insert-todo-heading)
-    ("md" "drawer" org-insert-drawer)
-    ("mi" "item" org-insert-item)
-    ("mD" "dynamic block" org-insert-dblock)
-    ("mS" "structure" org-insert-structure-template)]
+    ("mt" "todo" org-insert-todo-heading)]
    [("q" "quit" transient-quit-all)]])
 
-(shk-org-menu-add-navigation-items 'shk-org-menu-structure)
+(shk-org-menu-add-navigation-items 'shk-org-menu-headline)
 
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
@@ -111,7 +107,15 @@
     ("be" "example" (lambda () (interactive) (shk-org-menu-insert-block "example")))
     ("bv" "verbatim" (lambda () (interactive) (shk-org-menu-insert-block "verbatim")))
     ("ba" "ascii" (lambda () (interactive) (shk-org-menu-insert-block "ascii")))
-    ("bq" "quote" (lambda () (interactive) (shk-org-menu-insert-block "quote")))]
+    ("bq" "quote" (lambda () (interactive) (shk-org-menu-insert-block "quote")))
+    ("bd" "dynamic block" org-insert-dblock)]
+   ["More items"
+    ("md" "drawer" org-insert-drawer)
+    ("mi" "item" org-insert-item)]
+   ["Headline"
+    ("mh" "headline" org-insert-heading)
+    ("mH" "headline (after)" org-insert-heading-after-current)
+    ("mt" "todo" org-insert-todo-heading)]
    ["Templates"
     ("S" "structure template" org-insert-structure-template)]
    [("q" "quit" transient-quit-all)]])
@@ -222,11 +226,11 @@
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
    ["Elements"
+    ("h" "headline" shk-org-menu-headline)
     ("t" "table" shk-org-menu-table)
     ("l" "list" shk-org-menu-list)
     ("f" "format" shk-org-menu-text)]
    ["Tasks"
-    ("s" "structure" shk-org-menu-structure)
     ("v" "visibility" shk-org-menu-visibility)
     ("x" "evaluation" shk-org-menu-eval)
     ("i" "insert" shk-org-menu-insert)
