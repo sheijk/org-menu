@@ -26,18 +26,18 @@
   "A menu to change the org-mode structure"
   ["Edit document structure"
    ["Move headline"
-    ("P" "move up" org-metaup :transient t)
-    ("N" "move down" org-metadown :transient t)
-    ("F" "indent" org-shiftmetaright :transient t)
-    ("B" "unindent" org-shiftmetaleft :transient t)
-    ("f" "indent line" org-metaright :transient t)
-    ("b" "unindent line" org-metaleft :transient t)
+    ("P" "up" org-metaup :transient t)
+    ("N" "down" org-metadown :transient t)
+    ("B" "left" org-shiftmetaleft :transient t)
+    ("F" "right" org-shiftmetaright :transient t)
+    ("b" "left (line)" org-metaleft :transient t)
+    ("f" "right (line)" org-metaright :transient t)
     ("r" "refile" org-refile :transient t)]
    ["Headline"
+    ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
     ("t" "todo" org-todo :transient t)
     ("T" "tags" org-set-tags-command :transient t)
     ("A" "archive" org-toggle-archive-tag :transient t)
-    ("/" "comment" org-toggle-comment :transient t)
     ("C-w" "cut tree" org-cut-special :transient t)
     ("C-y" "yank tree" org-paste-special :transient t)]
    ["Make new"
@@ -48,11 +48,9 @@
     ("mi" "item" org-insert-item)
     ("mD" "dynamic block" org-insert-dblock)
     ("mS" "structure" org-insert-structure-template)]
-   ["Toggle"
-    ("-" "list item" org-toggle-item :if-not org-at-table-p)
-    ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
-    ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)
-    (":" "fixed width" org-toggle-fixed-width)]
+   ["Formatting"
+    ("/" "comment" org-toggle-comment :transient t)
+    (":" "fixed width" org-toggle-fixed-width :transient t)]
    [("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-structure)
