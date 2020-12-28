@@ -8,10 +8,10 @@
     ("u" "up" outline-up-heading :transient t)
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
     ("N" "next (same level)" shk-org-next-heading :transient t))
-  "A menu which gets inserted into all commands adding navigation commands")
+  "Items which gets inserted into all commands adding navigation commands")
 
-(define-transient-command shk-org-menu-structure
-  "Edit structure of org file"
+(transient-define-prefix shk-org-menu-structure ()
+  "A menu to change the org-mode structure"
   [:description
    "Edit document structure"
    ["Move"
@@ -47,11 +47,11 @@
            (not (member key (list "P" "N")))))
        shk-org-menu-navigation-items)])
 
-(define-transient-command shk-org-menu-visibility
-  "Visibility"
+(transient-define-prefix shk-org-menu-visibility ()
+  "A menu to control visibility of org-mode items"
   [:description
    "Visibility"
-   ["Tree"
+   ["Visibility"
     ("c" "cycle" org-cycle :transient t)
     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
     ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
@@ -70,8 +70,8 @@
 (transient-insert-suffix 'shk-org-menu-visibility (list 0 0)
   `["Navigate" ,@shk-org-menu-navigation-items])
 
-(define-transient-command shk-org-menu-eval
-  "Evaluation"
+(transient-define-prefix shk-org-menu-eval ()
+  "A menu to evaluate buffers, tables, etc. in org-mode"
   [:description
    "Evaluation"
    ["Table"
@@ -86,8 +86,11 @@
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
-(define-transient-command shk-org-menu-insert
-  "Insert"
+(transient-insert-suffix 'shk-org-menu-eval (list 0 0)
+  `["Navigate" ,@shk-org-menu-navigation-items])
+
+(transient-define-prefix shk-org-menu-insert ()
+  "A menu to insert new items in org-mode"
   [:description
    "Insert"
    ["Time"
@@ -97,11 +100,11 @@
     ("t!" "now (inactive)" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))]
    [("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu-visibility (list 0 0)
+(transient-insert-suffix 'shk-org-menu-insert (list 0 0)
   `["Navigate" ,@shk-org-menu-navigation-items])
 
-(define-transient-command shk-org-menu
-  "Org mode"
+(transient-define-prefix shk-org-menu ()
+  "A discoverable menu to edit and view org-mode documents"
   [:description
    "Org mode"
    ["Navigate"
