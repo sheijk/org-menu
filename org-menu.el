@@ -94,6 +94,13 @@
   (interactive)
   (insert (format "#+begin_%s\n#+end_%s\n" str str)))
 
+(defun shk-org-menu-expand-snippet (snippet)
+  "Will expand the given snippet."
+  (interactive)
+  (insert snippet)
+  (yas-expand))
+
+
 (transient-define-prefix shk-org-menu-insert ()
   "A menu to insert new items in org-mode"
   ["Insert"
@@ -117,10 +124,12 @@
     ("mH" "headline (after)" org-insert-heading-after-current)
     ("mt" "todo" org-insert-todo-heading)]
    ["Templates"
-    ("S" "structure template" org-insert-structure-template)]
+    ("S" "structure template" org-insert-structure-template)
+    ("B" "yas blocks" (lambda () (interactive) (shk-org-menu-expand-snippet "beg")))
+    ("O" "yas options" (lambda () (interactive) (shk-org-menu-expand-snippet "opt")))]
    [("q" "quit" transient-quit-all)]])
 
-(shk-org-menu-add-navigation-items 'shk-org-menu-insert)
+;; shk-org-menu-insert has no need for Navigation sub menu
 
 (transient-define-prefix shk-org-menu-table ()
   "Operations on org-mode tables"
