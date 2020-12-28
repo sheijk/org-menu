@@ -24,8 +24,7 @@
 
 (transient-define-prefix shk-org-menu-structure ()
   "A menu to change the org-mode structure"
-  [:description
-   "Edit document structure"
+  ["Edit document structure"
    ["Move"
     ("P" "move prev" org-metaup :transient t)
     ("N" "move next" org-metadown :transient t)
@@ -36,7 +35,11 @@
    ["Edit"
     ("r" "refile" org-refile :transient t)
     ("C-w" "cut tree" org-cut-special :transient t)
-    ("C-y" "yank tree" org-paste-special)]
+    ("C-y" "yank tree" org-paste-special)
+    ("t" "todo" org-todo :transient t)
+    ("T" "tags" org-set-tags-command :transient t)
+    ("/" "comment" org-toggle-comment :transient t)
+    ("A" "archive" org-toggle-archive-tag :transient t)]
    ["Make new"
     ("mh" "headline" org-insert-heading)
     ("mH" "headline (after)" org-insert-heading-after-current)
@@ -48,15 +51,15 @@
    ["Toggle"
     ("-" "list item" org-toggle-item :if-not org-at-table-p)
     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
-    ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)]
+    ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)
+    (":" "fixed width" org-toggle-fixed-width)]
    [("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-structure)
 
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
-  [:description
-   "Visibility"
+  ["Visibility"
    ["Visibility"
     ("c" "cycle" org-cycle :transient t)
     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
@@ -77,8 +80,7 @@
 
 (transient-define-prefix shk-org-menu-eval ()
   "A menu to evaluate buffers, tables, etc. in org-mode"
-  [:description
-   "Evaluation"
+  ["Evaluation"
    ["Table"
     :if org-at-table-p
     ("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)))
@@ -102,8 +104,7 @@
 
 (transient-define-prefix shk-org-menu-insert ()
   "A menu to insert new items in org-mode"
-  [:description
-   "Insert"
+  ["Insert"
    ["Time"
     ("." "time stamp" org-time-stamp)
     ("!" "inactive" org-time-stamp-inactive)
@@ -123,8 +124,7 @@
 
 (transient-define-prefix shk-org-menu-table ()
   "Operations on org-mode tables"
-  [:description
-   "Tables"
+  ["Tables"
    ["Navigate"
     ("n" "down" next-line :transient t)
     ("p" "up" previous-line :transient t)
@@ -138,16 +138,16 @@
    ["Formulas"
     ("e" "edit" org-table-edit-formulas)
     ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))))
-    ("-" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
-    ("c" "column" org-table-eval-formula)]
+    ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
+    ("c" "column" org-table-eval-formula)
+    ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)]
    ["Evaluate"
     ("x" "evaluate" shk-org-menu-eval)]
    [("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
-  [:description
-   "Org mode"
+  ["Org mode"
    ["Go to"
     ("gs" "goto src block" org-babel-goto-named-src-block)
     ("gr" "goto result block" org-babel-goto-named-result)
