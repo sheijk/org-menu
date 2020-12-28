@@ -10,6 +10,17 @@
     ("N" "next (same level)" shk-org-next-heading :transient t))
   "Items which gets inserted into all commands adding navigation commands")
 
+(defun shk-org-menu-add-navigation-items (prefix)
+  "Add navigation items unless their key is already being used."
+
+  (transient-insert-suffix 'shk-org-menu-structure (list 0 0)
+    `["Navigate"
+      ,@(seq-filter
+         (lambda (item)
+           (let* ((key (car item)))
+             (not (ignore-errors (transient-get-suffix prefix (vector key))))))
+         shk-org-menu-navigation-items)]))
+
 (transient-define-prefix shk-org-menu-structure ()
   "A menu to change the org-mode structure"
   [:description
@@ -39,13 +50,7 @@
     ("*" "headline" org-ctrl-c-star :if-not org-at-table-p)]
    [("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu-structure (list 0 0)
-  `["Navigate"
-    ,@(seq-filter
-       (lambda (item)
-         (let ((key (car item)))
-           (not (member key (list "P" "N")))))
-       shk-org-menu-navigation-items)])
+(shk-org-menu-add-navigation-items 'shk-org-menu-structure)
 
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
@@ -67,8 +72,7 @@
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    [("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu-visibility (list 0 0)
-  `["Navigate" ,@shk-org-menu-navigation-items])
+(shk-org-menu-add-navigation-items 'shk-org-menu-visibility)
 
 (transient-define-prefix shk-org-menu-eval ()
   "A menu to evaluate buffers, tables, etc. in org-mode"
@@ -86,8 +90,7 @@
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu-eval (list 0 0)
-  `["Navigate" ,@shk-org-menu-navigation-items])
+(shk-org-menu-add-navigation-items 'shk-org-menu-eval)
 
 (transient-define-prefix shk-org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -100,20 +103,12 @@
     ("t!" "now (inactive)" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))]
    [("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu-insert (list 0 0)
-  `["Navigate" ,@shk-org-menu-navigation-items])
+(shk-org-menu-add-navigation-items 'shk-org-menu-insert)
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   [:description
    "Org mode"
-   ["Navigate"
-    ("p" "prev" org-previous-visible-heading :transient t)
-    ("n" "next" org-next-visible-heading :transient t)
-    ("u" "up" outline-up-heading :transient t)
-    ("c" "cycle folding" org-cycle :transient t)
-    ("P" "prev (same level)" shk-org-prev-heading :transient t)
-    ("N" "next (same level)" shk-org-next-heading :transient t)]
    ["Go to"
     ("gs" "goto src block" org-babel-goto-named-src-block)
     ("gr" "goto result block" org-babel-goto-named-result)
@@ -125,5 +120,5 @@
     ("i" "insert" shk-org-menu-insert)
     ("q" "quit" transient-quit-all)]])
 
-(transient-insert-suffix 'shk-org-menu (list 0 0)
-  `["Navigate" ,@shk-org-menu-navigation-items])
+(shk-org-menu-add-navigation-items 'shk-org-menu)
+
