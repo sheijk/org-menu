@@ -160,6 +160,33 @@
 
 ;; shk-org-menu-table does not have a headlines Navigation menu (too crowded)
 
+(transient-define-prefix shk-org-menu-list ()
+  "Operations on org-mode lists"
+  ["List"
+   ["Navigation"
+    ("C-p" "prev" previous-line :transient t)
+    ("C-n" "next" next-line :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("u" "parent" org-up-element :transient t)
+    ("p" "prev (same level)" org-backward-element :transient t)
+    ("n" "next (same level)" org-forward-element :transient t)]
+   ["Move"
+    ("P" "up" org-metaup :transient t)
+    ("N" "down" org-metadown :transient t)
+    ("B" "left" org-shiftmetaleft :transient t)
+    ("F" "right" org-shiftmetaright :transient t)
+    ("b" "left (line)" org-metaleft :transient t)
+    ("f" "right (line)" org-metaright :transient t)]
+   ["List"
+    ("R" "repair" org-list-repair)
+    ("*" "turn into tree" org-list-make-subtree)]
+   ["Toggle"
+    ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
+    ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
+   [("q" "quit" transient-quit-all)]])
+
+;; Has a Navigation menu, already
+
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["Org mode"
@@ -168,7 +195,8 @@
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
    ["Elements"
-    ("t" "table" shk-org-menu-table)]
+    ("t" "table" shk-org-menu-table)
+    ("l" "list" shk-org-menu-list)]
    ["Tasks"
     ("s" "structure" shk-org-menu-structure)
     ("v" "visibility" shk-org-menu-visibility)
