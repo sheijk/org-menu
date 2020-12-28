@@ -24,8 +24,8 @@
 
 (transient-define-prefix shk-org-menu-headline ()
   "A menu to change the org-mode structure"
-  ["Edit document structure"
-   ["Move headline"
+  ["Headline"
+   ["Move"
     ("P" "up" org-metaup :transient t)
     ("N" "down" org-metadown :transient t)
     ("B" "left" org-shiftmetaleft :transient t)
@@ -33,7 +33,7 @@
     ("b" "left (line)" org-metaleft :transient t)
     ("f" "right (line)" org-metaright :transient t)
     ("r" "refile" org-refile :transient t)]
-   ["Headline"
+   ["Change"
     ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
     ("t" "todo" org-todo :transient t)
     ("T" "tags" org-set-tags-command :transient t)
@@ -81,8 +81,10 @@
    ["Source"
     :if org-in-src-block-p
     ("e" "run block" org-babel-execute-src-block)
-    ("c" "check headers" org-babel-check-src-block)]
+    ("c" "check headers" org-babel-check-src-block)
+    ("k" "clear results" org-babel-remove-result-one-or-many)]
    ["More"
+    :if-not org-in-src-block-p
     ("c" "update checkbox count" org-update-checkbox-count)]
    [("f" "format" org-table-align :if org-at-table-p)
     ("q" "quit" transient-quit-all)]])
@@ -165,6 +167,7 @@
    ["More"
     ("x" "evaluate" shk-org-menu-eval)
     ("S" "shrink column" org-table-toggle-column-width :transient t)
+    ""
     ("q" "quit" transient-quit-all)]])
 
 ;; shk-org-menu-table does not have a headlines Navigation menu (too crowded)
@@ -222,7 +225,8 @@
     ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
     ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
     ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
-    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))
+    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
+   ["Source"
     ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
     ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
    [("q" "quit" transient-quit-all)]])
@@ -231,7 +235,7 @@
   "A discoverable menu to edit and view org-mode documents"
   ["Org mode"
    ["Go to"
-    ("gs" "goto src block" org-babel-goto-named-src-block)
+    ("gs" "goto source block" org-babel-goto-named-src-block)
     ("gr" "goto result block" org-babel-goto-named-result)
     ("gh" "goto heading" imenu)]
    ["Elements"
@@ -243,6 +247,7 @@
     ("v" "visibility" shk-org-menu-visibility)
     ("x" "evaluation" shk-org-menu-eval)
     ("i" "insert" shk-org-menu-insert)
+    ""
     ("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu)
