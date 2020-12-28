@@ -13,7 +13,7 @@
 (defun shk-org-menu-add-navigation-items (prefix)
   "Add navigation items unless their key is already being used."
 
-  (transient-insert-suffix 'shk-org-menu-structure (list 0 0)
+  (transient-insert-suffix prefix (list 0 0)
     `["Navigate"
       ,@(seq-filter
          (lambda (item)
@@ -121,4 +121,3 @@
     ("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu)
-
