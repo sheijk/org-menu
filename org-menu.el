@@ -7,7 +7,8 @@
     ("c" "cycle" org-cycle :transient t)
     ("u" "up" outline-up-heading :transient t)
     ("P" "prev (same level)" shk-org-prev-heading :transient t)
-    ("N" "next (same level)" shk-org-next-heading :transient t))
+    ("N" "next (same level)" shk-org-next-heading :transient t)
+    ("'" "by name" imenu :transient t))
   "Items which gets inserted into all commands adding navigation commands")
 
 (defun shk-org-menu-add-navigation-items (prefix)
@@ -33,8 +34,8 @@
     ("f" "indent line" org-metaright :transient t)
     ("b" "unindent line" org-metaleft :transient t)]
    ["Edit"
-    ("R" "refile" org-refile)
-    ("C-w" "cut tree" org-cut-special)
+    ("R" "refile" org-refile :transient t)
+    ("C-w" "cut tree" org-cut-special :transient t)
     ("C-y" "yank tree" org-paste-special)]
    ["Make new"
     ("mh" "headline" org-insert-heading)
