@@ -236,13 +236,17 @@
     ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
    [("q" "quit" transient-quit-all)]])
 
+(transient-define-prefix shk-org-menu-goto ()
+  "Menu to go to different places by name"
+  ["Go to"
+   ("s" "goto source block" org-babel-goto-named-src-block)
+   ("r" "goto result block" org-babel-goto-named-result)
+   ("h" "goto heading" imenu)]
+  [("q" "quit" transient-quit-all)])
+
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["Org mode"
-   ["Go to"
-    ("gs" "goto source block" org-babel-goto-named-src-block)
-    ("gr" "goto result block" org-babel-goto-named-result)
-    ("gh" "goto heading" imenu)]
    ["Elements"
     ("h" "headline" shk-org-menu-headline)
     ("t" "table" shk-org-menu-table)
@@ -252,6 +256,7 @@
     ("v" "visibility" shk-org-menu-visibility)
     ("x" "evaluation" shk-org-menu-eval)
     ("i" "insert" shk-org-menu-insert)
+    ("g" "go to" shk-org-menu-goto)
     ""
     ("q" "quit" transient-quit-all)]])
 
