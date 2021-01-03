@@ -105,38 +105,6 @@
 
 ;; shk-org-menu-insert has no need for Navigation sub menu
 
-(transient-define-prefix shk-org-menu-list ()
-  "Operations on org-mode lists"
-  ["List"
-   ["Navigation"
-    ("C-p" "prev" previous-line
-     :if-not (lambda () transient-detect-key-conflicts)
-     :transient t)
-    ("M-p" "prev, (fallback)" previous-line
-     :if (lambda () transient-detect-key-conflicts)
-     :transient t)
-    ("C-n" "next" next-line :transient t)
-    ("c" "cycle" org-cycle :transient t)
-    ("u" "parent" org-up-element :transient t)
-    ("p" "prev (same level)" org-backward-element :transient t)
-    ("n" "next (same level)" org-forward-element :transient t)]
-   ["Move"
-    ("P" "up" org-metaup :transient t)
-    ("N" "down" org-metadown :transient t)
-    ("B" "left" org-shiftmetaleft :transient t)
-    ("F" "right" org-shiftmetaright :transient t)
-    ("b" "left (line)" org-metaleft :transient t)
-    ("f" "right (line)" org-metaright :transient t)]
-   ["List"
-    ("R" "repair" org-list-repair)
-    ("*" "turn into tree" org-list-make-subtree)]
-   ["Toggle"
-    ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
-    ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
-   [("q" "quit" transient-quit-all)]])
-
-;; shk-org-menu-list has a Navigation menu, already
-
 (defun shk-org-menu-comment-line ()
   "Toggles line comment w/o moving cursor"
   (interactive)
@@ -249,6 +217,36 @@
    ["Table"
     :if org-at-table-p
     ("S" "shrink column" org-table-toggle-column-width :transient t)]
+
+   ["Navigation"
+    :if org-in-item-p
+    ("C-p" "prev" previous-line
+     :if-not (lambda () transient-detect-key-conflicts)
+     :transient t)
+    ("M-p" "prev, (fallback)" previous-line
+     :if (lambda () transient-detect-key-conflicts)
+     :transient t)
+    ("C-n" "next" next-line :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("u" "parent" org-up-element :transient t)
+    ("p" "prev (same level)" org-backward-element :transient t)
+    ("n" "next (same level)" org-forward-element :transient t)]
+   ["Move list"
+    :if org-in-item-p
+    ("P" "up" org-metaup :transient t)
+    ("N" "down" org-metadown :transient t)
+    ("B" "left" org-shiftmetaleft :transient t)
+    ("F" "right" org-shiftmetaright :transient t)
+    ("b" "left (line)" org-metaleft :transient t)
+    ("f" "right (line)" org-metaright :transient t)]
+   ["List"
+    :if org-in-item-p
+    ("R" "repair" org-list-repair)
+    ("*" "turn into tree" org-list-make-subtree)]
+   ["Toggle"
+    :if org-in-item-p
+    ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
+    ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
 
    ["Tasks"
     ("v" "visibility" shk-org-menu-visibility)
