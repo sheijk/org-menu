@@ -121,22 +121,6 @@
     (insert right)
     (backward-char (length right))))
 
-(transient-define-prefix shk-org-menu-text ()
-  "Operations on org-mode text"
-  ["Text"
-   ["Line"
-    (":" "fixed width" org-toggle-fixed-width :transient t)
-    (";" "comment" shk-org-menu-comment-line :transient t)]
-   ["Formatting"
-    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
-    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
-    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
-    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
-   ["Source"
-    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
-    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
-   [("q" "quit" transient-quit-all)]])
-
 (transient-define-prefix shk-org-menu-goto ()
   "Menu to go to different places by name"
   ["Go to"
@@ -144,6 +128,13 @@
    ("r" "goto result block" org-babel-goto-named-result)
    ("h" "goto heading" imenu)]
   [("q" "quit" transient-quit-all)])
+
+(defun shk-org-menu-at-text-p ()
+  "Returns whether point is at text"
+  (not (or (org-at-heading-p)
+           (org-at-table-p)
+           (org-in-item-p)
+           (org-in-src-block-p))))
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -247,6 +238,21 @@
     :if org-in-item-p
     ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
+
+   ["Line"
+    :if shk-org-menu-at-text-p
+    (":" "fixed width" org-toggle-fixed-width :transient t)
+    (";" "comment" shk-org-menu-comment-line :transient t)]
+   ["Formatting"
+    :if shk-org-menu-at-text-p
+    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
+    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
+    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
+    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
+   ["Source"
+    :if shk-org-menu-at-text-p
+    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
+    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
 
    ["Tasks"
     ("v" "visibility" shk-org-menu-visibility)
