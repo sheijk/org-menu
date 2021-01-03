@@ -77,17 +77,17 @@
     :if org-at-table-p
     ("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)))
     ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)))
-    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))]
+    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))
+    ("f" "format" org-table-align :if org-at-table-p)]
    ["Source"
     :if org-in-src-block-p
     ("e" "run block" org-babel-execute-src-block)
     ("c" "check headers" org-babel-check-src-block)
     ("k" "clear results" org-babel-remove-result-one-or-many)]
-   ["More"
+   ["Headline"
     :if-not org-in-src-block-p
     ("c" "update checkbox count" org-update-checkbox-count)]
-   [("f" "format" org-table-align :if org-at-table-p)
-    ("q" "quit" transient-quit-all)]])
+   [("q" "quit" transient-quit-all)]])
 
 (shk-org-menu-add-navigation-items 'shk-org-menu-eval)
 
@@ -101,7 +101,6 @@
   (interactive)
   (insert snippet)
   (yas-expand))
-
 
 (transient-define-prefix shk-org-menu-insert ()
   "A menu to insert new items in org-mode"
