@@ -105,45 +105,6 @@
 
 ;; shk-org-menu-insert has no need for Navigation sub menu
 
-(transient-define-prefix shk-org-menu-table ()
-  "Operations on org-mode tables"
-  ["Tables"
-   ["Navigate"
-    ("p" "up" previous-line :transient t)
-    ("n" "down" next-line :transient t)
-    ("b" "left" org-table-previous-field :transient t)
-    ("f" "right" org-table-next-field :transient t)]
-   ["Move"
-    ("P" "up" org-table-move-row-up :transient t)
-    ("N" "down" org-table-move-row-down :transient t)
-    ("B" "left" org-table-move-column-left :transient t)
-    ("F" "right" org-table-move-column-right :transient t)]
-   ["Create/delete"
-    ("mr" "row above" org-table-insert-row :transient t)
-    ("mc" "column right" org-table-insert-column :transient t)
-    ("m-" "horiz. line" org-table-insert-hline :transient t)
-    ("dr" "delete row" org-shiftmetaup :transient t)
-    ("dc" "delete column" org-shiftmetaleft :transient t)
-    ("mt" "table from region" org-table-create-or-convert-from-region)]
-   ["Formulas"
-    ("e" "edit all" org-table-edit-formulas :transient t)
-    ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
-    ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
-    ("c" "column" org-table-eval-formula :transient t)
-    ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
-    ("D" "debug" org-table-toggle-formula-debugger :transient t)]
-   ["Field"
-    ("E" "edit" org-table-edit-field :transient t)
-    ("SPC" "blank" org-table-blank-field :transient t)
-    ("RET" "from above" org-table-copy-down :transient t)]
-   ["More"
-    ("x" "evaluate" shk-org-menu-eval)
-    ("S" "shrink column" org-table-toggle-column-width :transient t)
-    ""
-    ("q" "quit" transient-quit-all)]])
-
-;; shk-org-menu-table does not have a headlines Navigation menu (too crowded)
-
 (transient-define-prefix shk-org-menu-list ()
   "Operations on org-mode lists"
   ["List"
@@ -251,6 +212,44 @@
     ("mh" "headline (before)" org-insert-heading)
     ("mH" "headline (after)" org-insert-heading-after-current)
     ("mt" "todo (before)" org-insert-todo-heading)]
+
+   ["Navigate"
+    :if org-at-table-p
+    ("p" "up" previous-line :transient t)
+    ("n" "down" next-line :transient t)
+    ("b" "left" org-table-previous-field :transient t)
+    ("f" "right" org-table-next-field :transient t)]
+   ["Move r/c"
+    :if org-at-table-p
+    ("P" "up" org-table-move-row-up :transient t)
+    ("N" "down" org-table-move-row-down :transient t)
+    ("B" "left" org-table-move-column-left :transient t)
+    ("F" "right" org-table-move-column-right :transient t)]
+   ["Create/delete"
+    :if org-at-table-p
+    ("mr" "row above" org-table-insert-row :transient t)
+    ("mc" "column right" org-table-insert-column :transient t)
+    ("m-" "horiz. line" org-table-insert-hline :transient t)
+    ("dr" "delete row" org-shiftmetaup :transient t)
+    ("dc" "delete column" org-shiftmetaleft :transient t)
+    ("mt" "table from region" org-table-create-or-convert-from-region)]
+   ["Formulas"
+    :if org-at-table-p
+    ("e" "edit all" org-table-edit-formulas :transient t)
+    ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
+    ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
+    ("c" "column" org-table-eval-formula :transient t)
+    ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
+    ("D" "debug" org-table-toggle-formula-debugger :transient t)]
+   ["Field"
+    :if org-at-table-p
+    ("E" "edit" org-table-edit-field :transient t)
+    ("SPC" "blank" org-table-blank-field :transient t)
+    ("RET" "from above" org-table-copy-down :transient t)]
+   ["Table"
+    :if org-at-table-p
+    ("S" "shrink column" org-table-toggle-column-width :transient t)]
+
    ["Tasks"
     ("v" "visibility" shk-org-menu-visibility)
     ("x" "evaluation" shk-org-menu-eval)
