@@ -22,33 +22,6 @@
              (not (ignore-errors (transient-get-suffix prefix (vector key))))))
          shk-org-menu-navigation-items)]))
 
-(transient-define-prefix shk-org-menu-headline ()
-  "A menu to change the org-mode structure"
-  ["Headline"
-   ["Move"
-    ("P" "up" org-metaup :transient t)
-    ("N" "down" org-metadown :transient t)
-    ("B" "left" org-shiftmetaleft :transient t)
-    ("F" "right" org-shiftmetaright :transient t)
-    ("b" "left (line)" org-metaleft :transient t)
-    ("f" "right (line)" org-metaright :transient t)
-    ("r" "refile" org-refile :transient t)]
-   ["Change"
-    ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
-    ("t" "todo" org-todo :transient t)
-    ("T" "tags" org-set-tags-command :transient t)
-    ("A" "archive" org-toggle-archive-tag :transient t)
-    ("/" "comment" org-toggle-comment :transient t)
-    ("C-w" "cut tree" org-cut-special :transient t)
-    ("C-y" "yank tree" org-paste-special :transient t)]
-   ["Make new"
-    ("mh" "headline" org-insert-heading)
-    ("mH" "headline (after)" org-insert-heading-after-current)
-    ("mt" "todo" org-insert-todo-heading)]
-   [("q" "quit" transient-quit-all)]])
-
-(shk-org-menu-add-navigation-items 'shk-org-menu-headline)
-
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
   ["Visibility"
@@ -246,11 +219,38 @@
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["Org mode"
-   ["Elements"
-    ("h" "headline" shk-org-menu-headline)
-    ("t" "table" shk-org-menu-table)
-    ("l" "list" shk-org-menu-list)
-    ("f" "format" shk-org-menu-text)]
+   ["Navigate"
+    :if org-at-heading-p
+    ("p" "prev" org-previous-visible-heading :transient t)
+    ("n" "next" org-next-visible-heading :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("u" "parent" outline-up-heading :transient t)
+    ("P" "prev (same level)" shk-org-prev-heading :transient t)
+    ("N" "next (same level)" shk-org-next-heading :transient t)
+    ("'" "by name" imenu :transient t)]
+   ["Move headline"
+    :if org-at-heading-p
+    ("P" "up" org-metaup :transient t)
+    ("N" "down" org-metadown :transient t)
+    ("B" "left" org-shiftmetaleft :transient t)
+    ("F" "right" org-shiftmetaright :transient t)
+    ("b" "left (line)" org-metaleft :transient t)
+    ("f" "right (line)" org-metaright :transient t)
+    ("r" "refile" org-refile :transient t)]
+   ["Change headline"
+    :if org-at-heading-p
+    ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
+    ("t" "todo" org-todo :transient t)
+    ("T" "tags" org-set-tags-command :transient t)
+    ("A" "archive" org-toggle-archive-tag :transient t)
+    ("/" "comment" org-toggle-comment :transient t)
+    ("C-w" "cut tree" org-cut-special :transient t)
+    ("C-y" "yank tree" org-paste-special :transient t)]
+   ["Make new"
+    :if org-at-heading-p
+    ("mh" "headline (before)" org-insert-heading)
+    ("mH" "headline (after)" org-insert-heading-after-current)
+    ("mt" "todo (before)" org-insert-todo-heading)]
    ["Tasks"
     ("v" "visibility" shk-org-menu-visibility)
     ("x" "evaluation" shk-org-menu-eval)
