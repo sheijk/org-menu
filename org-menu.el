@@ -1,27 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; transient interface for org
 
-(defvar shk-org-menu-navigation-items
-  '(("p" "prev" org-previous-visible-heading :transient t)
-    ("n" "next" org-next-visible-heading :transient t)
-    ("c" "cycle" org-cycle :transient t)
-    ("u" "parent" outline-up-heading :transient t)
-    ("P" "prev (same level)" shk-org-prev-heading :transient t)
-    ("N" "next (same level)" shk-org-next-heading :transient t)
-    ("'" "by name" imenu :transient t))
-  "Items which gets inserted into all commands adding navigation commands")
-
-(defun shk-org-menu-add-navigation-items (prefix)
-  "Add navigation items unless their key is already being used."
-
-  (transient-insert-suffix prefix (list 0 0)
-    `["Navigate"
-      ,@(seq-filter
-         (lambda (item)
-           (let* ((key (car item)))
-             (not (ignore-errors (transient-get-suffix prefix (vector key))))))
-         shk-org-menu-navigation-items)]))
-
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
   ["Visibility"
@@ -41,8 +20,6 @@
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    [("q" "quit" transient-quit-all)]])
 
-(shk-org-menu-add-navigation-items 'shk-org-menu-visibility)
-
 (transient-define-prefix shk-org-menu-eval ()
   "A menu to evaluate buffers, tables, etc. in org-mode"
   ["Evaluation"
@@ -61,8 +38,6 @@
     :if-not org-in-src-block-p
     ("c" "update checkbox count" org-update-checkbox-count)]
    [("q" "quit" transient-quit-all)]])
-
-(shk-org-menu-add-navigation-items 'shk-org-menu-eval)
 
 (defun shk-org-menu-insert-block (str)
   "Insert an org mode block of type `str'"
@@ -262,4 +237,3 @@
     ""
     ("q" "quit" transient-quit-all)]])
 
-(shk-org-menu-add-navigation-items 'shk-org-menu)
