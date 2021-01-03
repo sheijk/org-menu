@@ -111,6 +111,19 @@
            (org-in-item-p)
            (org-in-src-block-p))))
 
+(transient-define-prefix shk-org-menu-text-in-list ()
+  "Add formatting for text in lists"
+  ;; These sub menus have a similar version in shk-org-menu, keep in sync
+  [["Formatting"
+    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
+    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
+    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
+    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
+   ["Source"
+    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
+    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
+   [("q" "quit" transient-quit-all)]])
+
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["Org mode"
@@ -208,7 +221,8 @@
    ["List"
     :if org-in-item-p
     ("R" "repair" org-list-repair)
-    ("*" "turn into tree" org-list-make-subtree)]
+    ("*" "turn into tree" org-list-make-subtree)
+    ("t" "text formatting" shk-org-menu-text-in-list)]
    ["Toggle"
     :if org-in-item-p
     ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
