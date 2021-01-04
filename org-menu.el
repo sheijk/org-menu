@@ -126,128 +126,130 @@
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
-  ["Org mode"
-   ["Navigate"
-    :if org-at-heading-p
-    ("p" "prev" org-previous-visible-heading :transient t)
-    ("n" "next" org-next-visible-heading :transient t)
-    ("c" "cycle" org-cycle :transient t)
-    ("u" "parent" outline-up-heading :transient t)
-    ("M-P" "prev (same level)" shk-org-prev-heading :transient t)
-    ("M-N" "next (same level)" shk-org-next-heading :transient t)
-    ("'" "by name" imenu :transient t)]
-   ["Move headline"
-    :if org-at-heading-p
-    ("P" "up" org-metaup :transient t)
-    ("N" "down" org-metadown :transient t)
-    ("B" "left" org-shiftmetaleft :transient t)
-    ("F" "right" org-shiftmetaright :transient t)
-    ("b" "left (line)" org-metaleft :transient t)
-    ("f" "right (line)" org-metaright :transient t)
-    ("r" "refile" org-refile :transient t)]
-   ["Change headline"
-    :if org-at-heading-p
-    ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
-    ("t" "todo" org-todo :transient t)
-    ("T" "tags" org-set-tags-command :transient t)
-    ("A" "archive" org-toggle-archive-tag :transient t)
-    ("/" "comment" org-toggle-comment :transient t)
-    ("C-w" "cut tree" org-cut-special :transient t)
-    ("C-y" "yank tree" org-paste-special :transient t)]
-   ["Make new"
-    :if org-at-heading-p
-    ("mh" "headline (before)" org-insert-heading)
-    ("mH" "headline (after)" org-insert-heading-after-current)
-    ("mt" "todo (before)" org-insert-todo-heading)]
+  ["dummy"])
 
-   ["Navigate"
-    :if org-at-table-p
-    ("p" "up" previous-line :transient t)
-    ("n" "down" next-line :transient t)
-    ("b" "left" org-table-previous-field :transient t)
-    ("f" "right" org-table-next-field :transient t)]
-   ["Move r/c"
-    :if org-at-table-p
-    ("P" "up" org-table-move-row-up :transient t)
-    ("N" "down" org-table-move-row-down :transient t)
-    ("B" "left" org-table-move-column-left :transient t)
-    ("F" "right" org-table-move-column-right :transient t)]
-   ["Create/delete"
-    :if org-at-table-p
-    ("mr" "row above" org-table-insert-row :transient t)
-    ("mc" "column right" org-table-insert-column :transient t)
-    ("m-" "horiz. line" org-table-insert-hline :transient t)
-    ("dr" "delete row" org-shiftmetaup :transient t)
-    ("dc" "delete column" org-shiftmetaleft :transient t)
-    ("mt" "table from region" org-table-create-or-convert-from-region)]
-   ["Formulas"
-    :if org-at-table-p
-    ("e" "edit all" org-table-edit-formulas :transient t)
-    ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
-    ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
-    ("c" "column" org-table-eval-formula :transient t)
-    ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
-    ("D" "debug" org-table-toggle-formula-debugger :transient t)]
-   ["Field"
-    :if org-at-table-p
-    ("E" "edit" org-table-edit-field :transient t)
-    ("SPC" "blank" org-table-blank-field :transient t)
-    ("RET" "from above" org-table-copy-down :transient t)]
-   ["Table"
-    :if org-at-table-p
-    ("S" "shrink column" org-table-toggle-column-width :transient t)]
+(transient-insert-suffix 'shk-org-menu (list 0)
+  `["Org mode"
+    ["Navigate"
+     :if org-at-heading-p
+     ("p" "prev" org-previous-visible-heading :transient t)
+     ("n" "next" org-next-visible-heading :transient t)
+     ("c" "cycle" org-cycle :transient t)
+     ("u" "parent" outline-up-heading :transient t)
+     ("M-P" "prev (same level)" shk-org-prev-heading :transient t)
+     ("M-N" "next (same level)" shk-org-next-heading :transient t)
+     ("'" "by name" imenu :transient t)]
+    ["Move headline"
+     :if org-at-heading-p
+     ("P" "up" org-metaup :transient t)
+     ("N" "down" org-metadown :transient t)
+     ("B" "left" org-shiftmetaleft :transient t)
+     ("F" "right" org-shiftmetaright :transient t)
+     ("b" "left (line)" org-metaleft :transient t)
+     ("f" "right (line)" org-metaright :transient t)
+     ("r" "refile" org-refile :transient t)]
+    ["Change headline"
+     :if org-at-heading-p
+     ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
+     ("t" "todo" org-todo :transient t)
+     ("T" "tags" org-set-tags-command :transient t)
+     ("A" "archive" org-toggle-archive-tag :transient t)
+     ("/" "comment" org-toggle-comment :transient t)
+     ("C-w" "cut tree" org-cut-special :transient t)
+     ("C-y" "yank tree" org-paste-special :transient t)]
+    ["Make new"
+     :if org-at-heading-p
+     ("mh" "headline (before)" org-insert-heading)
+     ("mH" "headline (after)" org-insert-heading-after-current)
+     ("mt" "todo (before)" org-insert-todo-heading)]
 
-   ["Navigation"
-    :if org-in-item-p
-    ("C-p" "prev" previous-line
-     :if-not (lambda () transient-detect-key-conflicts)
-     :transient t)
-    ("M-p" "prev, (fallback)" previous-line
-     :if (lambda () transient-detect-key-conflicts)
-     :transient t)
-    ("C-n" "next" next-line :transient t)
-    ("c" "cycle" org-cycle :transient t)
-    ("u" "parent" org-up-element :transient t)
-    ("p" "prev (same level)" org-backward-element :transient t)
-    ("n" "next (same level)" org-forward-element :transient t)]
-   ["Move list"
-    :if org-in-item-p
-    ("P" "up" org-metaup :transient t)
-    ("N" "down" org-metadown :transient t)
-    ("B" "left" org-shiftmetaleft :transient t)
-    ("F" "right" org-shiftmetaright :transient t)
-    ("b" "left (line)" org-metaleft :transient t)
-    ("f" "right (line)" org-metaright :transient t)]
-   ["List"
-    :if org-in-item-p
-    ("R" "repair" org-list-repair)
-    ("*" "turn into tree" org-list-make-subtree)
-    ("t" "text formatting" shk-org-menu-text-in-list)]
-   ["Toggle"
-    :if org-in-item-p
-    ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
-    ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
+    ["Navigate"
+     :if org-at-table-p
+     ("p" "up" previous-line :transient t)
+     ("n" "down" next-line :transient t)
+     ("b" "left" org-table-previous-field :transient t)
+     ("f" "right" org-table-next-field :transient t)]
+    ["Move r/c"
+     :if org-at-table-p
+     ("P" "up" org-table-move-row-up :transient t)
+     ("N" "down" org-table-move-row-down :transient t)
+     ("B" "left" org-table-move-column-left :transient t)
+     ("F" "right" org-table-move-column-right :transient t)]
+    ["Create/delete"
+     :if org-at-table-p
+     ("mr" "row above" org-table-insert-row :transient t)
+     ("mc" "column right" org-table-insert-column :transient t)
+     ("m-" "horiz. line" org-table-insert-hline :transient t)
+     ("dr" "delete row" org-shiftmetaup :transient t)
+     ("dc" "delete column" org-shiftmetaleft :transient t)
+     ("mt" "table from region" org-table-create-or-convert-from-region)]
+    ["Formulas"
+     :if org-at-table-p
+     ("e" "edit all" org-table-edit-formulas :transient t)
+     ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
+     ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
+     ("c" "column" org-table-eval-formula :transient t)
+     ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
+     ("D" "debug" org-table-toggle-formula-debugger :transient t)]
+    ["Field"
+     :if org-at-table-p
+     ("E" "edit" org-table-edit-field :transient t)
+     ("SPC" "blank" org-table-blank-field :transient t)
+     ("RET" "from above" org-table-copy-down :transient t)]
+    ["Table"
+     :if org-at-table-p
+     ("S" "shrink column" org-table-toggle-column-width :transient t)]
 
-   ["Line"
-    :if shk-org-menu-at-text-p
-    (":" "fixed width" org-toggle-fixed-width :transient t)
-    (";" "comment" shk-org-menu-comment-line :transient t)]
-   ["Formatting"
-    :if shk-org-menu-at-text-p
-    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
-    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
-    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
-    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
-   ["Source"
-    :if shk-org-menu-at-text-p
-    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
-    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
+    ["Navigation"
+     :if org-in-item-p
+     ("C-p" "prev" previous-line
+      :if-not (lambda () transient-detect-key-conflicts)
+      :transient t)
+     ("M-p" "prev, (fallback)" previous-line
+      :if (lambda () transient-detect-key-conflicts)
+      :transient t)
+     ("C-n" "next" next-line :transient t)
+     ("c" "cycle" org-cycle :transient t)
+     ("u" "parent" org-up-element :transient t)
+     ("p" "prev (same level)" org-backward-element :transient t)
+     ("n" "next (same level)" org-forward-element :transient t)]
+    ["Move list"
+     :if org-in-item-p
+     ("P" "up" org-metaup :transient t)
+     ("N" "down" org-metadown :transient t)
+     ("B" "left" org-shiftmetaleft :transient t)
+     ("F" "right" org-shiftmetaright :transient t)
+     ("b" "left (line)" org-metaleft :transient t)
+     ("f" "right (line)" org-metaright :transient t)]
+    ["List"
+     :if org-in-item-p
+     ("R" "repair" org-list-repair)
+     ("*" "turn into tree" org-list-make-subtree)
+     ("t" "text formatting" shk-org-menu-text-in-list)]
+    ["Toggle"
+     :if org-in-item-p
+     ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
+     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
 
-   ["Tasks"
-    ("v" "visibility" shk-org-menu-visibility)
-    ("x" "evaluation" shk-org-menu-eval)
-    ("i" "insert" shk-org-menu-insert)
-    ("g" "go to" shk-org-menu-goto)
-    ""
-    ("q" "quit" transient-quit-all)]])
+    ["Line"
+     :if shk-org-menu-at-text-p
+     (":" "fixed width" org-toggle-fixed-width :transient t)
+     (";" "comment" shk-org-menu-comment-line :transient t)]
+    ["Formatting"
+     :if shk-org-menu-at-text-p
+     ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
+     ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
+     ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
+     ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
+    ["Source"
+     :if shk-org-menu-at-text-p
+     ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
+     ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
 
+    ["Tasks"
+     ("v" "visibility" shk-org-menu-visibility)
+     ("x" "evaluation" shk-org-menu-eval)
+     ("i" "insert" shk-org-menu-insert)
+     ("g" "go to" shk-org-menu-goto)
+     ""
+     ("q" "quit" transient-quit-all)]])
