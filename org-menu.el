@@ -139,17 +139,13 @@
 (defun shk-org-menu-text-format-items (check-for-table)
   (list
    `["Formatting"
-     ,@(if (not check-for-table)
-           nil
-         '(:if shk-org-menu-at-text-p))
+     ,@(when check-for-table '(:if shk-org-menu-at-text-p))
      ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
      ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
      ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
      ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
    `["Source"
-     ,@(if (not check-for-table)
-           nil
-         '(:if shk-org-menu-at-text-p))
+     ,@(when check-for-table '(:if shk-org-menu-at-text-p))
      ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
      ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]))
 
