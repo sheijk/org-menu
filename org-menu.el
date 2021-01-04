@@ -231,17 +231,12 @@
     ;; Items for lists
     ["Navigate"
      :if org-in-item-p
-     ("C-p" "prev" previous-line
-      :if-not (lambda () transient-detect-key-conflicts)
-      :transient t)
-     ("M-p" "prev, (fallback)" previous-line
-      :if (lambda () transient-detect-key-conflicts)
-      :transient t)
-     ("C-n" "next" next-line :transient t)
+     ("p" "prev" previous-line :transient t)
+     ("n" "next" next-line :transient t)
      ("c" "cycle" org-cycle :transient t)
      ("u" "parent" org-up-element :transient t)
-     ("p" "prev (same level)" org-backward-element :transient t)
-     ("n" "next (same level)" org-forward-element :transient t)]
+     ("M-p" "prev (same level)" org-backward-element :transient t)
+     ("M-n" "next (same level)" org-forward-element :transient t)]
     ["Move list"
      :if org-in-item-p
      ("P" "up" org-metaup :transient t)
