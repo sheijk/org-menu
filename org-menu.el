@@ -76,11 +76,12 @@
     ("bd" "dynamic block" org-insert-dblock)]
    ["More items"
     ("md" "drawer" org-insert-drawer)
-    ("mi" "item" org-insert-item)]
+    ("mi" "item" org-insert-item)
+    ("mt" "table from region" org-table-create-or-convert-from-region)]
    ["Headline"
     ("mh" "headline" org-insert-heading)
     ("mH" "headline (after)" org-insert-heading-after-current)
-    ("mt" "todo" org-insert-todo-heading)]
+    ("mT" "todo" org-insert-todo-heading)]
    ["Templates"
     ("S" "structure template" org-insert-structure-template)
     ("B" "yas blocks" (lambda () (interactive) (shk-org-menu-expand-snippet "beg")))
@@ -152,6 +153,7 @@
 
 (transient-insert-suffix 'shk-org-menu (list 0)
   `["Org mode"
+    ;; Items for headlines
     ["Navigate"
      :if org-at-heading-p
      ("p" "prev" org-previous-visible-heading :transient t)
@@ -183,8 +185,9 @@
      :if org-at-heading-p
      ("mh" "headline (before)" org-insert-heading)
      ("mH" "headline (after)" org-insert-heading-after-current)
-     ("mt" "todo (before)" org-insert-todo-heading)]
+     ("mT" "todo (before)" org-insert-todo-heading)]
 
+    ;; Items for tables
     ["Navigate"
      :if org-at-table-p
      ("p" "up" previous-line :transient t)
@@ -203,8 +206,7 @@
      ("mc" "column right" org-table-insert-column :transient t)
      ("m-" "horiz. line" org-table-insert-hline :transient t)
      ("dr" "delete row" org-shiftmetaup :transient t)
-     ("dc" "delete column" org-shiftmetaleft :transient t)
-     ("mt" "table from region" org-table-create-or-convert-from-region)]
+     ("dc" "delete column" org-shiftmetaleft :transient t)]
     ["Formulas"
      :if org-at-table-p
      ("e" "edit all" org-table-edit-formulas :transient t)
@@ -222,6 +224,7 @@
      :if org-at-table-p
      ("S" "shrink column" org-table-toggle-column-width :transient t)]
 
+    ;; Items for lists
     ["Navigate"
      :if org-in-item-p
      ("C-p" "prev" previous-line
@@ -253,12 +256,14 @@
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
      ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
 
+    ;; Items for text
     ["Line"
      :if shk-org-menu-at-text-p
      (":" "fixed width" org-toggle-fixed-width :transient t)
      (";" "comment" shk-org-menu-comment-line :transient t)]
     ,@(shk-org-menu-text-format-items t)
 
+    ;; Items for source blocks
     ,@(shk-org-menu-eval-src-items)
 
     ["Tasks"
