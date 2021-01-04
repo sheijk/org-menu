@@ -43,7 +43,7 @@
      ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))
      ("f" "format" org-table-align :if org-at-table-p)]
     ,@(shk-org-menu-eval-src-items)
-    ["Headline"
+    ["Heading"
      :if-not org-in-src-block-p
      ("c" "update checkbox count" org-update-checkbox-count)]
     [("q" "quit" transient-quit-all)]])
@@ -78,9 +78,9 @@
     ("md" "drawer" org-insert-drawer)
     ("mi" "item" org-insert-item)
     ("mt" "table from region" org-table-create-or-convert-from-region)]
-   ["Headline"
-    ("mh" "headline" org-insert-heading)
-    ("mH" "headline (after)" org-insert-heading-after-current)
+   ["Heading"
+    ("mh" "heading" org-insert-heading)
+    ("mH" "heading (after)" org-insert-heading-after-current)
     ("mT" "todo" org-insert-todo-heading)]
    ["Templates"
     ("S" "structure template" org-insert-structure-template)
@@ -111,7 +111,7 @@
   ["Go to"
    ("s" "source block" org-babel-goto-named-src-block)
    ("r" "result block" org-babel-goto-named-result)
-   ("h" "headline" imenu)]
+   ("h" "heading" imenu)]
   [("q" "quit" transient-quit-all)])
 
 (defun shk-org-menu-at-text-p ()
@@ -153,7 +153,7 @@
 
 (transient-insert-suffix 'shk-org-menu (list 0)
   `["Org mode"
-    ;; Items for headlines
+    ;; Items for headings
     ["Navigate"
      :if org-at-heading-p
      ("p" "prev" org-previous-visible-heading :transient t)
@@ -163,7 +163,7 @@
      ("M-P" "prev (same level)" shk-org-prev-heading :transient t)
      ("M-N" "next (same level)" shk-org-next-heading :transient t)
      ("'" "by name" imenu :transient t)]
-    ["Move headline"
+    ["Move heading"
      :if org-at-heading-p
      ("P" "up" org-metaup :transient t)
      ("N" "down" org-metadown :transient t)
@@ -172,7 +172,7 @@
      ("b" "left (line)" org-metaleft :transient t)
      ("f" "right (line)" org-metaright :transient t)
      ("r" "refile" org-refile :transient t)]
-    ["Change headline"
+    ["Change heading"
      :if org-at-heading-p
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
      ("t" "todo" org-todo :transient t)
@@ -183,8 +183,8 @@
      ("C-y" "yank tree" org-paste-special :transient t)]
     ["Make new"
      :if org-at-heading-p
-     ("mh" "headline (before)" org-insert-heading)
-     ("mH" "headline (after)" org-insert-heading-after-current)
+     ("mh" "heading (before)" org-insert-heading)
+     ("mH" "heading (after)" org-insert-heading-after-current)
      ("mT" "todo (before)" org-insert-todo-heading)]
 
     ;; Items for tables
