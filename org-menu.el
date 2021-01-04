@@ -20,24 +20,33 @@
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    [("q" "quit" transient-quit-all)]])
 
-(transient-define-prefix shk-org-menu-eval ()
-  "A menu to evaluate buffers, tables, etc. in org-mode"
-  ["Evaluation"
-   ["Table"
-    :if org-at-table-p
-    ("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)))
-    ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)))
-    ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))
-    ("f" "format" org-table-align :if org-at-table-p)]
+(defun shk-org-menu-eval-src-items ()
+  "Return the items to evaluate a source block"
+  (list
    ["Source"
     :if org-in-src-block-p
     ("e" "run block" org-babel-execute-src-block)
     ("c" "check headers" org-babel-check-src-block)
-    ("k" "clear results" org-babel-remove-result-one-or-many)]
-   ["Headline"
-    :if-not org-in-src-block-p
-    ("c" "update checkbox count" org-update-checkbox-count)]
-   [("q" "quit" transient-quit-all)]])
+    ("k" "clear results" org-babel-remove-result-one-or-many)
+    ("'" "edit" org-edit-special)]))
+
+(transient-define-prefix shk-org-menu-eval ()
+  "A menu to evaluate buffers, tables, etc. in org-mode"
+  ["dummy"])
+
+(transient-insert-suffix 'shk-org-menu-eval (list 0)
+  `["Evaluation"
+    ["Table"
+     :if org-at-table-p
+     ("e" "table" (lambda () (interactive) (org-table-recalculate 'iterate)))
+     ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)))
+     ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))
+     ("f" "format" org-table-align :if org-at-table-p)]
+    ,@(shk-org-menu-eval-src-items)
+    ["Headline"
+     :if-not org-in-src-block-p
+     ("c" "update checkbox count" org-update-checkbox-count)]
+    [("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-insert-block (str)
   "Insert an org mode block of type `str'"
@@ -213,7 +222,7 @@
      :if org-at-table-p
      ("S" "shrink column" org-table-toggle-column-width :transient t)]
 
-    ["Navigation"
+    ["Navigate"
      :if org-in-item-p
      ("C-p" "prev" previous-line
       :if-not (lambda () transient-detect-key-conflicts)
@@ -249,6 +258,8 @@
      (":" "fixed width" org-toggle-fixed-width :transient t)
      (";" "comment" shk-org-menu-comment-line :transient t)]
     ,@(shk-org-menu-text-format-items t)
+
+    ,@(shk-org-menu-eval-src-items)
 
     ["Tasks"
      ("v" "visibility" shk-org-menu-visibility)
