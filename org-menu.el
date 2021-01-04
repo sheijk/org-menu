@@ -109,9 +109,9 @@
 (transient-define-prefix shk-org-menu-goto ()
   "Menu to go to different places by name"
   ["Go to"
-   ("s" "goto source block" org-babel-goto-named-src-block)
-   ("r" "goto result block" org-babel-goto-named-result)
-   ("h" "goto heading" imenu)]
+   ("s" "source block" org-babel-goto-named-src-block)
+   ("r" "result block" org-babel-goto-named-result)
+   ("h" "headline" imenu)]
   [("q" "quit" transient-quit-all)])
 
 (defun shk-org-menu-at-text-p ()
