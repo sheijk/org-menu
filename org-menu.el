@@ -119,7 +119,7 @@
 (transient-define-prefix shk-org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
-    ("T" "table" org-table-create-or-convert-from-region)]
+    ("t" "table" org-table-create-or-convert-from-region)]
    ["Rows/columns"
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
@@ -236,10 +236,11 @@
      ("N" "down" org-table-move-row-down :transient t)
      ("B" "left" org-table-move-column-left :transient t)
      ("F" "right" org-table-move-column-right :transient t)]
-    ["Delete"
+    ["Field"
      :if org-at-table-p
-     ("dr" "delete row" org-shiftmetaup :transient t)
-     ("dc" "delete column" org-shiftmetaleft :transient t)]
+     ("E" "edit" org-table-edit-field)
+     ("SPC" "blank" org-table-blank-field :transient t)
+     ("RET" "from above" org-table-copy-down :transient t)]
     ["Formulas"
      :if org-at-table-p
      ("e" "edit all" org-table-edit-formulas :transient t)
@@ -248,13 +249,10 @@
      ("c" "column" org-table-eval-formula :transient t)
      ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
      ("D" "debug" org-table-toggle-formula-debugger :transient t)]
-    ["Field"
-     :if org-at-table-p
-     ("E" "edit" org-table-edit-field :transient t)
-     ("SPC" "blank" org-table-blank-field :transient t)
-     ("RET" "from above" org-table-copy-down :transient t)]
     ["Table"
      :if org-at-table-p
+     ("dr" "delete row" org-shiftmetaup :transient t)
+     ("dc" "delete column" org-shiftmetaleft :transient t)
      ("S" "shrink column" org-table-toggle-column-width :transient t)]
 
     ;; Items for lists
