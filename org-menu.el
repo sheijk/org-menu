@@ -133,8 +133,8 @@
     ("n" "next" org-next-visible-heading :transient t)
     ("c" "cycle" org-cycle :transient t)
     ("u" "parent" outline-up-heading :transient t)
-    ("P" "prev (same level)" shk-org-prev-heading :transient t)
-    ("N" "next (same level)" shk-org-next-heading :transient t)
+    ("M-P" "prev (same level)" shk-org-prev-heading :transient t)
+    ("M-N" "next (same level)" shk-org-next-heading :transient t)
     ("'" "by name" imenu :transient t)]
    ["Move headline"
     :if org-at-heading-p
