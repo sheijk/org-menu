@@ -74,36 +74,68 @@
   (insert snippet)
   (yas-expand))
 
-(transient-define-prefix shk-org-menu-insert ()
-  "A menu to insert new items in org-mode"
-  ["Insert"
-   ["Time"
-    ("." "time stamp" org-time-stamp)
-    ("!" "inactive" org-time-stamp-inactive)
-    ("t." "now" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))
-    ("t!" "now (inactive)" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))]
-   ["Blocks"
-    ("bs" "source" (lambda () (interactive) (shk-org-menu-insert-block "src")))
-    ("be" "example" (lambda () (interactive) (shk-org-menu-insert-block "example")))
-    ("bv" "verbatim" (lambda () (interactive) (shk-org-menu-insert-block "verbatim")))
-    ("ba" "ascii" (lambda () (interactive) (shk-org-menu-insert-block "ascii")))
-    ("bq" "quote" (lambda () (interactive) (shk-org-menu-insert-block "quote")))
-    ("bd" "dynamic block" org-insert-dblock)]
-   ["More items"
-    ("md" "drawer" org-insert-drawer)
-    ("mi" "item" org-insert-item)
-    ("mt" "table from region" org-table-create-or-convert-from-region)]
-   ["Heading"
-    ("mh" "heading" org-insert-heading)
-    ("mH" "heading (after)" org-insert-heading-after-current)
-    ("mT" "todo" org-insert-todo-heading)]
-   ["Templates"
+(transient-define-prefix shk-org-menu-insert-blocks ()
+  "A menu to insert new blocks in org-mode"
+  [["Insert block"
+    ("s" "source" (lambda () (interactive) (shk-org-menu-insert-block "src")))
+    ("e" "example" (lambda () (interactive) (shk-org-menu-insert-block "example")))
+    ("v" "verbatim" (lambda () (interactive) (shk-org-menu-insert-block "verbatim")))
+    ("a" "ascii" (lambda () (interactive) (shk-org-menu-insert-block "ascii")))
+    ("q" "quote" (lambda () (interactive) (shk-org-menu-insert-block "quote")))
+    ("d" "dynamic block" org-insert-dblock)]
+   [("q" "quit" transient-quit-all)]])
+
+(transient-define-prefix shk-org-menu-insert-heading ()
+  "A menu to insert new headings in org-mode"
+  [["Heading"
+    ("h" "heading" org-insert-heading)
+    ("H" "heading (after)" org-insert-heading-after-current)
+    ("T" "todo" org-insert-todo-heading)]
+   ["Items"
+    ("d" "drawer" org-insert-drawer)]
+   [("q" "quit" transient-quit-all)]])
+
+(transient-define-prefix shk-org-menu-insert-template ()
+  "A menu to insert new templates in org-mode"
+  [["Templates"
     ("S" "structure template" org-insert-structure-template)
     ("B" "yas blocks" (lambda () (interactive) (shk-org-menu-expand-snippet "beg")))
     ("O" "yas options" (lambda () (interactive) (shk-org-menu-expand-snippet "opt")))]
    [("q" "quit" transient-quit-all)]])
 
-;; shk-org-menu-insert has no need for Navigation sub menu
+(transient-define-prefix shk-org-menu-insert-timestamp ()
+  "A menu to insert timestamps in org-mode"
+  [["Timestamp"
+    ("." "active" org-time-stamp)
+    ("!" "inactive" org-time-stamp-inactive)]
+   ["Now"
+    ("n" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))
+    ("N" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
+   ["Today"
+    ("t" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) nil)))
+    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]
+   [("q" "quit" transient-quit-all)]])
+
+(transient-define-prefix shk-org-menu-insert-table ()
+  "A menu to insert table items in org-mode"
+  [["Table"
+    ("T" "table" org-table-create-or-convert-from-region)]
+   ["Rows/columns"
+    :if org-at-table-p
+    ("r" "row above" org-table-insert-row :transient t)
+    ("c" "column right" org-table-insert-column :transient t)
+    ("-" "horiz. line" org-table-insert-hline :transient t)]
+   [("q" "quit" transient-quit-all)]])
+
+(transient-define-prefix shk-org-menu-insert ()
+  "A menu to insert new items in org-mode"
+  [["Insert"
+    ("." "time" shk-org-menu-insert-timestamp)
+    ("t" "table" shk-org-menu-insert-table)
+    ("h" "heading" shk-org-menu-insert-heading)
+    ("b" "block" shk-org-menu-insert-blocks)
+    ("T" "templates" shk-org-menu-insert-template)]
+   [("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-comment-line ()
   "Toggles line comment w/o moving cursor"
@@ -204,11 +236,8 @@
      ("N" "down" org-table-move-row-down :transient t)
      ("B" "left" org-table-move-column-left :transient t)
      ("F" "right" org-table-move-column-right :transient t)]
-    ["Create/delete"
+    ["Delete"
      :if org-at-table-p
-     ("mr" "row above" org-table-insert-row :transient t)
-     ("mc" "column right" org-table-insert-column :transient t)
-     ("m-" "horiz. line" org-table-insert-hline :transient t)
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)]
     ["Formulas"
