@@ -111,18 +111,31 @@
            (org-in-item-p)
            (org-in-src-block-p))))
 
+(defun shk-org-menu-text-format-items (check-for-table)
+  (list
+   `["Formatting"
+     ,@(if (not check-for-table)
+           nil
+         '(:if shk-org-menu-at-text-p))
+     ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
+     ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
+     ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
+     ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
+   `["Source"
+     ,@(if (not check-for-table)
+           nil
+         '(:if shk-org-menu-at-text-p))
+     ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
+     ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]))
+
 (transient-define-prefix shk-org-menu-text-in-list ()
   "Add formatting for text in lists"
+  ["dummy"])
+
+(transient-insert-suffix 'shk-org-menu-text-in-list (list 0)
   ;; These sub menus have a similar version in shk-org-menu, keep in sync
-  [["Formatting"
-    ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
-    ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
-    ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
-    ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
-   ["Source"
-    ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
-    ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
-   [("q" "quit" transient-quit-all)]])
+  `[,@(shk-org-menu-text-format-items nil)
+    [("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -235,16 +248,7 @@
      :if shk-org-menu-at-text-p
      (":" "fixed width" org-toggle-fixed-width :transient t)
      (";" "comment" shk-org-menu-comment-line :transient t)]
-    ["Formatting"
-     :if shk-org-menu-at-text-p
-     ("*" "Bold" (lambda nil (interactive) (shk-org-menu-insert-text "*" "*")))
-     ("/" "italic" (lambda nil (interactive) (shk-org-menu-insert-text "/" "/")))
-     ("_" "underline" (lambda nil (interactive) (shk-org-menu-insert-text "_" "_")))
-     ("+" "strikethrough" (lambda nil (interactive) (shk-org-menu-insert-text "+" "+")))]
-    ["Source"
-     :if shk-org-menu-at-text-p
-     ("~" "code" (lambda nil (interactive) (shk-org-menu-insert-text "~" "~")))
-     ("=" "verbatim" (lambda nil (interactive) (shk-org-menu-insert-text "=" "=")))]
+    ,@(shk-org-menu-text-format-items t)
 
     ["Tasks"
      ("v" "visibility" shk-org-menu-visibility)
