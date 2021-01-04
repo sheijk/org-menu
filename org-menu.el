@@ -1,24 +1,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; transient interface for org
 
+(defun shk-org-menu-heading-navigate-items (check-for-heading)
+  "Items to navigate headings"
+  `(["Navigate"
+     ,@(when check-for-heading '(:if org-at-heading-p))
+     ("p" "prev" org-previous-visible-heading :transient t)
+     ("n" "next" org-next-visible-heading :transient t)
+     ("c" "cycle" org-cycle :transient t)
+     ("u" "parent" outline-up-heading :transient t)
+     ("M-p" "prev (same level)" shk-org-prev-heading :transient t)
+     ("M-n" "next (same level)" shk-org-next-heading :transient t)
+     ("'" "by name" imenu :transient t)]))
+
 (transient-define-prefix shk-org-menu-visibility ()
   "A menu to control visibility of org-mode items"
-  ["Visibility"
-   ["Visibility"
-    ("c" "cycle" org-cycle :transient t)
-    ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
-    ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
-    ("t" "content" shk-org-show-content :if-not org-at-block-p :transient t)
-    ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
-    ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
-    ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
-   ["Global"
-    ("C" "cycle global" org-global-cycle :transient t)
-    ("go" "overview" org-overview)
-    ("gc" "content" org-content)
-    ("ga" "all" org-show-all)
-    ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
-   [("q" "quit" transient-quit-all)]])
+  ["dummy"])
+
+(transient-insert-suffix 'shk-org-menu-visibility (list 0)
+  `["Visibility"
+    ,@(shk-org-menu-heading-navigate-items nil)
+    ["Visibility"
+     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
+     ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
+     ("t" "content" shk-org-show-content :if-not org-at-block-p :transient t)
+     ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
+     ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
+     ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
+    ["Global"
+     ("C" "cycle global" org-global-cycle :transient t)
+     ("go" "overview" org-overview)
+     ("gc" "content" org-content)
+     ("ga" "all" org-show-all)
+     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
+    [("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-eval-src-items ()
   "Return the items to evaluate a source block"
@@ -154,15 +169,8 @@
 (transient-insert-suffix 'shk-org-menu (list 0)
   `["Org mode"
     ;; Items for headings
-    ["Navigate"
-     :if org-at-heading-p
-     ("p" "prev" org-previous-visible-heading :transient t)
-     ("n" "next" org-next-visible-heading :transient t)
-     ("c" "cycle" org-cycle :transient t)
-     ("u" "parent" outline-up-heading :transient t)
-     ("M-P" "prev (same level)" shk-org-prev-heading :transient t)
-     ("M-N" "next (same level)" shk-org-next-heading :transient t)
-     ("'" "by name" imenu :transient t)]
+    ,@(shk-org-menu-heading-navigate-items t)
+
     ["Move heading"
      :if org-at-heading-p
      ("P" "up" org-metaup :transient t)
