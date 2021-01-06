@@ -134,7 +134,8 @@
     ("t" "table" shk-org-menu-insert-table)
     ("h" "heading" shk-org-menu-insert-heading)
     ("b" "block" shk-org-menu-insert-blocks)
-    ("T" "templates" shk-org-menu-insert-template)]
+    ("T" "templates" shk-org-menu-insert-template)
+    ("l" "link" org-insert-link)]
    [("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-comment-line ()
@@ -189,6 +190,15 @@
   ;; These sub menus have a similar version in shk-org-menu, keep in sync
   `[,@(shk-org-menu-text-format-items nil)
     [("q" "quit" transient-quit-all)]])
+
+(defun shk-org-menu-in-link ()
+  "Returns whether we are inside a link.
+
+Conditions have been adapted from `org-insert-link'"
+  (or
+   (org-in-regexp org-link-bracket-re 1)
+   (or (org-in-regexp org-link-angle-re)
+       (org-in-regexp org-link-plain-re))))
 
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -291,6 +301,10 @@
 
     ;; Items for source blocks
     ,@(shk-org-menu-eval-src-items)
+
+    ["Link"
+     :if shk-org-menu-in-link
+     ("e" "edit" org-insert-link)]
 
     ["Tasks"
      ("v" "visibility" shk-org-menu-visibility)
