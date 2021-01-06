@@ -191,6 +191,14 @@
   `[,@(shk-org-menu-text-format-items nil)
     [("q" "quit" transient-quit-all)]])
 
+(transient-define-prefix shk-org-menu-options ()
+  "A menu to toggle options"
+  ["Display"
+   ("l" "show links" org-toggle-link-display)
+   ("i" "inline images" org-toggle-inline-images)
+   ("p" "pretty entities" org-toggle-pretty-entities)
+   ("t" "timestamp overlay" org-toggle-time-stamp-overlays)])
+
 (defun shk-org-menu-in-link ()
   "Returns whether we are inside a link.
 
@@ -323,5 +331,6 @@ Conditions have been adapted from `org-insert-link'"
      ("x" "evaluation" shk-org-menu-eval)
      ("i" "insert" shk-org-menu-insert)
      ("g" "go to" shk-org-menu-goto)
+     ("o" "options" shk-org-menu-options)
      ""
      ("q" "quit" transient-quit-all)]])
