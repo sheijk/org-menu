@@ -200,6 +200,16 @@ Conditions have been adapted from `org-insert-link'"
    (or (org-in-regexp org-link-angle-re)
        (org-in-regexp org-link-plain-re))))
 
+(defun shk-org-menu-toggle-has-checkbox ()
+  "Toggle whether the current list item has a checkbox"
+  (interactive)
+  (save-excursion
+    (back-to-indentation)
+    (if (not (looking-at "- "))
+        (message "Not at list item")
+      (end-of-line 1)
+      (org-ctrl-c-ctrl-c '(4)))))
+
 (transient-define-prefix shk-org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["dummy"])
@@ -290,7 +300,9 @@ Conditions have been adapted from `org-insert-link'"
     ["Toggle"
      :if org-in-item-p
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
-     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)]
+     ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
+     ("d" "done" org-toggle-checkbox)
+     ("m" "checkbox" shk-org-menu-toggle-has-checkbox)]
 
     ;; Items for text
     ["Line"
