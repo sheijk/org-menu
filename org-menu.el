@@ -9,9 +9,18 @@
      ("n" "next" org-next-visible-heading :transient t)
      ("c" "cycle" org-cycle :transient t)
      ("u" "parent" outline-up-heading :transient t)
-     ("M-p" "prev (same level)" shk-org-prev-heading :transient t)
-     ("M-n" "next (same level)" shk-org-next-heading :transient t)
+     ("M-p" "prev (same level)" org-backward-heading-same-level :transient t)
+     ("M-n" "next (same level)" org-forward-heading-same-level :transient t)
      ("'" "by name" imenu :transient t)]))
+
+(defun org-menu-show-headline-content ()
+  "Will show the complete content of the current headline and it's children."
+  (interactive)
+  (save-excursion
+    (outline-hide-subtree)
+    (org-show-children 4)
+    (org-goto-first-child)
+    (org-reveal '(4))))
 
 (transient-define-prefix org-menu-visibility ()
   "A menu to control visibility of org-mode items"
@@ -23,7 +32,7 @@
     ["Visibility"
      ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
      ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
-     ("t" "content" shk-org-show-content :if-not org-at-block-p :transient t)
+     ("t" "content" org-menu-show-headline-content :if-not org-at-block-p :transient t)
      ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
      ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
      ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
