@@ -119,7 +119,7 @@
 (transient-define-prefix shk-org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
-    ("t" "table" org-table-create-or-convert-from-region)]
+    ("t" "table" org-table-create-or-convert-from-region :if-not org-at-table-p)]
    ["Rows/columns"
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
@@ -309,8 +309,8 @@ Conditions have been adapted from `org-insert-link'"
      :if org-in-item-p
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
      ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
-     ("d" "done" org-toggle-checkbox)
-     ("m" "checkbox" shk-org-menu-toggle-has-checkbox)]
+     ("d" "done" org-toggle-checkbox :transient t)
+     ("m" "checkbox" shk-org-menu-toggle-has-checkbox :transient t)]
 
     ;; Items for text
     ["Line"
@@ -329,7 +329,8 @@ Conditions have been adapted from `org-insert-link'"
     ["Tasks"
      ("v" "visibility" shk-org-menu-visibility)
      ("x" "evaluation" shk-org-menu-eval)
-     ("i" "insert" shk-org-menu-insert)
+     ("i" "insert" shk-org-menu-insert-table :if org-at-table-p)
+     ("i" "insert" shk-org-menu-insert :if-not org-at-table-p)
      ("g" "go to" shk-org-menu-goto)
      ("o" "options" shk-org-menu-options)
      ""
