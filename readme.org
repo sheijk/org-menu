@@ -1,0 +1,20 @@
+#+TITLE: Org-menu
+
+#+STARTUP: indent
+
+* What is this
+
+A menu for editing org-mode documents and exploring it's features in a discoverable way.
+
+It is using =transient=, the package to create interactive menus =magit= uses.
+
+* How to use it
+
+Add this to your Emacs init file:
+
+#+begin_src emacs-lisp
+(require 'org-menu)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c m") 'org-menu))
+#+end_src
+
