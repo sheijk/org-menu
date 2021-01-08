@@ -1,8 +1,48 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; transient interface for org
+;;; org-menu.el --- A discoverable menu for Emacs org-mode using transient -*- lexical-binding: t; coding: utf-8 -*-
+;;
+;; Copyright 2021 Jan Rehders
+;;
+;; Author: Jan Rehders <nospam@sheijk.net>
+;; Version: 0.1alpha
+;; Package-Requires: ((emacs "26.1") (transient "0.1"))
+;; URL: https://github.com/sheijk/org-menu
+;;
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+;;
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
+;;
+;;; Commentary:
+;;
+;; Usage:
+;;
+;; Add this to your ~/.emacs to bind the menu to `C-c m':
+;;
+;; (with-eval-after-load 'org
+;;   (define-key org-mode-map (kbd "C-c m") 'org-menu))
+;;
+;; If you didn't install this using a package manager you'll also need to add
+;;   (require 'org-menu)
+;;
+;;; Code:
+
+(require 'org)
+(require 'transient)
 
 (defun org-menu-heading-navigate-items (check-for-heading)
-  "Items to navigate headings"
+  "Items to navigate headings.
+
+These will be added to most sub menus."
   `(["Navigate"
      ,@(when check-for-heading '(:if org-at-heading-p))
      ("p" "prev" org-previous-visible-heading :transient t)
@@ -227,6 +267,7 @@ Conditions have been adapted from `org-insert-link'"
       (end-of-line 1)
       (org-ctrl-c-ctrl-c '(4)))))
 
+;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["dummy"])
@@ -344,3 +385,6 @@ Conditions have been adapted from `org-insert-link'"
      ("o" "options" org-menu-options)
      ""
      ("q" "quit" transient-quit-all)]])
+
+(provide 'org-menu)
+;;; org-menu.el ends here
