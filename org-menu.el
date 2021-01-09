@@ -283,6 +283,17 @@ Conditions have been adapted from `org-insert-link'"
       (end-of-line 1)
       (org-ctrl-c-ctrl-c '(4)))))
 
+(transient-define-prefix org-menu-clock ()
+  "Time management using org-modes clock"
+  ["Clock"
+   ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
+   ("o" "out" org-clock-out :if org-clock-is-active)
+   ("j" "goto" org-clock-goto :if org-clock-is-active)
+   ("Q" "cancel" org-clock-cancel :if org-clock-is-active)
+   ("d" "display" org-clock-display :if org-clock-is-active)
+   ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
+   ("z" "resolve" org-resolve-clocks)])
+
 ;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -408,6 +419,7 @@ Conditions have been adapted from `org-insert-link'"
      ("i" "insert" org-menu-insert :if-not org-at-table-p)
      ("g" "go to" org-menu-goto)
      ("o" "options" org-menu-options)
+     ("C" "clock" org-menu-clock)
      ""
      ("q" "quit" transient-quit-all)]])
 
