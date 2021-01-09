@@ -202,12 +202,20 @@ These will be added to most sub menus."
     (insert right)
     (backward-char (length right))))
 
+(defun org-menu-in-time-p ()
+  "Returns whether we're at a time stamp or similar
+
+Adapted from `org-goto-calendar'"
+  (or (org-at-timestamp-p 'lax)
+      (org-match-line (concat ".*" org-ts-regexp))))
+
 (transient-define-prefix org-menu-goto ()
   "Menu to go to different places by name"
   ["Go to"
    ("s" "source block" org-babel-goto-named-src-block)
    ("r" "result block" org-babel-goto-named-result)
-   ("h" "heading" imenu)]
+   ("h" "heading" imenu)
+   ("." "calendar" org-goto-calendar :if org-menu-in-time-p)]
   [("q" "quit" transient-quit-all)])
 
 (defun org-menu-at-text-p ()
@@ -387,6 +395,11 @@ Conditions have been adapted from `org-insert-link'"
     ["Link"
      :if org-menu-in-link
      ("e" "edit" org-insert-link)]
+
+    ["Timestamp"
+     :if org-menu-in-time-p
+     ("." "type" org-toggle-timestamp-type)
+     ("e" "edit" org-time-stamp)]
 
     ["Tasks"
      ("v" "visibility" org-menu-visibility)
