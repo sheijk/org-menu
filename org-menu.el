@@ -50,8 +50,7 @@ These will be added to most sub menus."
      ("c" "cycle" org-cycle :transient t)
      ("u" "parent" outline-up-heading :transient t)
      ("M-p" "prev (same level)" org-backward-heading-same-level :transient t)
-     ("M-n" "next (same level)" org-forward-heading-same-level :transient t)
-     ("'" "by name" imenu :transient t)]))
+     ("M-n" "next (same level)" org-forward-heading-same-level :transient t)]))
 
 (defun org-menu-show-headline-content ()
   "Will show the complete content of the current headline and it's children."
@@ -319,7 +318,8 @@ Conditions have been adapted from `org-insert-link'"
      ("p" "up" previous-line :transient t)
      ("n" "down" next-line :transient t)
      ("b" "left" org-table-previous-field :transient t)
-     ("f" "right" org-table-next-field :transient t)]
+     ("f" "right" org-table-next-field :transient t)
+     ("u" "parent" outline-up-heading :transient t)]
     ["Move r/c"
      :if org-at-table-p
      ("P" "up" org-table-move-row-up :transient t)
