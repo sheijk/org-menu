@@ -220,16 +220,25 @@ These will be added to most sub menus."
 
 (defun org-menu-text-format-items (check-for-table)
   (list
+   `["Navigate"
+     ,@(when check-for-table '(:if org-menu-at-text-p))
+     ("p" "up" previous-line :transient t)
+     ("n" "down" next-line :transient t)
+     ("b" "left" backward-word :transient t)
+     ("f" "right" forward-word :transient t)
+     ("u" "parent" org-up-element :transient t)
+     ("SPC" "mark" set-mark-command :transient t)
+     ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("*" "Bold" (lambda nil (interactive) (org-menu-insert-text "*" "*")))
-     ("/" "italic" (lambda nil (interactive) (org-menu-insert-text "/" "/")))
-     ("_" "underline" (lambda nil (interactive) (org-menu-insert-text "_" "_")))
-     ("+" "strikethrough" (lambda nil (interactive) (org-menu-insert-text "+" "+")))]
+     ("*" "Bold" (lambda nil (interactive) (org-menu-insert-text "*" "*")) :transient t)
+     ("/" "italic" (lambda nil (interactive) (org-menu-insert-text "/" "/")) :transient t)
+     ("_" "underline" (lambda nil (interactive) (org-menu-insert-text "_" "_")) :transient t)
+     ("+" "strikethrough" (lambda nil (interactive) (org-menu-insert-text "+" "+")) :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~")))
-     ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=")))]))
+     ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~")) :transient t)
+     ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=")) :transient t)]))
 
 (transient-define-prefix org-menu-text-in-list ()
   "Add formatting for text in lists"
@@ -366,11 +375,11 @@ Conditions have been adapted from `org-insert-link'"
      ("m" "checkbox" org-menu-toggle-has-checkbox :transient t)]
 
     ;; Items for text
+    ,@(org-menu-text-format-items t)
     ["Line"
      :if org-menu-at-text-p
      (":" "fixed width" org-toggle-fixed-width :transient t)
      (";" "comment" org-menu-comment-line :transient t)]
-    ,@(org-menu-text-format-items t)
 
     ;; Items for source blocks
     ,@(org-menu-eval-src-items)
