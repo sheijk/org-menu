@@ -173,7 +173,8 @@ These will be added to most sub menus."
     ("r" "row above" org-table-insert-row :transient t)
     ("c" "column right" org-table-insert-column :transient t)
     ("-" "horiz. line" org-table-insert-hline :transient t)]
-   [("q" "quit" transient-quit-all)]])
+   [("i" "insert other element" org-menu-insert)
+    ("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -247,12 +248,11 @@ Adapted from `org-goto-calendar'"
      ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~")) :transient t)
      ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=")) :transient t)]))
 
-(transient-define-prefix org-menu-text-in-list ()
-  "Add formatting for text in lists"
+(transient-define-prefix org-menu-text-in-element ()
+  "Add formatting for text inside other elements like lists and tables"
   ["dummy"])
 
-(transient-insert-suffix 'org-menu-text-in-list (list 0)
-  ;; These sub menus have a similar version in org-menu, keep in sync
+(transient-insert-suffix 'org-menu-text-in-element (list 0)
   `[,@(org-menu-text-format-items nil)
     [("q" "quit" transient-quit-all)]])
 
@@ -347,12 +347,12 @@ Conditions have been adapted from `org-insert-link'"
      ("F" "right" org-table-move-column-right :transient t)]
     ["Field"
      :if org-at-table-p
-     ("E" "edit" org-table-edit-field)
+     ("'" "edit" org-table-edit-field)
      ("SPC" "blank" org-table-blank-field :transient t)
      ("RET" "from above" org-table-copy-down :transient t)]
     ["Formulas"
      :if org-at-table-p
-     ("e" "edit all" org-table-edit-formulas :transient t)
+     ("E" "edit all" org-table-edit-formulas :transient t)
      ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
      ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
      ("c" "column" org-table-eval-formula :transient t)
@@ -362,7 +362,11 @@ Conditions have been adapted from `org-insert-link'"
      :if org-at-table-p
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
-     ("S" "shrink column" org-table-toggle-column-width :transient t)]
+     ("mr" "row above" org-table-insert-row :transient t)
+     ("mc" "column right" org-table-insert-column :transient t)
+     ("m-" "horiz. line" org-table-insert-hline :transient t)
+     ("S" "shrink column" org-table-toggle-column-width :transient t)
+     ("t" "text formatting" org-menu-text-in-element)]
 
     ;; Items for lists
     ["Navigate"
@@ -385,7 +389,7 @@ Conditions have been adapted from `org-insert-link'"
      :if org-in-item-p
      ("R" "repair" org-list-repair)
      ("*" "turn into tree" org-list-make-subtree)
-     ("t" "text formatting" org-menu-text-in-list)]
+     ("t" "text formatting" org-menu-text-in-element)]
     ["Toggle"
      :if org-in-item-p
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
