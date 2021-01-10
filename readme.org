@@ -6,8 +6,11 @@ A menu for editing org-mode documents and exploring it's features in a discovera
 
 It is using =transient=, the package to create interactive menus =magit= uses.
 
-[[file:org-menu-headline.png][org-menu when editing a headline]]
-[[file:org-menu-table.png][org-menu when editing a table]]
+Editing a headline
+[[file:org-menu-headline.png]]
+
+Editing a table
+[[file:org-menu-table.png]]
 
 * How to use it
 
