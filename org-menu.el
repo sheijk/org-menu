@@ -402,7 +402,9 @@ Conditions have been adapted from `org-insert-link'"
     ["Line"
      :if org-menu-at-text-p
      (":" "fixed width" org-toggle-fixed-width :transient t)
-     (";" "comment" org-menu-comment-line :transient t)]
+     (";" "comment" org-menu-comment-line :transient t)
+     ("--" "list" org-toggle-item :transient t)
+     ("-*" "heading" org-ctrl-c-star :transient t)]
 
     ;; Items for source blocks
     ,@(org-menu-eval-src-items)
