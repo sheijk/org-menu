@@ -1,0 +1,107 @@
+#+TITLE: Manual testing steps for org-menu
+#+STARTUP: showall
+
+These are manual tests to be done for each org-menu steps.
+
+* Headings
+
+  When point is on the heading of "child one" the following things should work:
+  - navigate with n/p (A1/A2/A21/A22)
+  - navigate with M-n/M-p, skipping children (A1/A2/A3)
+  - u moves up to Headings
+
+** A1
+** A2
+*** A21
+*** A22
+** A3
+* Checkboxes [0/0]
+
+  The same navigation commands as above should work
+
+  - foo [0/1]
+    - bar
+    - [-] buzz [2/4]
+      - [X] check that checkboxes can be checked
+      - [X] and that the checkbox can be added/removed
+      - [ ] and that checkbox count can be updated (in evaluation menu)
+      - [ ] and that text here can be formatted
+
+        Lorem *ipsum dolor* sit amet, consectetuer adipiscing elit. Mauris rhoncus
+        purus. Maecenas commodo massa id turpis. Duis ultrices pede a
+        justo. Vivamus molestie, =leo id semper aliquet=, justo felis egestas
+        lectus, ut tempor diam mauris at ante. Suspendisse potenti. Etiam purus
+        turpis, pellentesque vel, tincidunt eu, faucibus quis, dui. Maecenas eu
+        tortor at tortor vestibulum viverra. Proin pellentesque lorem sit amet
+        massa. Nullam at erat. Proin suscipit scelerisque mauris. Donec
+        lobortis. Vestibulum porta orci at lectus. Nunc enim.
+  - dal
+
+* Nesting
+
+  - this is a time stamp <2021-01-10 So>
+
+  | Elements in tables can be edited |
+  | [2021-01-10 So]                  |
+  | *bold-text*                      |
+  | [[Nesting][Parent]]                           |
+
+* Unsorted:
+  :PROPERTIES:
+  :CUSTOM_ID: test-menu-id
+  :END:
+
+- <2021-01-06 Mi>
+- [2021-01-06 Mi] [[file:notes.org][Notes!]]
+
+unordered and checkboxes
+- foo
+  - bar
+  - [X] buzz
+    - [X] foo
+    - [X] bar
+
+      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris rhoncus
+      purus. Maecenas commodo massa id turpis. Duis ultrices pede a
+      justo. Vivamus molestie, leo id semper aliquet, justo felis egestas
+      lectus, ut tempor diam mauris at ante. Suspendisse potenti. Etiam purus
+      turpis, pellentesque vel, tincidunt eu, faucibus quis, dui. Maecenas eu
+      tortor at tortor vestibulum viverra. Proin pellentesque lorem sit amet
+      massa. Nullam at erat. Proin suscipit scelerisque mauris. Donec
+      lobortis. Vestibulum porta orci at lectus. Nunc enim.
+- dal
+
+ordered
+1. a
+2. b
+   - x
+   - [X] y
+   - z
+3. c
+4. d
+
+|     1 |      2 |
+|-------+--------|
+| 12345 |      5 |
+|   999 | [[file:test.org][foobar]] |
+|       |        |
+|-------+--------|
+
+#+BEGIN_SRC sh
+  echo foobar
+#+END_SRC
+
+[[https://magit.vc/manual/transient.html#Comparison-With-Prefix-Keys-and-Prefix-Arguments][Transient doc]]
+
+[[file:notes.org][Notes!]]
+[[*Testing org-menu][Testing org-menu]]
+
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris rhoncus
+purus. Maecenas commodo massa id turpis. Duis ultrices pede a justo. Vivamus
+molestie, leo id semper aliquet, justo felis egestas lectus, ut tempor diam
+mauris at ante. Suspendisse potenti. Etiam purus turpis, pellentesque vel,
+tincidunt eu, faucibus quis, dui. Maecenas eu tortor at tortor vestibulum
+viverra. Proin pellentesque lorem sit amet massa. Nullam at erat. Proin suscipit
+scelerisque mauris. Donec lobortis. Vestibulum porta orci at lectus. Nunc enim.
+
