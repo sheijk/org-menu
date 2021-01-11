@@ -287,6 +287,7 @@ Conditions have been adapted from `org-insert-link'"
   "Time management using org-modes clock"
   ["Clock"
    ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
+   ("TAB" "in" org-clock-in :if-not org-clock-is-active)
    ("o" "out" org-clock-out :if org-clock-is-active)
    ("j" "goto" org-clock-goto :if org-clock-is-active)
    ("Q" "cancel" org-clock-cancel :if org-clock-is-active)
