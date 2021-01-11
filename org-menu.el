@@ -425,7 +425,8 @@ Conditions have been adapted from `org-insert-link'"
      ("i" "insert" org-menu-insert :if-not org-at-table-p)
      ("g" "go to" org-menu-goto)
      ("o" "options" org-menu-options)
-     ("C" "clock" org-menu-clock)
+     ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
+     ("C" "clock" org-menu-clock :if-not org-clock-is-active)
      ""
      ("q" "quit" transient-quit-all)]])
 
