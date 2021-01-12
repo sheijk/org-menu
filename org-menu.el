@@ -63,6 +63,7 @@ These will be added to most sub menus."
     (org-goto-first-child)
     (org-reveal '(4))))
 
+;;;###autoload
 (transient-define-prefix org-menu-visibility ()
   "A menu to control visibility of org-mode items"
   ["dummy"])
@@ -95,6 +96,7 @@ These will be added to most sub menus."
     ("k" "clear results" org-babel-remove-result-one-or-many)
     ("'" "edit" org-edit-special)]))
 
+;;;###autoload
 (transient-define-prefix org-menu-eval ()
   "A menu to evaluate buffers, tables, etc. in org-mode"
   ["dummy"])
@@ -124,6 +126,7 @@ These will be added to most sub menus."
   (insert snippet)
   (yas-expand))
 
+;;;###autoload
 (transient-define-prefix org-menu-insert-blocks ()
   "A menu to insert new blocks in org-mode"
   [["Insert block"
@@ -135,6 +138,7 @@ These will be added to most sub menus."
     ("d" "dynamic block" org-insert-dblock)]
    [("q" "quit" transient-quit-all)]])
 
+;;;###autoload
 (transient-define-prefix org-menu-insert-heading ()
   "A menu to insert new headings in org-mode"
   [["Heading"
@@ -145,6 +149,7 @@ These will be added to most sub menus."
     ("d" "drawer" org-insert-drawer)]
    [("q" "quit" transient-quit-all)]])
 
+;;;###autoload
 (transient-define-prefix org-menu-insert-template ()
   "A menu to insert new templates in org-mode"
   [["Templates"
@@ -153,6 +158,7 @@ These will be added to most sub menus."
     ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]
    [("q" "quit" transient-quit-all)]])
 
+;;;###autoload
 (transient-define-prefix org-menu-insert-timestamp ()
   "A menu to insert timestamps in org-mode"
   [["Timestamp"
@@ -177,6 +183,7 @@ These will be added to most sub menus."
   (org-table-insert-column)
   (org-table-move-column-right))
 
+;;;###autoload
 (transient-define-prefix org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
@@ -191,6 +198,7 @@ These will be added to most sub menus."
    [("i" "insert other element" org-menu-insert)
     ("q" "quit" transient-quit-all)]])
 
+;;;###autoload
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
   [["Insert"
@@ -225,6 +233,7 @@ Adapted from `org-goto-calendar'"
   (or (org-at-timestamp-p 'lax)
       (org-match-line (concat ".*" org-ts-regexp))))
 
+;;;###autoload
 (transient-define-prefix org-menu-goto ()
   "Menu to go to different places by name"
   ["Go to"
@@ -263,6 +272,7 @@ Adapted from `org-goto-calendar'"
      ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~")) :transient t)
      ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=")) :transient t)]))
 
+;;;###autoload
 (transient-define-prefix org-menu-text-in-element ()
   "Add formatting for text inside other elements like lists and tables"
   ["dummy"])
@@ -271,6 +281,7 @@ Adapted from `org-goto-calendar'"
   `[,@(org-menu-text-format-items nil)
     [("q" "quit" transient-quit-all)]])
 
+;;;###autoload
 (transient-define-prefix org-menu-options ()
   "A menu to toggle options"
   ["Display"
@@ -298,6 +309,7 @@ Conditions have been adapted from `org-insert-link'"
       (end-of-line 1)
       (org-ctrl-c-ctrl-c '(4)))))
 
+;;;###autoload
 (transient-define-prefix org-menu-clock ()
   "Time management using org-modes clock"
   ["Clock"
