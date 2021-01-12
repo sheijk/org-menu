@@ -83,8 +83,7 @@ These will be added to most sub menus."
      ("go" "overview" org-overview)
      ("gc" "content" org-content)
      ("ga" "all" org-show-all)
-     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
-    [("q" "quit" transient-quit-all)]])
+     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]])
 
 (defun org-menu-eval-src-items ()
   "Return the items to evaluate a source block"
@@ -112,8 +111,7 @@ These will be added to most sub menus."
     ,@(org-menu-eval-src-items)
     ["Heading"
      :if-not org-in-src-block-p
-     ("c" "update checkbox count" org-update-checkbox-count)]
-    [("q" "quit" transient-quit-all)]])
+     ("c" "update checkbox count" org-update-checkbox-count)]])
 
 (defun org-menu-insert-block (str)
   "Insert an org mode block of type `str'"
@@ -135,8 +133,7 @@ These will be added to most sub menus."
     ("v" "verbatim" (lambda () (interactive) (org-menu-insert-block "verbatim")))
     ("a" "ascii" (lambda () (interactive) (org-menu-insert-block "ascii")))
     ("q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")))
-    ("d" "dynamic block" org-insert-dblock)]
-   [("q" "quit" transient-quit-all)]])
+    ("d" "dynamic block" org-insert-dblock)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-heading ()
@@ -146,8 +143,7 @@ These will be added to most sub menus."
     ("H" "heading (after)" org-insert-heading-after-current)
     ("T" "todo" org-insert-todo-heading)]
    ["Items"
-    ("d" "drawer" org-insert-drawer)]
-   [("q" "quit" transient-quit-all)]])
+    ("d" "drawer" org-insert-drawer)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-template ()
@@ -155,8 +151,7 @@ These will be added to most sub menus."
   [["Templates"
     ("S" "structure template" org-insert-structure-template)
     ("B" "yas blocks" (lambda () (interactive) (org-menu-expand-snippet "beg")))
-    ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]
-   [("q" "quit" transient-quit-all)]])
+    ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-timestamp ()
@@ -169,8 +164,7 @@ These will be added to most sub menus."
     ("N" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
    ["Today"
     ("t" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) nil)))
-    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]
-   [("q" "quit" transient-quit-all)]])
+    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]])
 
 (defun shk-org-menu-table-insert-row-below ()
   "Insert a new table column below point"
@@ -194,9 +188,8 @@ These will be added to most sub menus."
     ("R" "row below" shk-org-menu-table-insert-row-below :transient t)
     ("c" "column right" org-table-insert-column :transient t)
     ("C" "column left" shk-org-menu-table-insert-column-left :transient t)
-    ("-" "horiz. line" org-table-insert-hline :transient t)]
    [("i" "insert other element" org-menu-insert)
-    ("q" "quit" transient-quit-all)]])
+    ("-" "horiz. line" org-table-insert-hline :transient t)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
@@ -207,8 +200,7 @@ These will be added to most sub menus."
     ("h" "heading" org-menu-insert-heading)
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
-    ("l" "link" org-insert-link)]
-   [("q" "quit" transient-quit-all)]])
+    ("l" "link" org-insert-link)]])
 
 (defun org-menu-comment-line ()
   "Toggles line comment w/o moving cursor"
@@ -240,8 +232,7 @@ Adapted from `org-goto-calendar'"
    ("s" "source block" org-babel-goto-named-src-block)
    ("r" "result block" org-babel-goto-named-result)
    ("h" "heading" imenu)
-   ("." "calendar" org-goto-calendar :if org-menu-in-time-p)]
-  [("q" "quit" transient-quit-all)])
+   ("." "calendar" org-goto-calendar :if org-menu-in-time-p)])
 
 (defun org-menu-at-text-p ()
   "Returns whether point is at text"
@@ -278,8 +269,7 @@ Adapted from `org-goto-calendar'"
   ["dummy"])
 
 (transient-insert-suffix 'org-menu-text-in-element (list 0)
-  `[,@(org-menu-text-format-items nil)
-    [("q" "quit" transient-quit-all)]])
+  `[,@(org-menu-text-format-items nil)])
 
 ;;;###autoload
 (transient-define-prefix org-menu-options ()
@@ -451,9 +441,7 @@ Conditions have been adapted from `org-insert-link'"
      ("g" "go to" org-menu-goto)
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
-     ("C" "clock" org-menu-clock :if-not org-clock-is-active)
-     ""
-     ("q" "quit" transient-quit-all)]])
+     ("C" "clock" org-menu-clock :if-not org-clock-is-active)]])
 
 (provide 'org-menu)
 ;;; org-menu.el ends here
