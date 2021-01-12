@@ -378,9 +378,7 @@ Conditions have been adapted from `org-insert-link'"
      :if org-at-table-p
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
-     ("mr" "row above" org-table-insert-row :transient t)
-     ("mc" "column right" org-table-insert-column :transient t)
-     ("m-" "horiz. line" org-table-insert-hline :transient t)
+     ("m" "make" org-menu-insert-table)
      ("S" "shrink column" org-table-toggle-column-width :transient t)
      ("t" "text formatting" org-menu-text-in-element)]
 
@@ -437,8 +435,7 @@ Conditions have been adapted from `org-insert-link'"
     ["Tasks"
      ("v" "visibility" org-menu-visibility)
      ("x" "evaluation" org-menu-eval)
-     ("i" "insert" org-menu-insert-table :if org-at-table-p)
-     ("i" "insert" org-menu-insert :if-not org-at-table-p)
+     ("i" "insert" org-menu-insert)
      ("g" "go to" org-menu-goto)
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
