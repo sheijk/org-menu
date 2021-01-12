@@ -166,6 +166,17 @@ These will be added to most sub menus."
     ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]
    [("q" "quit" transient-quit-all)]])
 
+(defun shk-org-menu-table-insert-row-below ()
+  "Insert a new table column below point"
+  (interactive)
+  (org-table-insert-row '4))
+
+(defun shk-org-menu-table-insert-column-left ()
+  "Insert a new column to the left of point"
+  (interactive)
+  (org-table-insert-column)
+  (org-table-move-column-right))
+
 (transient-define-prefix org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
@@ -173,7 +184,9 @@ These will be added to most sub menus."
    ["Rows/columns"
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
+    ("R" "row below" shk-org-menu-table-insert-row-below :transient t)
     ("c" "column right" org-table-insert-column :transient t)
+    ("C" "column left" shk-org-menu-table-insert-column-left :transient t)
     ("-" "horiz. line" org-table-insert-hline :transient t)]
    [("i" "insert other element" org-menu-insert)
     ("q" "quit" transient-quit-all)]])
