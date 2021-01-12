@@ -17,8 +17,8 @@ Editing a table
 Add this to your Emacs init file:
 
 #+begin_src emacs-lisp
-(require 'org-menu)
 (with-eval-after-load 'org
+  (require 'org-menu)
   (define-key org-mode-map (kbd "C-c m") 'org-menu))
 #+end_src
 

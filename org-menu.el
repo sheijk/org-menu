@@ -29,10 +29,12 @@
 ;; Add this to your ~/.emacs to bind the menu to `C-c m':
 ;;
 ;; (with-eval-after-load 'org
+;;   (require 'org-menu) ;; not needed if installing by package manager
 ;;   (define-key org-mode-map (kbd "C-c m") 'org-menu))
 ;;
-;; If you didn't install this using a package manager you'll also need to add
-;;   (require 'org-menu)
+;; The menu should be pretty self-explanatory. It is context dependent and
+;; offers different commands for headlines, tables, timestamps, etc.
+;; The task menu provides entry points for task that work from anywhere.
 ;;
 ;;; Code:
 
