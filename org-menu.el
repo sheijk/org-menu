@@ -188,7 +188,6 @@ These will be added to most sub menus."
     ("R" "row below" shk-org-menu-table-insert-row-below :transient t)
     ("c" "column right" org-table-insert-column :transient t)
     ("C" "column left" shk-org-menu-table-insert-column-left :transient t)
-   [("i" "insert other element" org-menu-insert)
     ("-" "horiz. line" org-table-insert-hline :transient t)]])
 
 ;;;###autoload
@@ -307,7 +306,7 @@ Conditions have been adapted from `org-insert-link'"
    ("TAB" "in" org-clock-in :if-not org-clock-is-active)
    ("o" "out" org-clock-out :if org-clock-is-active)
    ("j" "goto" org-clock-goto :if org-clock-is-active)
-   ("Q" "cancel" org-clock-cancel :if org-clock-is-active)
+   ("q" "cancel" org-clock-cancel :if org-clock-is-active)
    ("d" "display" org-clock-display :if org-clock-is-active)
    ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
    ("z" "resolve" org-resolve-clocks)])
@@ -335,7 +334,7 @@ Conditions have been adapted from `org-insert-link'"
      :if org-at-heading-p
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
      ("t" "todo" org-todo :transient t)
-     ("T" "tags" org-set-tags-command :transient t)
+     ("q" "tags" org-set-tags-command :transient t)
      ("P" "property" org-set-property :transient t)
      ("A" "archive" org-toggle-archive-tag :transient t)
      ("/" "comment" org-toggle-comment :transient t)
