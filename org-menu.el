@@ -81,7 +81,7 @@ These will be added to most sub menus."
     ["Global"
      ("C" "cycle global" org-global-cycle :transient t)
      ("go" "overview" org-overview)
-     ("gc" "content" org-content)
+     ("gt" "content" org-content)
      ("ga" "all" org-show-all)
      ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]])
 
@@ -311,6 +311,16 @@ Conditions have been adapted from `org-insert-link'"
    ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
    ("z" "resolve" org-resolve-clocks)])
 
+(transient-define-prefix org-menu-search-and-filter ()
+  "A menu to search and filter org-mode documents"
+  ["Filter"
+   ("/" "spars tags tree" org-sparse-tree)
+   ("t" "todos" org-show-todo-tree)
+   ("d" "deadlines" org-check-deadlines)
+   ("b" "before date" org-check-before-date)
+   ("a" "after date" org-check-after-date)
+   ("D" "dates range" org-check-dates-range)])
+
 ;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -438,6 +448,7 @@ Conditions have been adapted from `org-insert-link'"
      ("x" "evaluation" org-menu-eval)
      ("i" "insert" org-menu-insert)
      ("g" "go to" org-menu-goto)
+     ("s" "search" org-menu-search-and-filter)
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
      ("C" "clock" org-menu-clock :if-not org-clock-is-active)]])
