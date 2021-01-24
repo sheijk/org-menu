@@ -39,12 +39,20 @@ These are manual tests to be done for each org-menu steps.
 
 * Nesting
 
-  - this is a time stamp <2021-01-10 So>
+  Opening menu while at link should not produce conflicts
+
+** Links in items
+
+   - this is a time stamp <2021-01-10 So>
+
+** Links in tables
 
   | Elements in tables can be edited |
   | [2021-01-10 So]                  |
   | *bold-text*                      |
   | [[Nesting][Parent]]                           |
+
+*** [#B] Links in [[Nesting][Parent]] headlines
 
 * Unsorted:
   :PROPERTIES:
