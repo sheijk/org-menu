@@ -357,9 +357,9 @@ Conditions have been adapted from `org-insert-link'"
      ("C-y" "yank tree" org-paste-special :transient t)]
     ["Make new/delete"
      :if org-at-heading-p
-     ("mh" "make heading (before)" org-insert-heading :transient t)
-     ("mH" "make heading (after)" org-insert-heading-after-current :transient t)
-     ("mT" "make todo (before)" org-insert-todo-heading :transient t)
+     ("mh" "make heading (before)" org-insert-heading)
+     ("mH" "make heading (after)" org-insert-heading-after-current)
+     ("mt" "make todo (before)" org-insert-todo-heading)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)]
 
