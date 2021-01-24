@@ -228,9 +228,9 @@ Adapted from `org-goto-calendar'"
 (transient-define-prefix org-menu-goto ()
   "Menu to go to different places by name"
   ["Go to"
+   ("h" "heading" imenu)
    ("s" "source block" org-babel-goto-named-src-block)
    ("r" "result block" org-babel-goto-named-result)
-   ("h" "heading" imenu)
    ("." "calendar" org-goto-calendar :if org-menu-in-time-p)])
 
 (defun org-menu-at-text-p ()
@@ -451,7 +451,10 @@ Conditions have been adapted from `org-insert-link'"
      ("s" "search" org-menu-search-and-filter)
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
-     ("C" "clock" org-menu-clock :if-not org-clock-is-active)]])
+     ("C" "clock" org-menu-clock :if-not org-clock-is-active)
+     ("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)
+     ("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)
+     ]])
 
 (provide 'org-menu)
 ;;; org-menu.el ends here
