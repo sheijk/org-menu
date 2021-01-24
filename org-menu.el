@@ -346,7 +346,8 @@ Conditions have been adapted from `org-insert-link'"
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
      ("t" "todo" org-todo :transient t)
      ("q" "tags" org-set-tags-command :transient t)
-     ("P" "property" org-set-property :transient t)
+     ("y" "property" org-set-property :transient t)
+     ("," "priority" org-priority :transient t)
      ("A" "archive" org-toggle-archive-tag :transient t)
      ("/" "comment" org-toggle-comment :transient t)
      ("C-w" "cut tree" org-cut-special :transient t)
@@ -357,7 +358,7 @@ Conditions have been adapted from `org-insert-link'"
      ("mH" "make heading (after)" org-insert-heading-after-current :transient t)
      ("mT" "make todo (before)" org-insert-todo-heading :transient t)
      ("dh" "delete heading" org-cut-subtree :transient t)
-     ("dP" "delete property" org-delete-property :transient t)]
+     ("dy" "delete property" org-delete-property :transient t)]
 
     ;; Items for tables
     ["Navigate"
