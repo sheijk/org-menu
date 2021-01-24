@@ -54,6 +54,46 @@ These are manual tests to be done for each org-menu steps.
 
 *** [#B] Links in [[Nesting][Parent]] headlines
 
+* Formatting
+** Can be applied to words
+   Check that the word bar can be marked, and then made bold from the org-menu
+   (C-c m, f/b/SPC until marked, * to make bold)
+
+   foo bar buzz
+
+   Should result in
+
+   foo *bar* buzz
+
+** TODO They can be nested
+   Doing the same here
+
+   foo /bar/ buzz
+
+   Should result in
+
+   foo */bar/* buzz
+
+** TODO Can be applied to parts of words
+
+   The same as before, but for the sub-word bar
+
+   foobarbuzz
+
+   Should result in, with added spaces
+
+   foo *bar* buzz
+
+** TODO Can be removed
+
+   Marking either "*bar*" or "bar" in this text, then open org-menu, press *
+
+   foo *bar* buzz
+
+   Should result in
+
+   foo bar buzz
+ 
 * Unsorted:
   :PROPERTIES:
   :CUSTOM_ID: test-menu-id
