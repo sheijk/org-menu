@@ -614,5 +614,21 @@ Conditions have been adapted from `org-insert-link'"
      ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)
      ]])
 
+(transient-define-prefix org-menu-agenda ()
+  "A discoverable menu for the org-mode agenda"
+  ["Org agenda"
+   ["Headline"
+    ("t" "todo" org-agenda-todo :transient t)
+    ("," "priority" org-agenda-priority :transient t)
+    ("A" "archive" org-agenda-archive :transient t)
+    ]
+   ["View"
+    ("." "go to today" org-agenda-goto-today)
+    ("f" "forward" org-agenda-later :transient t)
+    ("b" "backward" org-agenda-earlier :transient t)
+    ("j" "to date" org-agenda-goto-date)
+    ]
+   ])
+
 (provide 'org-menu)
 ;;; org-menu.el ends here

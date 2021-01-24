@@ -19,6 +19,7 @@ Add this to your Emacs init file:
 #+begin_src emacs-lisp
 (with-eval-after-load 'org
   (require 'org-menu)
-  (define-key org-mode-map (kbd "C-c m") 'org-menu))
+  (define-key org-mode-map (kbd "C-c m") 'org-menu)
+  (define-key org-agenda-mode-map (kbd "C-c m") 'org-menu-agenda))
 #+end_src
 
