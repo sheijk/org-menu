@@ -314,7 +314,8 @@ Conditions have been adapted from `org-insert-link'"
 (transient-define-prefix org-menu-search-and-filter ()
   "A menu to search and filter org-mode documents"
   ["Filter"
-   ("/" "spars tags tree" org-sparse-tree)
+   ("/" "only matching" org-sparse-tree)
+   ("q" "tags" org-tags-sparse-tree)
    ("t" "todos" org-show-todo-tree)
    ("d" "deadlines" org-check-deadlines)
    ("b" "before date" org-check-before-date)
