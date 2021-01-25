@@ -41,6 +41,18 @@
 (require 'org)
 (require 'transient)
 
+(defgroup org-menu nil
+  "Options for org-menu"
+  :group 'org)
+
+(defcustom org-menu-use-q-for-quit nil
+  "Whether to add a q binding to quit to all menus.
+
+Use this if you prefer to be consistent with magit. It will also
+change some other bindings to use Q instead of q."
+  :group 'org-menu
+  :type 'boolean)
+
 (defun org-menu-heading-navigate-items (check-for-heading)
   "Items to navigate headings.
 
@@ -83,7 +95,10 @@ These will be added to most sub menus."
      ("go" "overview" org-overview)
      ("gt" "content" org-content)
      ("ga" "all" org-show-all)
-     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]])
+     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
+    ["Quit"
+     :if-non-nil org-menu-use-q-for-quit
+     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-eval-src-items ()
   "Return the items to evaluate a source block"
@@ -111,7 +126,10 @@ These will be added to most sub menus."
     ,@(org-menu-eval-src-items)
     ["Heading"
      :if-not org-in-src-block-p
-     ("c" "update checkbox count" org-update-checkbox-count)]])
+     ("c" "update checkbox count" org-update-checkbox-count)]
+    ["Quit"
+     :if-non-nil org-menu-use-q-for-quit
+     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-insert-block (str)
   "Insert an org mode block of type `str'"
@@ -132,8 +150,12 @@ These will be added to most sub menus."
     ("e" "example" (lambda () (interactive) (org-menu-insert-block "example")))
     ("v" "verbatim" (lambda () (interactive) (org-menu-insert-block "verbatim")))
     ("a" "ascii" (lambda () (interactive) (org-menu-insert-block "ascii")))
-    ("q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")))
-    ("d" "dynamic block" org-insert-dblock)]])
+    ("q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-nil org-menu-use-q-for-quit)
+    ("Q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-non-nil org-menu-use-q-for-quit)
+    ("d" "dynamic block" org-insert-dblock)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-heading ()
@@ -143,7 +165,10 @@ These will be added to most sub menus."
     ("H" "heading (after)" org-insert-heading-after-current)
     ("T" "todo" org-insert-todo-heading)]
    ["Items"
-    ("d" "drawer" org-insert-drawer)]])
+    ("d" "drawer" org-insert-drawer)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-template ()
@@ -151,7 +176,10 @@ These will be added to most sub menus."
   [["Templates"
     ("S" "structure template" org-insert-structure-template)
     ("B" "yas blocks" (lambda () (interactive) (org-menu-expand-snippet "beg")))
-    ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]])
+    ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-timestamp ()
@@ -164,7 +192,10 @@ These will be added to most sub menus."
     ("N" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
    ["Today"
     ("t" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) nil)))
-    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]])
+    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-table-insert-row-below ()
   "Insert a new table column below point"
@@ -188,7 +219,10 @@ These will be added to most sub menus."
     ("R" "row below" shk-org-menu-table-insert-row-below :transient t)
     ("c" "column right" org-table-insert-column :transient t)
     ("C" "column left" shk-org-menu-table-insert-column-left :transient t)
-    ("-" "horiz. line" org-table-insert-hline :transient t)]])
+    ("-" "horiz. line" org-table-insert-hline :transient t)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
@@ -199,7 +233,10 @@ These will be added to most sub menus."
     ("h" "heading" org-menu-insert-heading)
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
-    ("l" "link" org-insert-link)]])
+    ("l" "link" org-insert-link)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-comment-line ()
   "Toggles line comment w/o moving cursor"
@@ -231,7 +268,10 @@ Adapted from `org-goto-calendar'"
     ("h" "heading" imenu)
     ("s" "source block" org-babel-goto-named-src-block)
     ("r" "result block" org-babel-goto-named-result)
-    ("." "calendar" org-goto-calendar :if org-menu-in-time-p)]])
+    ("." "calendar" org-goto-calendar :if org-menu-in-time-p)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-at-text-p ()
   "Returns whether point is at text"
@@ -268,7 +308,10 @@ Adapted from `org-goto-calendar'"
   ["dummy"])
 
 (transient-insert-suffix 'org-menu-text-in-element (list 0)
-  `[,@(org-menu-text-format-items nil)])
+  `[,@(org-menu-text-format-items nil)
+    ["Quit"
+     :if-non-nil org-menu-use-q-for-quit
+     ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu-options ()
@@ -277,7 +320,10 @@ Adapted from `org-goto-calendar'"
     ("l" "show links" org-toggle-link-display)
     ("i" "inline images" org-toggle-inline-images)
     ("p" "pretty entities" org-toggle-pretty-entities)
-    ("t" "timestamp overlay" org-toggle-time-stamp-overlays)]])
+    ("t" "timestamp overlay" org-toggle-time-stamp-overlays)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-in-link ()
   "Returns whether we are inside a link.
@@ -306,24 +352,36 @@ Conditions have been adapted from `org-insert-link'"
     ("TAB" "in" org-clock-in :if-not org-clock-is-active)
     ("o" "out" org-clock-out :if org-clock-is-active)
     ("j" "goto" org-clock-goto :if org-clock-is-active)
-    ("q" "cancel" org-clock-cancel :if org-clock-is-active)
+    ("q" "cancel" org-clock-cancel
+     :if (lambda () (and (not org-menu-use-q-for-quit)
+                         (org-clock-is-active))))
+    ("Q" "cancel" org-clock-cancel
+     :if (lambda () (and org-menu-use-q-for-quit
+                         (org-clock-is-active))))
     ("d" "display" org-clock-display :if org-clock-is-active)
     ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
-    ("z" "resolve" org-resolve-clocks)]])
+    ("z" "resolve" org-resolve-clocks)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix org-menu-search-and-filter ()
   "A menu to search and filter org-mode documents"
   ["Search and filter"
    ["Filter"
     ("/" "only matching" org-sparse-tree)
-    ("q" "tags" org-tags-sparse-tree)
+    ("q" "tags" org-tags-sparse-tree :if-nil org-menu-use-q-for-quit)
+    ("Q" "tags" org-tags-sparse-tree :if-non-nil org-menu-use-q-for-quit)
     ("t" "todos" org-show-todo-tree)
     ("d" "deadlines" org-check-deadlines)
     ("b" "before date" org-check-before-date)
     ("a" "after date" org-check-after-date)
     ("D" "dates range" org-check-dates-range)]
    ["Agenda"
-    ("A" "open" org-agenda)]])
+    ("A" "open" org-agenda)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 ;;;###autoload
 (transient-define-prefix org-menu ()
@@ -348,7 +406,8 @@ Conditions have been adapted from `org-insert-link'"
      :if org-at-heading-p
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
      ("t" "todo" org-todo :transient t)
-     ("q" "tags" org-set-tags-command :transient t)
+     ("q" "tags" org-set-tags-command :transient t :if-nil org-menu-use-q-for-quit)
+     ("Q" "tags" org-set-tags-command :transient t :if-non-nil org-menu-use-q-for-quit)
      ("y" "property" org-set-property :transient t)
      ("," "priority" org-priority :transient t)
      ("A" "archive" org-toggle-archive-tag :transient t)
@@ -459,6 +518,8 @@ Conditions have been adapted from `org-insert-link'"
      ("C" "clock" org-menu-clock :if-not org-clock-is-active)
      ("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)
      ("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)
+     ("" "" transient-noop)
+     ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)
      ]])
 
 (provide 'org-menu)
