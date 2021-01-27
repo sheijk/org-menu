@@ -227,11 +227,11 @@ Adapted from `org-goto-calendar'"
 ;;;###autoload
 (transient-define-prefix org-menu-goto ()
   "Menu to go to different places by name"
-  ["Go to"
-   ("h" "heading" imenu)
-   ("s" "source block" org-babel-goto-named-src-block)
-   ("r" "result block" org-babel-goto-named-result)
-   ("." "calendar" org-goto-calendar :if org-menu-in-time-p)])
+  [["Go to"
+    ("h" "heading" imenu)
+    ("s" "source block" org-babel-goto-named-src-block)
+    ("r" "result block" org-babel-goto-named-result)
+    ("." "calendar" org-goto-calendar :if org-menu-in-time-p)]])
 
 (defun org-menu-at-text-p ()
   "Returns whether point is at text"
@@ -273,11 +273,11 @@ Adapted from `org-goto-calendar'"
 ;;;###autoload
 (transient-define-prefix org-menu-options ()
   "A menu to toggle options"
-  ["Display"
-   ("l" "show links" org-toggle-link-display)
-   ("i" "inline images" org-toggle-inline-images)
-   ("p" "pretty entities" org-toggle-pretty-entities)
-   ("t" "timestamp overlay" org-toggle-time-stamp-overlays)])
+  [["Display"
+    ("l" "show links" org-toggle-link-display)
+    ("i" "inline images" org-toggle-inline-images)
+    ("p" "pretty entities" org-toggle-pretty-entities)
+    ("t" "timestamp overlay" org-toggle-time-stamp-overlays)]])
 
 (defun org-menu-in-link ()
   "Returns whether we are inside a link.
@@ -301,15 +301,15 @@ Conditions have been adapted from `org-insert-link'"
 ;;;###autoload
 (transient-define-prefix org-menu-clock ()
   "Time management using org-modes clock"
-  ["Clock"
-   ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
-   ("TAB" "in" org-clock-in :if-not org-clock-is-active)
-   ("o" "out" org-clock-out :if org-clock-is-active)
-   ("j" "goto" org-clock-goto :if org-clock-is-active)
-   ("q" "cancel" org-clock-cancel :if org-clock-is-active)
-   ("d" "display" org-clock-display :if org-clock-is-active)
-   ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
-   ("z" "resolve" org-resolve-clocks)])
+  [["Clock"
+    ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
+    ("TAB" "in" org-clock-in :if-not org-clock-is-active)
+    ("o" "out" org-clock-out :if org-clock-is-active)
+    ("j" "goto" org-clock-goto :if org-clock-is-active)
+    ("q" "cancel" org-clock-cancel :if org-clock-is-active)
+    ("d" "display" org-clock-display :if org-clock-is-active)
+    ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
+    ("z" "resolve" org-resolve-clocks)]])
 
 (transient-define-prefix org-menu-search-and-filter ()
   "A menu to search and filter org-mode documents"
