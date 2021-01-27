@@ -45,7 +45,7 @@
   "Options for org-menu"
   :group 'org)
 
-(defcustom org-menu-use-q-for-quit nil
+(defcustom org-menu-use-q-for-quit t
   "Whether to add a q binding to quit to all menus.
 
 Use this if you prefer to be consistent with magit. It will also
