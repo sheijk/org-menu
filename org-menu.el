@@ -641,6 +641,8 @@ Conditions have been adapted from `org-insert-link'"
     ("<tab>" "go to" org-agenda-goto)
     ("SPC" "show" org-agenda-show-and-scroll-up :transient t)
     ("t" "todo" org-agenda-todo :transient t)
+    ("S" "schedule" org-agenda-schedule :transient t)
+    ("D" "deadline" org-agenda-deadline :transient t)
     ("," "priority" org-agenda-priority :transient t)
     ("+" "up" org-agenda-priority-up :transient t)
     ("-" "down" org-agenda-priority-down :transient t)
