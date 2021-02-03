@@ -620,6 +620,14 @@ Conditions have been adapted from `org-insert-link'"
    ("l" "log" org-agenda-log-mode)
    ("F" "follow" org-agenda-follow-mode)])
 
+(transient-define-prefix org-menu-agenda-time-range ()
+  "A menu to select between day/week/month/year view in org-agenda"
+  ["Show a"
+   ("d" "day" org-agenda-day-view)
+   ("w" "week" org-agenda-week-view)
+   ("m" "week" org-agenda-month-view)
+   ("y" "week" org-agenda-year-view)])
+
 (transient-define-prefix org-menu-agenda ()
   "A discoverable menu for the org-mode agenda"
   ["Org agenda"
@@ -644,6 +652,7 @@ Conditions have been adapted from `org-insert-link'"
     ("j" "to date" org-agenda-goto-date :transient t)]
    ["More"
     ("o" "options" org-menu-agenda-options)
+    ("w" "time range" org-menu-agenda-time-range)
     ("" "" transient-noop)
     ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)]])
 
