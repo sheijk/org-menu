@@ -37,6 +37,29 @@ These are manual tests to be done for each org-menu steps.
         lobortis. Vestibulum porta orci at lectus. Nunc enim.
   - dal
 
+* Tables
+
+- Mark from before b2 to after c3
+- C-w should clear fields b2, b3, c2, c3
+- C-y at beginning of y1 should result table like table-result
+- M-w should also work for copying
+
+| a  | b  | c  | d  |
+|----+----+----+----|
+| a1 | b1 | c1 | d1 |
+| a2 | b2 | c2 | d2 |
+| a3 | b3 | c3 | d3 |
+| a4 | b4 | c4 | d4 |
+
+| x  | y  | z |
+| x1 | y1 |   |
+| x2 | y2 |   |
+
+#+NAME: table-result
+| x  | y  | z  |
+| x1 | b2 | c2 |
+| x2 | b3 | c3 |
+
 * Nesting
 
   Opening menu while at link should not produce conflicts

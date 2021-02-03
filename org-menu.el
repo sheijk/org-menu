@@ -462,7 +462,10 @@ Conditions have been adapted from `org-insert-link'"
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
      ("S" "shrink column" org-table-toggle-column-width :transient t)
-     ("t" "text formatting" org-menu-text-in-element)]
+     ("t" "text formatting" org-menu-text-in-element)
+     ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
+     ("C-w" "copy rect" org-table-cut-region :transient t :if region-active-p)
+     ("C-y" "yank rect" org-table-paste-rectangle :transient t)]
 
     ;; Items for lists
     ["Navigate"
