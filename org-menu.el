@@ -617,7 +617,12 @@ Conditions have been adapted from `org-insert-link'"
 (transient-define-prefix org-menu-agenda ()
   "A discoverable menu for the org-mode agenda"
   ["Org agenda"
-   ["Headline"
+   ["Navigate"
+    ("p" "prev" org-agenda-previous-line :transient t)
+    ("n" "next" org-agenda-next-line :transient t)
+    ("u" "day" org-agenda-previous-date-line :transient t)
+    ("M-p" "prev day" org-agenda-previous-date-line :transient t)
+    ("M-n" "next day" org-agenda-next-date-line :transient t)]
     ("t" "todo" org-agenda-todo :transient t)
     ("," "priority" org-agenda-priority :transient t)
     ("A" "archive" org-agenda-archive :transient t)
