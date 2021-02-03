@@ -618,7 +618,9 @@ Conditions have been adapted from `org-insert-link'"
   "A menu to toggle options for org-agenda"
   ["Options"
    ("l" "log" org-agenda-log-mode)
-   ("F" "follow" org-agenda-follow-mode)])
+   ("F" "follow" org-agenda-follow-mode)
+   ("G" "date grid" org-agenda-toggle-time-grid)
+   ("D" "diary" org-agenda-toggle-diary)])
 
 (transient-define-prefix org-menu-agenda-time-range ()
   "A menu to select between day/week/month/year view in org-agenda"
