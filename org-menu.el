@@ -281,6 +281,9 @@ Adapted from `org-goto-calendar'"
            (org-in-src-block-p))))
 
 (defun org-menu-text-format-items (check-for-table)
+  "Items to format text.
+
+Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
   (list
    `["Navigate"
      ,@(when check-for-table '(:if org-menu-at-text-p))
