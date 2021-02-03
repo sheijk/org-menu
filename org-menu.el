@@ -225,6 +225,16 @@ These will be added to most sub menus."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
+(defun org-menu-insert-superscript ()
+  "Inserts a text with superscript"
+  (interactive)
+  (org-menu-insert-text "foo^{" "2}"))
+
+(defun org-menu-insert-subscript ()
+  "Inserts a text with subscript"
+  (interactive)
+  (org-menu-insert-text "foo_{" "2}"))
+
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -235,6 +245,9 @@ These will be added to most sub menus."
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
     ("l" "link" org-insert-link)]
+   ["Format"
+    ("^" "superscript" org-menu-insert-superscript)
+    ("_" "subscript" org-menu-insert-subscript)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
