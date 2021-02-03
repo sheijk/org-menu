@@ -39,9 +39,34 @@ These are manual tests to be done for each org-menu steps.
 
 * Tables
 
+** Creating
+
+- Mark one of those blocks
+- org-menu insert/table/table
+- the result should look like table-create-result
+
+a b c d e f
+1 2 3 4 5 6
+one two three four five six
+
+a	b	c	d	e	f
+1	2	3	4	5	6
+one	two	three	four	five	six
+
+a,b,c,d,e,f
+1,2,3,4,5,6
+one,two,three,four,five,six
+
+#+NAME: table-create-result
+| a   | b   | c     | d    | e    | f   |
+| 1   | 2   | 3     | 4    | 5    | 6   |
+| one | two | three | four | five | six |
+
+** Copy/past rectangle
+
 - Mark from before b2 to after c3
 - C-w should clear fields b2, b3, c2, c3
-- C-y at beginning of y1 should result table like table-result
+- C-y at beginning of y1 should result table like table-copy-result
 - M-w should also work for copying
 
 | a  | b  | c  | d  |
@@ -55,7 +80,7 @@ These are manual tests to be done for each org-menu steps.
 | x1 | y1 |   |
 | x2 | y2 |   |
 
-#+NAME: table-result
+#+NAME: table-copy-result
 | x  | y  | z  |
 | x1 | b2 | c2 |
 | x2 | b3 | c3 |
@@ -116,7 +141,7 @@ These are manual tests to be done for each org-menu steps.
    Should result in
 
    foo bar buzz
- 
+
 * Unsorted:
   :PROPERTIES:
   :CUSTOM_ID: test-menu-id
