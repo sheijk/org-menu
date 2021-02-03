@@ -320,7 +320,9 @@ Adapted from `org-goto-calendar'"
     ("l" "show links" org-toggle-link-display)
     ("i" "inline images" org-toggle-inline-images)
     ("p" "pretty entities" org-toggle-pretty-entities)
-    ("t" "timestamp overlay" org-toggle-time-stamp-overlays)]
+    ("I" "indent by level" org-indent-mode)
+    ("t" "timestamp overlay" org-toggle-time-stamp-overlays)
+    ("n" "numbered headings" org-num-mode)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
