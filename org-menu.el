@@ -628,12 +628,13 @@ Conditions have been adapted from `org-insert-link'"
     ("A" "archive" org-agenda-archive :transient t)
     ]
    ["View"
-    ("." "go to today" org-agenda-goto-today)
+    ("." "go to today" org-agenda-goto-today :transient t)
     ("f" "forward" org-agenda-later :transient t)
     ("b" "backward" org-agenda-earlier :transient t)
-    ("j" "to date" org-agenda-goto-date)
-    ]
-   ])
+    ("j" "to date" org-agenda-goto-date :transient t)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (provide 'org-menu)
 ;;; org-menu.el ends here
