@@ -623,10 +623,14 @@ Conditions have been adapted from `org-insert-link'"
     ("u" "day" org-agenda-previous-date-line :transient t)
     ("M-p" "prev day" org-agenda-previous-date-line :transient t)
     ("M-n" "next day" org-agenda-next-date-line :transient t)]
+   ["Task"
+    ("<tab>" "go to" org-agenda-goto)
+    ("SPC" "show" org-agenda-show-and-scroll-up :transient t)
     ("t" "todo" org-agenda-todo :transient t)
     ("," "priority" org-agenda-priority :transient t)
-    ("A" "archive" org-agenda-archive :transient t)
-    ]
+    ("+" "up" org-agenda-priority-up :transient t)
+    ("-" "down" org-agenda-priority-down :transient t)
+    ("A" "archive" org-agenda-archive :transient t)]
    ["View"
     ("." "go to today" org-agenda-goto-today :transient t)
     ("f" "forward" org-agenda-later :transient t)
