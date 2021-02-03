@@ -416,6 +416,8 @@ Conditions have been adapted from `org-insert-link'"
      ("y" "property" org-set-property :transient t)
      ("," "priority" org-priority :transient t)
      ("A" "archive" org-toggle-archive-tag :transient t)
+     ("D" "deadline" org-deadline :transient t)
+     ("S" "schedule" org-schedule :transient t)
      ("/" "comment" org-toggle-comment :transient t)
      ("C-w" "cut tree" org-cut-special :transient t)
      ("C-y" "yank tree" org-paste-special :transient t)]
