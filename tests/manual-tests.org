@@ -62,6 +62,11 @@ one,two,three,four,five,six
 | 1   | 2   | 3     | 4    | 5    | 6   |
 | one | two | three | four | five | six |
 
+** Import
+
+- org-menu insert/table/import
+- should result in a table like table-create-result
+
 ** Copy/past rectangle
 
 - Mark from before b2 to after c3

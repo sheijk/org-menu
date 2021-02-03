@@ -212,7 +212,8 @@ These will be added to most sub menus."
 (transient-define-prefix org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
-    ("t" "table" org-table-create-or-convert-from-region :if-not org-at-table-p)]
+    ("t" "table" org-table-create-or-convert-from-region :if-not org-at-table-p)
+    ("i" "import" org-table-import :if-not org-at-table-p)]
    ["Rows/columns"
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
@@ -447,7 +448,8 @@ Conditions have been adapted from `org-insert-link'"
      :if org-at-table-p
      ("'" "edit" org-table-edit-field)
      ("SPC" "blank" org-table-blank-field :transient t)
-     ("RET" "from above" org-table-copy-down :transient t)]
+     ("RET" "from above" org-table-copy-down :transient t)
+     ("t" "text formatting" org-menu-text-in-element)]
     ["Formulas"
      :if org-at-table-p
      ("E" "edit all" org-table-edit-formulas :transient t)
@@ -462,7 +464,7 @@ Conditions have been adapted from `org-insert-link'"
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
      ("S" "shrink column" org-table-toggle-column-width :transient t)
-     ("t" "text formatting" org-menu-text-in-element)
+     ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
      ("C-w" "copy rect" org-table-cut-region :transient t :if region-active-p)
      ("C-y" "yank rect" org-table-paste-rectangle :transient t)]
