@@ -40,6 +40,7 @@
 
 (require 'org)
 (require 'transient)
+(require 'yasnippet)
 
 (defgroup org-menu nil
   "Options for org-menu"
@@ -228,12 +229,12 @@ These will be added to most sub menus."
 (defun org-menu-insert-superscript ()
   "Inserts a text with superscript"
   (interactive)
-  (org-menu-insert-text "foo^{" "2}"))
+  (yas-expand-snippet "${1:text}^{${2:super}}"))
 
 (defun org-menu-insert-subscript ()
   "Inserts a text with subscript"
   (interactive)
-  (org-menu-insert-text "foo_{" "2}"))
+  (yas-expand-snippet "${1:text}_{${2:sub}}"))
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
