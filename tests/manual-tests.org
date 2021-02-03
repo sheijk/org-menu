@@ -137,6 +137,16 @@ one,two,three,four,five,six
 
    foo *bar* buzz
 
+   This should also work at the beginning and end of a line
+
+bar buzz
+foo bar
+
+   Should result in this (without added spaces at beginning/end of line)
+
+*bar* buzz
+foo *bar*
+
 ** TODO Can be removed
 
    Marking either "*bar*" or "bar" in this text, then open org-menu, press *

@@ -258,16 +258,35 @@ These will be added to most sub menus."
   (interactive)
   (save-excursion (comment-line 1)))
 
-(defun org-menu-insert-text (left right)
-  "Will insert left|right and put the curser at |"
-  (if (region-active-p)
-      (progn
-        (insert left)
-        (exchange-point-and-mark)
-        (insert right))
+(defun org-menu-insert-text (left right &optional surround-whitespace)
+  "Will insert left|right and put the curser at |
+
+If region is active it will be surrounded by left and right and
+the point will be at end of region."
+
+  (let ((start (point))
+        (end (point)))
+    (when (region-active-p)
+      (setq start (region-beginning)
+            end (region-end))
+      (deactivate-mark))
+    (when (> start end)
+      ;; swap variables w/o importing cl-lib
+      (setq start (prog1 end (setq end start))))
+
+    (goto-char start)
+    (when (and surround-whitespace
+                     (not (looking-back " +")))
+            (insert " "))
     (insert left)
-    (insert right)
-    (backward-char (length right))))
+
+    (forward-char (- end start))
+
+    (save-excursion
+      (insert right)
+      (when (and surround-whitespace
+                 (not (looking-at " +")))
+        (insert " ")))))
 
 (defun org-menu-in-time-p ()
   "Returns whether we're at a time stamp or similar
@@ -311,14 +330,14 @@ Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("*" "Bold" (lambda nil (interactive) (org-menu-insert-text "*" "*")) :transient t)
-     ("/" "italic" (lambda nil (interactive) (org-menu-insert-text "/" "/")) :transient t)
-     ("_" "underline" (lambda nil (interactive) (org-menu-insert-text "_" "_")) :transient t)
-     ("+" "strikethrough" (lambda nil (interactive) (org-menu-insert-text "+" "+")) :transient t)]
+     ("*" "Bold" (lambda nil (interactive) (org-menu-insert-text "*" "*" t)) :transient t)
+     ("/" "italic" (lambda nil (interactive) (org-menu-insert-text "/" "/" t)) :transient t)
+     ("_" "underline" (lambda nil (interactive) (org-menu-insert-text "_" "_" t)) :transient t)
+     ("+" "strikethrough" (lambda nil (interactive) (org-menu-insert-text "+" "+" t)) :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~")) :transient t)
-     ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=")) :transient t)]))
+     ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~" t)) :transient t)
+     ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=" t)) :transient t)]))
 
 ;;;###autoload
 (transient-define-prefix org-menu-text-in-element ()
