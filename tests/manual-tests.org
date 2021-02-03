@@ -127,7 +127,7 @@ one,two,three,four,five,six
 
    foo */bar/* buzz
 
-** TODO Can be applied to parts of words
+** Can be applied to parts of words
 
    The same as before, but for the sub-word bar
 
@@ -139,8 +139,8 @@ one,two,three,four,five,six
 
    This should also work at the beginning and end of a line
 
-bar buzz
-foo bar
+barbuzz
+foobar
 
    Should result in this (without added spaces at beginning/end of line)
 

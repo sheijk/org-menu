@@ -276,8 +276,9 @@ the point will be at end of region."
 
     (goto-char start)
     (when (and surround-whitespace
-                     (not (looking-back " +")))
-            (insert " "))
+               (not (bolp))
+               (not (looking-back " +")))
+      (insert " "))
     (insert left)
 
     (forward-char (- end start))
@@ -285,6 +286,7 @@ the point will be at end of region."
     (save-excursion
       (insert right)
       (when (and surround-whitespace
+                 (not (eolp))
                  (not (looking-at " +")))
         (insert " ")))))
 
