@@ -614,6 +614,12 @@ Conditions have been adapted from `org-insert-link'"
      ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)
      ]])
 
+(transient-define-prefix org-menu-agenda-options ()
+  "A menu to toggle options for org-agenda"
+  ["Options"
+   ("l" "log" org-agenda-log-mode)
+   ("F" "follow" org-agenda-follow-mode)])
+
 (transient-define-prefix org-menu-agenda ()
   "A discoverable menu for the org-mode agenda"
   ["Org agenda"
@@ -636,9 +642,10 @@ Conditions have been adapted from `org-insert-link'"
     ("f" "forward" org-agenda-later :transient t)
     ("b" "backward" org-agenda-earlier :transient t)
     ("j" "to date" org-agenda-goto-date :transient t)]
-   ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
-    ("q" "quit" transient-quit-all)]])
+   ["More"
+    ("o" "options" org-menu-agenda-options)
+    ("" "" transient-noop)
+    ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)]])
 
 (provide 'org-menu)
 ;;; org-menu.el ends here
