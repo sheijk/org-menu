@@ -236,6 +236,32 @@ These will be added to most sub menus."
   (interactive)
   (yas-expand-snippet "${1:text}_{${2:sub}}"))
 
+(defun org-menu-parse-formatting (format-char)
+  (let ((original-point (point))
+        start end)
+    (ignore-errors
+      (save-excursion
+        (save-restriction
+          (save-match-data
+            (org-narrow-to-element)
+            (goto-char (search-backward (format "%c" format-char)))
+            (setq start (point))
+            (goto-char original-point)
+            (goto-char (search-forward (format "%c" format-char)))
+            (setq end (point))
+            (cons start end)))))))
+
+(defun org-menu-toggle-format (format-char)
+  "Will add/remove the given format form the region (or point)"
+  (let ((range (org-menu-parse-formatting format-char))
+        (format-string (format "%c" format-char)))
+    (if (null range)
+        (org-menu-insert-text format-string format-string t)
+      (goto-char (cdr range))
+      (delete-backward-char 1)
+      (goto-char (car range))
+      (delete-char 1))))
+
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -332,14 +358,14 @@ Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("*" "Bold" (lambda nil (interactive) (org-menu-insert-text "*" "*" t)) :transient t)
-     ("/" "italic" (lambda nil (interactive) (org-menu-insert-text "/" "/" t)) :transient t)
-     ("_" "underline" (lambda nil (interactive) (org-menu-insert-text "_" "_" t)) :transient t)
-     ("+" "strikethrough" (lambda nil (interactive) (org-menu-insert-text "+" "+" t)) :transient t)]
+     ("*" "Bold" (lambda nil (interactive) (org-menu-toggle-format ?*)) :transient t)
+     ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
+     ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
+     ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-at-text-p))
-     ("~" "code" (lambda nil (interactive) (org-menu-insert-text "~" "~" t)) :transient t)
-     ("=" "verbatim" (lambda nil (interactive) (org-menu-insert-text "=" "=" t)) :transient t)]))
+     ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
+     ("=" "verbatim" (lambda nil (interactive) (org-menu-toggle-format ?=)) :transient t)]))
 
 ;;;###autoload
 (transient-define-prefix org-menu-text-in-element ()

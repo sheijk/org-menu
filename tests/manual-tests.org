@@ -147,7 +147,7 @@ foobar
 *bar* buzz
 foo *bar*
 
-** TODO Can be removed
+** Can be removed
 
    Marking either "*bar*" or "bar" in this text, then open org-menu, press *
 
