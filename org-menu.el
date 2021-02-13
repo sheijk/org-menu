@@ -653,7 +653,8 @@ Conditions have been adapted from `org-insert-link'"
     ("." "go to today" org-agenda-goto-today :transient t)
     ("f" "forward" org-agenda-later :transient t)
     ("b" "backward" org-agenda-earlier :transient t)
-    ("j" "to date" org-agenda-goto-date :transient t)]
+    ("j" "to date" org-agenda-goto-date :transient t)
+    ("g" "update" org-agenda-redo-all :transient t)]
    ["More"
     ("o" "options" org-menu-agenda-options)
     ("w" "time range" org-menu-agenda-time-range)
