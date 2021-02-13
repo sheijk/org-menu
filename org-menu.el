@@ -263,6 +263,23 @@ These will be added to most sub menus."
       (delete-char 1))))
 
 ;;;###autoload
+(transient-define-prefix org-menu-insert-list ()
+  "A menu to insert lists"
+  [["List"
+    ("-" "item" (lambda () (interactive) (insert "- ")))
+    ("+" "+" (lambda () (interactive) (insert "+ ")))
+    ("*" "*" (lambda () (interactive) (insert "* ")))
+    ("." "1." (lambda () (interactive) (insert "1. ")))
+    (")" "1)" (lambda () (interactive) (insert "1) ")))]
+   ["Todo"
+    ("t" "todo" (lambda () (interactive) (insert "- [ ] ")))
+    ("d" "done" (lambda () (interactive) (insert "- [X] ")))
+    ("p" "partial" (lambda () (interactive) (insert "- [-] ")))]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
+
+;;;###autoload
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
   [["Insert"
@@ -271,7 +288,8 @@ These will be added to most sub menus."
     ("h" "heading" org-menu-insert-heading)
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
-    ("l" "link" org-insert-link)]
+    ("l" "link" org-insert-link)
+    ("-" "list" org-menu-insert-list)]
    ["Format"
     ("^" "superscript" org-menu-insert-superscript)
     ("_" "subscript" org-menu-insert-subscript)]

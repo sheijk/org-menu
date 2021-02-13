@@ -15,6 +15,54 @@ These are manual tests to be done for each org-menu steps.
 *** A21
 *** A22
 ** A3
+
+* Lists
+
+  - Check that all of this can be created
+    - using insert list
+    - and list style
+
+** Unordered
+   - normal
+   - list
+
+   Plus
+
+   + plus
+   + list
+
+   Star
+
+   * star
+   * list
+
+   Descriptor items
+
+   - one :: first item
+   - two :: second item
+   - three :: third item
+     - four :: nested
+     - five
+
+** Ordered
+
+  1. one
+  2. two
+  3. three
+     1) three.one
+     2) three.two
+     3) three.three
+  4. four
+  10. [@10] ten, we can skip
+  11. eleven
+
+** testing
+
+   - item
+   - [ ] todo
+   - [X] done
+   - [-] mixed
+
 * Checkboxes [0/0]
 
   The same navigation commands as above should work
@@ -165,32 +213,6 @@ foo *bar*
 - <2021-01-06 Mi>
 - [2021-01-06 Mi] [[file:notes.org][Notes!]]
 
-unordered and checkboxes
-- foo
-  - bar
-  - [X] buzz
-    - [X] foo
-    - [X] bar
-
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris rhoncus
-      purus. Maecenas commodo massa id turpis. Duis ultrices pede a
-      justo. Vivamus molestie, leo id semper aliquet, justo felis egestas
-      lectus, ut tempor diam mauris at ante. Suspendisse potenti. Etiam purus
-      turpis, pellentesque vel, tincidunt eu, faucibus quis, dui. Maecenas eu
-      tortor at tortor vestibulum viverra. Proin pellentesque lorem sit amet
-      massa. Nullam at erat. Proin suscipit scelerisque mauris. Donec
-      lobortis. Vestibulum porta orci at lectus. Nunc enim.
-- dal
-
-ordered
-1. a
-2. b
-   - x
-   - [X] y
-   - z
-3. c
-4. d
-
 |     1 |      2 |
 |-------+--------|
 | 12345 |      5 |
@@ -203,16 +225,6 @@ ordered
 #+END_SRC
 
 [[https://magit.vc/manual/transient.html#Comparison-With-Prefix-Keys-and-Prefix-Arguments][Transient doc]]
-
-[[file:notes.org][Notes!]]
-[[*Testing org-menu][Testing org-menu]]
-
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris rhoncus
-purus. Maecenas commodo massa id turpis. Duis ultrices pede a justo. Vivamus
-molestie, leo id semper aliquet, justo felis egestas lectus, ut tempor diam
-mauris at ante. Suspendisse potenti. Etiam purus turpis, pellentesque vel,
-tincidunt eu, faucibus quis, dui. Maecenas eu tortor at tortor vestibulum
-viverra. Proin pellentesque lorem sit amet massa. Nullam at erat. Proin suscipit
-scelerisque mauris. Donec lobortis. Vestibulum porta orci at lectus. Nunc enim.
+[[file:~/Development/org-menu/org-menu.el][Source!]]
+[[Tables][Internal link]]
 
