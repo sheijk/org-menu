@@ -569,6 +569,7 @@ Conditions have been adapted from `org-insert-link'"
      :if org-in-item-p
      ("R" "repair" org-list-repair)
      ("*" "turn into tree" org-list-make-subtree)
+     ("S" "sort" org-sort-list :transient t)
      ("t" "text formatting" org-menu-text-in-element)]
     ["Toggle"
      :if org-in-item-p
@@ -591,12 +592,12 @@ Conditions have been adapted from `org-insert-link'"
 
     ["Link"
      :if org-menu-in-link
-     ("e" "edit" org-insert-link)]
+     ("e" "edit" org-insert-link :transient t)]
 
     ["Timestamp"
      :if org-menu-in-time-p
-     ("." "type" org-toggle-timestamp-type)
-     ("e" "edit" org-time-stamp)]
+     ("." "type" org-toggle-timestamp-type :transient t)
+     ("e" "edit" org-time-stamp :transient t)]
 
     ["Tasks"
      ("v" "visibility" org-menu-visibility)
