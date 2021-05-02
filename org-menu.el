@@ -468,6 +468,31 @@ Conditions have been adapted from `org-insert-link'"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
+(transient-define-prefix org-menu-attachments ()
+  "A menu to manage attachments"
+  ["Attachments"
+   ["Add"
+    ("a" "file" org-attach-attach)
+    ("c" "copy" org-attach-attach-cp)
+    ("m" "move" org-attach-attach-mv)
+    ("l" "link" org-attach-attach-ln)
+    ("y" "symlink" org-attach-attach-lns)
+    ("u" "download" org-attach-url)
+    ("b" "buffer" org-attach-buffer)
+    ("n" "new" org-attach-new)]
+   ["Open"
+    ("o" "attachment" org-attach-open)
+    ("O" "in Emacs" org-attach-open-in-emacs)
+    ("f" "directory" org-attach-reveal)
+    ("F" "in Emacs" org-attach-reveal-in-emacs)]
+   ["Delete"
+    ("d" "delete" org-attach-delete-one)
+    ("D" "all" org-attach-delete-all)]
+   ["More"
+    ("s" "set directory" org-attach-set-directory)
+    ("S" "unset" org-attach-unset-directory)
+    ("z" "synchronize" org-attach-sync)]])
+
 ;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -507,7 +532,8 @@ Conditions have been adapted from `org-insert-link'"
      ("mH" "make heading (after)" org-insert-heading-after-current)
      ("mt" "make todo (before)" org-insert-todo-heading)
      ("dh" "delete heading" org-cut-subtree :transient t)
-     ("dy" "delete property" org-delete-property :transient t)]
+     ("dy" "delete property" org-delete-property :transient t)
+     ("a" "attachments" org-menu-attachments :transient t)]
 
     ;; Items for tables
     ["Navigate"
