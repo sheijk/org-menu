@@ -153,7 +153,7 @@ These will be added to most sub menus."
     ("a" "ascii" (lambda () (interactive) (org-menu-insert-block "ascii")))
     ("q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-nil org-menu-use-q-for-quit)
     ("Q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-non-nil org-menu-use-q-for-quit)
-    ("d" "dynamic block" org-insert-dblock)]
+    ("d" "dynamic block" org-dynamic-block-insert-dblock)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
