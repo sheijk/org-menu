@@ -54,15 +54,16 @@ change some other bindings to use Q instead of q."
   :group 'org-menu
   :type 'boolean)
 
-(defun org-menu-heading-navigate-items (check-for-heading)
+(defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
 
 These will be added to most sub menus."
+  (setq cycle-function (or cycle-function 'org-cycle))
   `(["Navigate"
      ,@(when check-for-heading '(:if org-at-heading-p))
      ("p" "prev" org-previous-visible-heading :transient t)
      ("n" "next" org-next-visible-heading :transient t)
-     ("c" "cycle" org-cycle :transient t)
+     ("c" "cycle" ,cycle-function :transient t)
      ("u" "parent" outline-up-heading :transient t)
      ("M-p" "prev (same level)" org-backward-heading-same-level :transient t)
      ("M-n" "next (same level)" org-forward-heading-same-level :transient t)]))
@@ -493,6 +494,18 @@ Conditions have been adapted from `org-insert-link'"
     ("S" "unset" org-attach-unset-directory)
     ("z" "synchronize" org-attach-sync)]])
 
+(transient-define-prefix org-menu-archive ()
+  "A menu to archive items"
+  ["dummy"])
+
+(transient-insert-suffix 'org-menu-archive (list 0)
+  `["Archive"
+    ,@(org-menu-heading-navigate-items nil 'org-force-cycle-archived)
+    ["Archive to"
+     ("t" "tree" org-archive-subtree :transient t)
+     ("s" "sibling" org-archive-to-archive-sibling :transient t)
+     ("Q" "tag" org-toggle-archive-tag :transient t)]])
+
 ;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -520,7 +533,7 @@ Conditions have been adapted from `org-insert-link'"
      ("Q" "tags" org-set-tags-command :transient t :if-non-nil org-menu-use-q-for-quit)
      ("y" "property" org-set-property :transient t)
      ("," "priority" org-priority :transient t)
-     ("A" "archive" org-toggle-archive-tag :transient t)
+     ("A" "archive" org-menu-archive :transient t)
      ("D" "deadline" org-deadline :transient t)
      ("S" "schedule" org-schedule :transient t)
      ("/" "comment" org-toggle-comment :transient t)
