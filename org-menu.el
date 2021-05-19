@@ -117,6 +117,13 @@ These will be added to most sub menus."
   "A menu to evaluate buffers, tables, etc. in org-mode"
   ["dummy"])
 
+(defun org-menu-run-gnuplot ()
+  "Will call `org-plot/gnuplot' and update inline images"
+  (interactive)
+  (org-plot/gnuplot)
+  (when org-inline-image-overlays
+    (org-redisplay-inline-images)))
+
 (transient-insert-suffix 'org-menu-eval (list 0)
   `["Evaluation"
     ["Table"
@@ -129,6 +136,8 @@ These will be added to most sub menus."
     ["Heading"
      :if-not org-in-src-block-p
      ("c" "update checkbox count" org-update-checkbox-count)]
+    ["Plot"
+     ("p" "gnuplot" org-menu-run-gnuplot)]
     ["Quit"
      :if-non-nil org-menu-use-q-for-quit
      ("q" "quit" transient-quit-all)]])
@@ -280,6 +289,22 @@ These will be added to most sub menus."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
+(defun org-menu-insert-plot ()
+  "Insert a small example plot for `gnu-plot'"
+  (interactive)
+  (beginning-of-line 1)
+  (yas-expand-snippet
+   "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
+| A |  B |
+|---+----|
+| 1 | 10 |
+| 2 |  8 |
+| 3 |  9 |
+
+#+attr_org: :width ${3:400px}
+[[file:$2]]
+"))
+
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
@@ -290,7 +315,8 @@ These will be added to most sub menus."
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
     ("l" "link" org-insert-link)
-    ("-" "list" org-menu-insert-list)]
+    ("-" "list" org-menu-insert-list)
+    ("p" "plot" org-menu-insert-plot)]
    ["Format"
     ("^" "superscript" org-menu-insert-superscript)
     ("_" "subscript" org-menu-insert-subscript)]
