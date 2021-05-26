@@ -456,6 +456,18 @@ Conditions have been adapted from `org-insert-link'"
       (end-of-line 1)
       (org-ctrl-c-ctrl-c '(4)))))
 
+(defun org-menu-is-timer-running ()
+  "Return whether a timer is currently running."
+  (and org-timer-start-time
+       (not org-timer-countdown-timer)
+       (not org-timer-pause-time)))
+
+(defun org-menu-is-timer-paused ()
+  "Return whether a timer has been started and is paused."
+  (and org-timer-start-time
+       (not org-timer-countdown-timer)
+       org-timer-pause-time))
+
 ;;;###autoload
 (transient-define-prefix org-menu-clock ()
   "Time management using org-modes clock"
@@ -473,6 +485,14 @@ Conditions have been adapted from `org-insert-link'"
     ("d" "display" org-clock-display :if org-clock-is-active)
     ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
     ("z" "resolve" org-resolve-clocks)]
+   ["Timer"
+    ("0" "start" org-timer-start :if-nil org-timer-start-time)
+    ("_" "stop" org-timer-stop :if-non-nil org-timer-start-time)
+    ("." "insert" org-timer :if-non-nil org-timer-start-time)
+    ("-" "... item" org-timer-item :if-non-nil org-timer-start-time)
+    ("," "pause" org-timer-pause-or-continue :if org-menu-is-timer-running)
+    ("," "continue" org-timer-pause-or-continue :if org-menu-is-timer-paused)
+    (";" "countdown" org-timer-set-timer :if-nil org-timer-start-time)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
