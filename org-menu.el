@@ -442,9 +442,10 @@ Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
 
 Conditions have been adapted from `org-insert-link'"
   (or
-   (org-in-regexp org-link-bracket-re 1)
-   (or (org-in-regexp org-link-angle-re)
-       (org-in-regexp org-link-plain-re))))
+   ;; Use variable from org-compat to support Emacs 26
+   (org-in-regexp org-bracket-link-regexp 1)
+   (org-in-regexp org-link-angle-re)
+   (org-in-regexp org-link-plain-re)))
 
 (defun org-menu-toggle-has-checkbox ()
   "Toggle whether the current list item has a checkbox"
@@ -627,7 +628,8 @@ Conditions have been adapted from `org-insert-link'"
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
-     ("S" "shrink column" org-table-toggle-column-width :transient t)
+     ,@(when (fboundp 'org-table-toggle-column-width)
+         (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
      ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
      ("C-w" "copy rect" org-table-cut-region :transient t :if region-active-p)
