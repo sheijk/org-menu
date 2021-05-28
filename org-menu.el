@@ -444,8 +444,10 @@ Conditions have been adapted from `org-insert-link'"
   (or
    ;; Use variable from org-compat to support Emacs 26
    (org-in-regexp org-bracket-link-regexp 1)
-   (org-in-regexp org-link-angle-re)
-   (org-in-regexp org-link-plain-re)))
+   (when (boundp 'org-link-angle-re)
+     (org-in-regexp org-link-angle-re))
+   (when (boundp 'org-link-plain-re)
+     (org-in-regexp org-link-plain-re))))
 
 (defun org-menu-toggle-has-checkbox ()
   "Toggle whether the current list item has a checkbox"
@@ -695,8 +697,10 @@ Conditions have been adapted from `org-insert-link'"
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
      ("C" "clock" org-menu-clock :if-not org-clock-is-active)
-     ("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)
-     ("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)
+     ,@(when (fboundp 'org-capture-finalize)
+         (list '("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)))
+     ,@(when (fboundp 'org-capture-kill)
+         (list '("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)))
      ("" "" transient-noop)
      ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)
      ]])
