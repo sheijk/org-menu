@@ -634,7 +634,7 @@ Conditions have been adapted from `org-insert-link'"
          (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
      ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
-     ("C-w" "copy rect" org-table-cut-region :transient t :if region-active-p)
+     ("C-w" "cut rect" org-table-cut-region :transient t :if region-active-p)
      ("C-y" "yank rect" org-table-paste-rectangle :transient t)]
 
     ;; Items for lists
