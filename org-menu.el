@@ -66,7 +66,8 @@ These will be added to most sub menus."
      ("c" "cycle" ,cycle-function :transient t)
      ("u" "parent" outline-up-heading :transient t)
      ("M-p" "prev (same level)" org-backward-heading-same-level :transient t)
-     ("M-n" "next (same level)" org-forward-heading-same-level :transient t)]))
+     ("M-n" "next (same level)" org-forward-heading-same-level :transient t)
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]))
 
 (defun org-menu-show-headline-content ()
   "Will show the complete content of the current headline and it's children."
@@ -314,7 +315,8 @@ These will be added to most sub menus."
     ("h" "heading" org-menu-insert-heading)
     ("b" "block" org-menu-insert-blocks)
     ("T" "templates" org-menu-insert-template)
-    ("l" "link" org-insert-link)
+    ("l" "link (new)" org-insert-link)
+    ("L" "link (stored)" org-insert-last-stored-link :transient t)
     ("-" "list" org-menu-insert-list)
     ("p" "plot" org-menu-insert-plot)]
    ["Format"
@@ -399,6 +401,7 @@ Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
      ("b" "left" backward-word :transient t)
      ("f" "right" forward-word :transient t)
      ("u" "parent" org-up-element :transient t)
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("SPC" "mark" set-mark-command :transient t)
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
@@ -610,7 +613,8 @@ Conditions have been adapted from `org-insert-link'"
      ("n" "down" next-line :transient t)
      ("b" "left" org-table-previous-field :transient t)
      ("f" "right" org-table-next-field :transient t)
-     ("u" "parent" outline-up-heading :transient t)]
+     ("u" "parent" outline-up-heading :transient t)
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]
     ["Move r/c"
      :if org-at-table-p
      ("P" "up" org-table-move-row-up :transient t)
@@ -651,7 +655,8 @@ Conditions have been adapted from `org-insert-link'"
      ("c" "cycle" org-cycle :transient t)
      ("u" "parent" org-up-element :transient t)
      ("M-p" "prev (same level)" org-backward-element :transient t)
-     ("M-n" "next (same level)" org-forward-element :transient t)]
+     ("M-n" "next (same level)" org-forward-element :transient t)
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]
     ["Move list"
      :if org-in-item-p
      ("P" "up" org-metaup :transient t)
