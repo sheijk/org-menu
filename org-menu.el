@@ -555,6 +555,11 @@ Conditions have been adapted from `org-insert-link'"
      ("s" "sibling" org-archive-to-archive-sibling :transient t)
      ("Q" "tag" org-toggle-archive-tag :transient t)]])
 
+(defun org-menu-insert-todo-heading-after-current ()
+  "Insert a new todo heading with same level as current, after subtree."
+  (interactive)
+  (org-insert-todo-heading '(16)))
+
 ;;;###autoload
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
@@ -593,6 +598,7 @@ Conditions have been adapted from `org-insert-link'"
      ("mh" "make heading (before)" org-insert-heading)
      ("mH" "make heading (after)" org-insert-heading-after-current)
      ("mt" "make todo (before)" org-insert-todo-heading)
+     ("mT" "make todo (after)" org-menu-insert-todo-heading-after-current)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)
      ("a" "attachments" org-menu-attachments :transient t)]
