@@ -40,7 +40,6 @@
 
 (require 'org)
 (require 'transient)
-(require 'yasnippet)
 
 (defgroup org-menu nil
   "Options for org-menu"
@@ -154,6 +153,7 @@ function to be used to cycle visibility of current element."
   "Will expand the given snippet named `SNIPPET'."
   (interactive)
   (insert snippet)
+  (require 'yasnippet)
   (yas-expand))
 
 ;;;###autoload
@@ -297,6 +297,7 @@ function to be used to cycle visibility of current element."
   "Insert a small example plot for `gnu-plot'."
   (interactive)
   (beginning-of-line 1)
+  (require 'yasnippet)
   (yas-expand-snippet
    "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
 | A |  B |
