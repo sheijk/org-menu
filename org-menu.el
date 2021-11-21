@@ -644,7 +644,7 @@ Conditions have been adapted from `org-insert-link'"
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
-     ,@(when (fboundp #'org-table-toggle-column-width)
+     ,@(when (fboundp (function org-table-toggle-column-width))
          (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
      ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
