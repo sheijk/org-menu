@@ -1,4 +1,4 @@
-;;; org-menu.el --- A discoverable menu for Emacs org-mode using transient -*- lexical-binding: t; coding: utf-8 -*-
+;;; org-menu.el --- A discoverable menu for org-mode using transient -*- lexical-binding: t; coding: utf-8 -*-
 ;;
 ;; Copyright 2021 Jan Rehders
 ;;
@@ -396,7 +396,7 @@ Adapted from `org-goto-calendar'"
 (defun org-menu-text-format-items (check-for-table)
   "Items to format text.
 
-Will add an :if org-menu-at-text-p criteria if `CHECK-FOR-TABLE' is true."
+Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
   (list
    `["Navigate"
      ,@(when check-for-table '(:if org-menu-at-text-p))
