@@ -32,7 +32,7 @@
 ;;   (require 'org-menu) ;; not needed if installing by package manager
 ;;   (define-key org-mode-map (kbd "C-c m") 'org-menu))
 ;;
-;; The menu should be pretty self-explanatory. It is context dependent and
+;; The menu should be pretty self-explanatory.  It is context dependent and
 ;; offers different commands for headlines, tables, timestamps, etc.
 ;; The task menu provides entry points for task that work from anywhere.
 ;;
@@ -49,7 +49,7 @@
 (defcustom org-menu-use-q-for-quit t
   "Whether to add a q binding to quit to all menus.
 
-Use this if you prefer to be consistent with magit. It will also
+Use this if you prefer to be consistent with magit.  It will also
 change some other bindings to use Q instead of q."
   :group 'org-menu
   :type 'boolean)
@@ -57,7 +57,9 @@ change some other bindings to use Q instead of q."
 (defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
 
-These will be added to most sub menus."
+These will be added to most sub menus.  If `CHECK-FOR-HEADING' is
+true the items will only be added if on a heading.  `CYCLE-FUNCTION' is the
+function to be used to cycle visibility of current element."
   (setq cycle-function (or cycle-function 'org-cycle))
   `(["Navigate"
      ,@(when check-for-heading '(:if org-at-heading-p))
@@ -104,7 +106,7 @@ These will be added to most sub menus."
      ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-eval-src-items ()
-  "Return the items to evaluate a source block"
+  "Return the items to evaluate a source block."
   (list
    ["Source"
     :if org-in-src-block-p
@@ -119,7 +121,7 @@ These will be added to most sub menus."
   ["dummy"])
 
 (defun org-menu-run-gnuplot ()
-  "Will call `org-plot/gnuplot' and update inline images"
+  "Will call `org-plot/gnuplot' and update inline images."
   (interactive)
   (org-plot/gnuplot)
   (when org-inline-image-overlays
@@ -144,12 +146,12 @@ These will be added to most sub menus."
      ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-insert-block (str)
-  "Insert an org mode block of type `str'"
+  "Insert an org mode block of type `STR'."
   (interactive)
   (insert (format "#+begin_%s\n#+end_%s\n" str str)))
 
 (defun org-menu-expand-snippet (snippet)
-  "Will expand the given snippet."
+  "Will expand the given snippet named `SNIPPET'."
   (interactive)
   (insert snippet)
   (yas-expand))
@@ -210,12 +212,12 @@ These will be added to most sub menus."
     ("q" "quit" transient-quit-all)]])
 
 (defun shk-org-menu-table-insert-row-below ()
-  "Insert a new table column below point"
+  "Insert a new table column below point."
   (interactive)
   (org-table-insert-row '4))
 
 (defun shk-org-menu-table-insert-column-left ()
-  "Insert a new column to the left of point"
+  "Insert a new column to the left of point."
   (interactive)
   (org-table-insert-column)
   (org-table-move-column-right))
@@ -238,16 +240,17 @@ These will be added to most sub menus."
     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-insert-superscript ()
-  "Inserts a text with superscript"
+  "Insert a text with superscript."
   (interactive)
   (yas-expand-snippet "${1:text}^{${2:super}}"))
 
 (defun org-menu-insert-subscript ()
-  "Inserts a text with subscript"
+  "Insert a text with subscript."
   (interactive)
   (yas-expand-snippet "${1:text}_{${2:sub}}"))
 
 (defun org-menu-parse-formatting (format-char)
+  "Will return the bounds of the format markup `FORMAT-CHAR'."
   (let ((original-point (point))
         start end)
     (ignore-errors
@@ -263,7 +266,7 @@ These will be added to most sub menus."
             (cons start end)))))))
 
 (defun org-menu-toggle-format (format-char)
-  "Will add/remove the given format form the region (or point)"
+  "Will add/remove the given format wrapped in `FORMAT-CHAR' form the region (or point)."
   (let ((range (org-menu-parse-formatting format-char))
         (format-string (format "%c" format-char)))
     (if (null range)
@@ -291,7 +294,7 @@ These will be added to most sub menus."
     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-insert-plot ()
-  "Insert a small example plot for `gnu-plot'"
+  "Insert a small example plot for `gnu-plot'."
   (interactive)
   (beginning-of-line 1)
   (yas-expand-snippet
@@ -327,15 +330,16 @@ These will be added to most sub menus."
     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-comment-line ()
-  "Toggles line comment w/o moving cursor"
+  "Toggle line comment w/o moving cursor."
   (interactive)
   (save-excursion (comment-line 1)))
 
 (defun org-menu-insert-text (left right &optional surround-whitespace)
-  "Will insert left|right and put the curser at |
+  "Will insert left|right and put the curser at |.
 
-If region is active it will be surrounded by left and right and
-the point will be at end of region."
+If region is active it will be surrounded by `LEFT' and `RIGHT' and
+the point will be at end of region.  Will add spaces before/after text if
+`SURROUND-WHITESPACE' is true and it's needed."
 
   (let ((start (point))
         (end (point)))
@@ -364,7 +368,7 @@ the point will be at end of region."
         (insert " ")))))
 
 (defun org-menu-in-time-p ()
-  "Returns whether we're at a time stamp or similar
+  "Return whether we're at a time stamp or similar.
 
 Adapted from `org-goto-calendar'"
   (or (org-at-timestamp-p 'lax)
@@ -383,7 +387,7 @@ Adapted from `org-goto-calendar'"
     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-at-text-p ()
-  "Returns whether point is at text"
+  "Return whether point is at text."
   (not (or (org-at-heading-p)
            (org-at-table-p)
            (org-in-item-p)
@@ -392,7 +396,7 @@ Adapted from `org-goto-calendar'"
 (defun org-menu-text-format-items (check-for-table)
   "Items to format text.
 
-Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
+Will add an :if org-menu-at-text-p criteria if `CHECK-FOR-TABLE' is true."
   (list
    `["Navigate"
      ,@(when check-for-table '(:if org-menu-at-text-p))
@@ -441,7 +445,7 @@ Will add an :if org-menu-at-text-p criteria if `check-for-table' is true."
     ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-in-link ()
-  "Returns whether we are inside a link.
+  "Return whether we are inside a link.
 
 Conditions have been adapted from `org-insert-link'"
   (or
@@ -453,7 +457,7 @@ Conditions have been adapted from `org-insert-link'"
      (org-in-regexp org-link-plain-re))))
 
 (defun org-menu-toggle-has-checkbox ()
-  "Toggle whether the current list item has a checkbox"
+  "Toggle whether the current list item has a checkbox."
   (interactive)
   (save-excursion
     (back-to-indentation)
