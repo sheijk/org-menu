@@ -60,7 +60,7 @@ change some other bindings to use Q instead of q."
 These will be added to most sub menus.  If `CHECK-FOR-HEADING' is
 true the items will only be added if on a heading.  `CYCLE-FUNCTION' is the
 function to be used to cycle visibility of current element."
-  (setq cycle-function (or cycle-function 'org-cycle))
+  (setq cycle-function (or cycle-function #'org-cycle))
   `(["Navigate"
      ,@(when check-for-heading '(:if org-at-heading-p))
      ("p" "prev" org-previous-visible-heading :transient t)
@@ -556,7 +556,7 @@ Conditions have been adapted from `org-insert-link'"
 
 (transient-insert-suffix 'org-menu-archive (list 0)
   `["Archive"
-    ,@(org-menu-heading-navigate-items nil 'org-force-cycle-archived)
+    ,@(org-menu-heading-navigate-items nil #'org-force-cycle-archived)
     ["Archive to"
      ("t" "tree" org-archive-subtree :transient t)
      ("s" "sibling" org-archive-to-archive-sibling :transient t)
@@ -644,7 +644,7 @@ Conditions have been adapted from `org-insert-link'"
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
-     ,@(when (fboundp 'org-table-toggle-column-width)
+     ,@(when (fboundp #'org-table-toggle-column-width)
          (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
      ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
@@ -712,9 +712,9 @@ Conditions have been adapted from `org-insert-link'"
      ("o" "options" org-menu-options)
      ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
      ("C" "clock" org-menu-clock :if-not org-clock-is-active)
-     ,@(when (fboundp 'org-capture-finalize)
+     ,@(when (fboundp #'org-capture-finalize)
          (list '("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)))
-     ,@(when (fboundp 'org-capture-kill)
+     ,@(when (fboundp #'org-capture-kill)
          (list '("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)))
      ("" "" transient-noop)
      ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)
