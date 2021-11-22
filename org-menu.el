@@ -152,9 +152,11 @@ function to be used to cycle visibility of current element."
 (defun org-menu-expand-snippet (snippet)
   "Will expand the given snippet named `SNIPPET'."
   (interactive)
-  (insert snippet)
-  (require 'yasnippet)
-  (yas-expand))
+  (if (require 'yasnippet nil 'noerror)
+      (progn
+        (insert snippet)
+        (yas-expand))
+    (message "error: yasnippet not installed, could not expand %s" snippet)))
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert-blocks ()
@@ -242,12 +244,16 @@ function to be used to cycle visibility of current element."
 (defun org-menu-insert-superscript ()
   "Insert a text with superscript."
   (interactive)
-  (yas-expand-snippet "${1:text}^{${2:super}}"))
+  (if (require 'yasnippet nil 'noerror)
+      (yas-expand-snippet "${1:text}^{${2:super}}")
+    (insert "a^b")))
 
 (defun org-menu-insert-subscript ()
   "Insert a text with subscript."
   (interactive)
-  (yas-expand-snippet "${1:text}_{${2:sub}}"))
+  (if (require 'yasnippet nil 'noerror)
+      (yas-expand-snippet "${1:text}_{${2:sub}}")
+    (insert "a_b")))
 
 (defun org-menu-parse-formatting (format-char)
   "Will return the bounds of the format markup `FORMAT-CHAR'."
@@ -297,9 +303,9 @@ function to be used to cycle visibility of current element."
   "Insert a small example plot for `gnu-plot'."
   (interactive)
   (beginning-of-line 1)
-  (require 'yasnippet)
-  (yas-expand-snippet
-   "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
+  (if (require 'yasnippet nil 'noerror)
+      (yas-expand-snippet
+       "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
 | A |  B |
 |---+----|
 | 1 | 10 |
@@ -308,7 +314,18 @@ function to be used to cycle visibility of current element."
 
 #+attr_org: :width ${3:400px}
 [[file:$2]]
-"))
+")
+    (insert
+     "#+plot: type:2d file:\"plot.svg\"
+| A |  B |
+|---+----|
+| 1 | 10 |
+| 2 |  8 |
+| 3 |  9 |
+
+#+attr_org: :width 400px
+[[file:plot.svg]]
+")))
 
 ;;;###autoload
 (transient-define-prefix org-menu-insert ()
