@@ -79,7 +79,7 @@ function to be used to cycle visibility of current element."
     (org-goto-first-child)
     (org-reveal '(4))))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-visibility "org-menu" nil t)
 (transient-define-prefix org-menu-visibility ()
   "A menu to control visibility of org-mode items"
   ["dummy"])
@@ -114,7 +114,7 @@ function to be used to cycle visibility of current element."
     ("k" "clear results" org-babel-remove-result-one-or-many)
     ("'" "edit" org-edit-special)]))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-eval "org-menu" nil t)
 (transient-define-prefix org-menu-eval ()
   "A menu to evaluate buffers, tables, etc. in org-mode"
   ["dummy"])
@@ -158,7 +158,7 @@ function to be used to cycle visibility of current element."
         (yas-expand))
     (message "error: yasnippet not installed, could not expand %s" snippet)))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-blocks "org-menu" nil t)
 (transient-define-prefix org-menu-insert-blocks ()
   "A menu to insert new blocks in org-mode"
   [["Insert block"
@@ -173,7 +173,7 @@ function to be used to cycle visibility of current element."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-heading "org-menu" nil t)
 (transient-define-prefix org-menu-insert-heading ()
   "A menu to insert new headings in org-mode"
   [["Heading"
@@ -186,7 +186,7 @@ function to be used to cycle visibility of current element."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-template "org-menu" nil t)
 (transient-define-prefix org-menu-insert-template ()
   "A menu to insert new templates in org-mode"
   [["Templates"
@@ -197,7 +197,7 @@ function to be used to cycle visibility of current element."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-timestamp "org-menu" nil t)
 (transient-define-prefix org-menu-insert-timestamp ()
   "A menu to insert timestamps in org-mode"
   [["Timestamp"
@@ -224,7 +224,7 @@ function to be used to cycle visibility of current element."
   (org-table-insert-column)
   (org-table-move-column-right))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-table "org-menu" nil t)
 (transient-define-prefix org-menu-insert-table ()
   "A menu to insert table items in org-mode"
   [["Table"
@@ -282,7 +282,7 @@ function to be used to cycle visibility of current element."
       (goto-char (car range))
       (delete-char 1))))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert-list "org-menu" nil t)
 (transient-define-prefix org-menu-insert-list ()
   "A menu to insert lists"
   [["List"
@@ -327,7 +327,7 @@ function to be used to cycle visibility of current element."
 [[file:plot.svg]]
 ")))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-insert "org-menu" nil t)
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in org-mode"
   [["Insert"
@@ -392,7 +392,7 @@ Adapted from `org-goto-calendar'"
   (or (org-at-timestamp-p 'lax)
       (org-match-line (concat ".*" org-ts-regexp))))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-goto "org-menu" nil t)
 (transient-define-prefix org-menu-goto ()
   "Menu to go to different places by name"
   [["Go to"
@@ -437,7 +437,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
      ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
      ("=" "verbatim" (lambda nil (interactive) (org-menu-toggle-format ?=)) :transient t)]))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-text-in-element "org-menu" nil t)
 (transient-define-prefix org-menu-text-in-element ()
   "Add formatting for text inside other elements like lists and tables"
   ["dummy"])
@@ -448,7 +448,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
      :if-non-nil org-menu-use-q-for-quit
      ("q" "quit" transient-quit-all)]])
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-options "org-menu" nil t)
 (transient-define-prefix org-menu-options ()
   "A menu to toggle options"
   [["Display"
@@ -496,7 +496,7 @@ Conditions have been adapted from `org-insert-link'"
        (not org-timer-countdown-timer)
        org-timer-pause-time))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu-clock "org-menu" nil t)
 (transient-define-prefix org-menu-clock ()
   "Time management using org-modes clock"
   [["Clock"
@@ -585,7 +585,7 @@ Conditions have been adapted from `org-insert-link'"
   (interactive)
   (org-insert-todo-heading '(16)))
 
-;;;###autoload
+;;;###autoload (autoload 'org-menu "org-menu" nil t)
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view org-mode documents"
   ["dummy"])
