@@ -53,6 +53,11 @@ change some other bindings to use Q instead of q."
   :group 'org-menu
   :type 'boolean)
 
+(defcustom org-menu-global-toc-depth 10
+  "The number of heading levels to show when displaying the global content."
+  :group 'org-menu
+  :type 'integer)
+
 (defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
 
@@ -97,7 +102,7 @@ function to be used to cycle visibility of current element."
     ["Global"
      ("C" "cycle global" org-global-cycle :transient t)
      ("go" "overview" org-overview)
-     ("gt" "content" org-content)
+     ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
      ("ga" "all" org-show-all)
      ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
     ["Quit"
