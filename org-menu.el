@@ -73,7 +73,8 @@ function to be used to cycle visibility of current element."
      ("u" "parent" outline-up-heading :transient t)
      ("M-p" "prev (same level)" org-backward-heading-same-level :transient t)
      ("M-n" "next (same level)" org-forward-heading-same-level :transient t)
-     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]))
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
+     ("C-_" "undo" undo :transient t)]))
 
 (defun org-menu-show-headline-content ()
   "Will show the complete content of the current headline and it's children."
@@ -429,6 +430,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
      ("f" "right" forward-word :transient t)
      ("u" "parent" org-up-element :transient t)
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
+     ("C-_" "undo" undo :transient t)
      ("SPC" "mark" set-mark-command :transient t)
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
@@ -641,7 +643,8 @@ Conditions have been adapted from `org-insert-link'"
      ("b" "left" org-table-previous-field :transient t)
      ("f" "right" org-table-next-field :transient t)
      ("u" "parent" outline-up-heading :transient t)
-     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
+     ("C-_" "undo" undo :transient t)]
     ["Move r/c"
      :if org-at-table-p
      ("P" "up" org-table-move-row-up :transient t)
@@ -683,7 +686,8 @@ Conditions have been adapted from `org-insert-link'"
      ("u" "parent" org-up-element :transient t)
      ("M-p" "prev (same level)" org-backward-element :transient t)
      ("M-n" "next (same level)" org-forward-element :transient t)
-     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)]
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
+     ("C-_" "undo" undo :transient t)]
     ["Move list"
      :if org-in-item-p
      ("P" "up" org-metaup :transient t)
