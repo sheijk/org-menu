@@ -240,8 +240,8 @@ function to be used to cycle visibility of current element."
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
     ("R" "row below" org-menu-table-insert-row-below :transient t)
-    ("c" "column right" org-table-insert-column :transient t)
-    ("C" "column left" org-menu-table-insert-column-left :transient t)
+    ("c" "column left" org-table-insert-column :transient t)
+    ("C" "column right" org-menu-table-insert-column-left :transient t)
     ("-" "horiz. line" org-table-insert-hline :transient t)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
