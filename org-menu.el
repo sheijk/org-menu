@@ -573,7 +573,10 @@ Conditions have been adapted from `org-insert-link'"
    ["More"
     ("s" "set directory" org-attach-set-directory)
     ("S" "unset" org-attach-unset-directory)
-    ("z" "synchronize" org-attach-sync)]])
+    ("z" "synchronize" org-attach-sync)]]
+  (interactive)
+  (require 'org-attach)
+  (transient-setup 'org-menu-attachments))
 
 (transient-define-prefix org-menu-archive ()
   "A menu to archive items"
