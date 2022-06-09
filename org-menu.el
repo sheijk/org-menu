@@ -528,6 +528,9 @@ Conditions have been adapted from `org-insert-link'"
     ("," "pause" org-timer-pause-or-continue :if org-menu-is-timer-running)
     ("," "continue" org-timer-pause-or-continue :if org-menu-is-timer-paused)
     (";" "countdown" org-timer-set-timer :if-nil org-timer-start-time)]
+   ["Effort"
+    ("e" "set effort" org-set-effort)
+    ("E" "increase" org-inc-effort)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
