@@ -1,0 +1,41 @@
+
+name: emacs-package-tests
+on: [push, pull_request]
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          # - windows-latest
+        emacs:
+          - 28.1
+          - 27.2
+          - 26.3
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Install Emacs
+        uses: purcell/setup-emacs@master
+        with:
+          version: ${{matrix.emacs}}
+
+      - name: Run checks
+        uses: leotaku/elisp-check@master
+        with:
+          file: org-menu.el
+          ignore_warnings: false
+
+      - name: Run tests
+        uses: leotaku/elisp-check@master
+        with:
+          check: ert
+          file: org-menu-tests.el
+          ignore_warnings: false
+
