@@ -40,6 +40,11 @@
 
 (require 'org)
 (require 'transient)
+(require 'org-capture)
+(require 'org-timer)
+
+(autoload 'yas-expand-snippet "yasnippet")
+(autoload 'yas-expand-from-trigger-key "yasnippet")
 
 (defgroup org-menu nil
   "Options for org-menu"
@@ -164,7 +169,7 @@ function to be used to cycle visibility of current element."
   (if (require 'yasnippet nil 'noerror)
       (progn
         (insert snippet)
-        (yas-expand))
+        (yas-expand-from-trigger-key))
     (message "error: yasnippet not installed, could not expand %s" snippet)))
 
 ;;;###autoload (autoload 'org-menu-insert-blocks "org-menu" nil t)
@@ -281,13 +286,13 @@ function to be used to cycle visibility of current element."
             (cons start end)))))))
 
 (defun org-menu-toggle-format (format-char)
-  "Will add/remove the given format wrapped in `FORMAT-CHAR' form the region (or point)."
+  "Will either remove `FORMAT-CHAR' or add it around region/point."
   (let ((range (org-menu-parse-formatting format-char))
         (format-string (format "%c" format-char)))
     (if (null range)
         (org-menu-insert-text format-string format-string t)
       (goto-char (cdr range))
-      (delete-backward-char 1)
+      (delete-char -1)
       (goto-char (car range))
       (delete-char 1))))
 
@@ -381,7 +386,7 @@ the point will be at end of region.  Will add spaces before/after text if
     (goto-char start)
     (when (and surround-whitespace
                (not (bolp))
-               (not (looking-back " +")))
+               (not (looking-back " +" nil)))
       (insert " "))
     (insert left)
 
@@ -478,6 +483,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
 Conditions have been adapted from `org-insert-link'"
   (or
    ;; Use variable from org-compat to support Emacs 26
+   ;; this produces a warning in newer Emacs which we can't avoid
    (org-in-regexp org-bracket-link-regexp 1)
    (when (boundp 'org-link-angle-re)
      (org-in-regexp org-link-angle-re))
@@ -680,6 +686,7 @@ Conditions have been adapted from `org-insert-link'"
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
      ,@(when (fboundp (function org-table-toggle-column-width))
+         ;; This will emit a warning during byte compilation. We can ignore it
          (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
      ("r" "sort" org-table-sort-lines :transient t)
      ("M-w" "copy rect" org-table-copy-region :transient t :if region-active-p)
