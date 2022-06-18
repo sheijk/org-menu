@@ -47,7 +47,7 @@
 (autoload 'yas-expand-from-trigger-key "yasnippet")
 
 (defgroup org-menu nil
-  "Options for org-menu"
+  "Options for `org-menu'."
   :group 'org)
 
 (defcustom org-menu-use-q-for-quit t
@@ -92,7 +92,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-visibility "org-menu" nil t)
 (transient-define-prefix org-menu-visibility ()
-  "A menu to control visibility of org-mode items"
+  "A menu to control visibility of `org-mode' items."
   ["Visibility"
    ["Heading"
     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
@@ -130,7 +130,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-eval "org-menu" nil t)
 (transient-define-prefix org-menu-eval ()
-  "A menu to evaluate buffers, tables, etc. in org-mode"
+  "A menu to evaluate buffers, tables, etc. in `org-mode'."
   ["dummy"])
 
 (defun org-menu-run-gnuplot ()
@@ -174,7 +174,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-blocks "org-menu" nil t)
 (transient-define-prefix org-menu-insert-blocks ()
-  "A menu to insert new blocks in org-mode"
+  "A menu to insert new blocks in `org-mode'."
   [["Insert block"
     ("s" "source" (lambda () (interactive) (org-menu-insert-block "src")))
     ("e" "example" (lambda () (interactive) (org-menu-insert-block "example")))
@@ -189,7 +189,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-heading "org-menu" nil t)
 (transient-define-prefix org-menu-insert-heading ()
-  "A menu to insert new headings in org-mode"
+  "A menu to insert new headings in `org-mode'."
   [["Heading"
     ("h" "heading" org-insert-heading)
     ("H" "heading (after)" org-insert-heading-after-current)
@@ -202,7 +202,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-template "org-menu" nil t)
 (transient-define-prefix org-menu-insert-template ()
-  "A menu to insert new templates in org-mode"
+  "A menu to insert new templates in `org-mode'."
   [["Templates"
     ("S" "structure template" org-insert-structure-template)
     ("B" "yas blocks" (lambda () (interactive) (org-menu-expand-snippet "beg")))
@@ -213,7 +213,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-timestamp "org-menu" nil t)
 (transient-define-prefix org-menu-insert-timestamp ()
-  "A menu to insert timestamps in org-mode"
+  "A menu to insert timestamps in `org-mode'."
   [["Timestamp"
     ("." "active" org-time-stamp)
     ("!" "inactive" org-time-stamp-inactive)]
@@ -240,7 +240,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-table "org-menu" nil t)
 (transient-define-prefix org-menu-insert-table ()
-  "A menu to insert table items in org-mode"
+  "A menu to insert table items in `org-mode'."
   [["Table"
     ("t" "table" org-table-create-or-convert-from-region :if-not org-at-table-p)
     ("i" "import" org-table-import :if-not org-at-table-p)]
@@ -298,7 +298,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-list "org-menu" nil t)
 (transient-define-prefix org-menu-insert-list ()
-  "A menu to insert lists"
+  "A menu to insert lists."
   [["List"
     ("-" "item" (lambda () (interactive) (insert "- ")))
     ("+" "+" (lambda () (interactive) (insert "+ ")))
@@ -343,7 +343,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert "org-menu" nil t)
 (transient-define-prefix org-menu-insert ()
-  "A menu to insert new items in org-mode"
+  "A menu to insert new items in `org-mode'."
   [["Insert"
     ("." "time" org-menu-insert-timestamp)
     ("t" "table" org-menu-insert-table)
@@ -408,7 +408,7 @@ Adapted from `org-goto-calendar'"
 
 ;;;###autoload (autoload 'org-menu-goto "org-menu" nil t)
 (transient-define-prefix org-menu-goto ()
-  "Menu to go to different places by name"
+  "Menu to go to different places by name."
   [["Go to"
     ("h" "heading" imenu)
     ("s" "source block" org-babel-goto-named-src-block)
@@ -454,7 +454,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
 
 ;;;###autoload (autoload 'org-menu-text-in-element "org-menu" nil t)
 (transient-define-prefix org-menu-text-in-element ()
-  "Add formatting for text inside other elements like lists and tables"
+  "Add formatting for text inside other elements like lists and tables."
   ["dummy"])
 
 (transient-insert-suffix 'org-menu-text-in-element (list 0)
@@ -465,7 +465,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
 
 ;;;###autoload (autoload 'org-menu-options "org-menu" nil t)
 (transient-define-prefix org-menu-options ()
-  "A menu to toggle options"
+  "A menu to toggle options."
   [["Display"
     ("l" "show links" org-toggle-link-display)
     ("i" "inline images" org-toggle-inline-images)
@@ -514,7 +514,7 @@ Conditions have been adapted from `org-insert-link'"
 
 ;;;###autoload (autoload 'org-menu-clock "org-menu" nil t)
 (transient-define-prefix org-menu-clock ()
-  "Time management using org-modes clock"
+  "Time management using org-modes clock."
   [["Clock"
     ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
     ("TAB" "in" org-clock-in :if-not org-clock-is-active)
@@ -545,7 +545,7 @@ Conditions have been adapted from `org-insert-link'"
     ("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix org-menu-search-and-filter ()
-  "A menu to search and filter org-mode documents"
+  "A menu to search and filter `org-mode' documents."
   ["Search and filter"
    ["Filter"
     ("/" "only matching" org-sparse-tree)
@@ -563,7 +563,7 @@ Conditions have been adapted from `org-insert-link'"
     ("q" "quit" transient-quit-all)]])
 
 (transient-define-prefix org-menu-attachments ()
-  "A menu to manage attachments"
+  "A menu to manage attachments."
   ["Attachments"
    ["Add"
     ("a" "file" org-attach-attach)
@@ -591,7 +591,7 @@ Conditions have been adapted from `org-insert-link'"
   (transient-setup 'org-menu-attachments))
 
 (transient-define-prefix org-menu-archive ()
-  "A menu to archive items"
+  "A menu to archive items."
   ["dummy"])
 
 (transient-insert-suffix 'org-menu-archive (list 0)
@@ -609,7 +609,7 @@ Conditions have been adapted from `org-insert-link'"
 
 ;;;###autoload (autoload 'org-menu "org-menu" nil t)
 (transient-define-prefix org-menu ()
-  "A discoverable menu to edit and view org-mode documents"
+  "A discoverable menu to edit and view `org-mode' documents."
   ["dummy"])
 
 (transient-insert-suffix 'org-menu (list 0)
