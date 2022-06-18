@@ -88,27 +88,24 @@ function to be used to cycle visibility of current element."
 ;;;###autoload (autoload 'org-menu-visibility "org-menu" nil t)
 (transient-define-prefix org-menu-visibility ()
   "A menu to control visibility of org-mode items"
-  ["dummy"])
-
-(transient-insert-suffix 'org-menu-visibility (list 0)
-  `["Visibility"
-    ,@(org-menu-heading-navigate-items nil)
-    ["Visibility"
-     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
-     ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
-     ("t" "content" org-menu-show-headline-content :if-not org-at-block-p :transient t)
-     ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
-     ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
-     ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
-    ["Global"
-     ("C" "cycle global" org-global-cycle :transient t)
-     ("go" "overview" org-overview)
-     ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
-     ("ga" "all" org-show-all)
-     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
-    ["Quit"
-     :if-non-nil org-menu-use-q-for-quit
-     ("q" "quit" transient-quit-all)]])
+  ["Visibility"
+   ["Heading"
+    ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
+    ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
+    ("c" "cycle" org-cycle :transient t)
+    ("t" "content" org-menu-show-headline-content :if-not org-at-block-p :transient t)
+    ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
+    ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
+    ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
+   ["Global"
+    ("C" "cycle global" org-global-cycle :transient t)
+    ("go" "overview" org-overview)
+    ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
+    ("ga" "all" org-show-all)
+    ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
 
 (defun org-menu-eval-src-items ()
   "Return the items to evaluate a source block."
