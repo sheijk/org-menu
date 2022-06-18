@@ -103,6 +103,12 @@ function to be used to cycle visibility of current element."
     ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
     ("ga" "all" org-show-all)
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
+   ["Narrow"
+    ("nn" "toggle" org-toggle-narrow-to-subtree)
+    ("nb" "to block" org-narrow-to-block :if org-at-block-p)
+    ("ns" "to sub tree" org-narrow-to-subtree)
+    ("ne" "to element" org-narrow-to-element)
+    ("w" "widen" widen)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
