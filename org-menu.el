@@ -340,10 +340,26 @@ function to be used to cycle visibility of current element."
 [[file:plot.svg]]
 ")))
 
+(defun org-menu-insert-option-line-smart (line)
+  "Will insert `LINE'. If inside a block move to right before it."
+  (beginning-of-line 1)
+  (insert line "\n"))
+
+(defun org-menu-insert-name (name)
+  "Insert a #+NAME for the next element."
+  (interactive "MName? ")
+  (org-menu-insert-option-line-smart (format "#+NAME: %s" name)))
+
+(defun org-menu-insert-caption (caption)
+  "Insert a #+CAPTION for the next element."
+  (interactive "MCaption? ")
+  (org-menu-insert-option-line-smart (format "#+CAPTION: %s" caption)))
+
 ;;;###autoload (autoload 'org-menu-insert "org-menu" nil t)
 (transient-define-prefix org-menu-insert ()
   "A menu to insert new items in `org-mode'."
-  [["Insert"
+  ["Insert"
+   ["Element"
     ("." "time" org-menu-insert-timestamp)
     ("t" "table" org-menu-insert-table)
     ("h" "heading" org-menu-insert-heading)
@@ -356,6 +372,10 @@ function to be used to cycle visibility of current element."
    ["Format"
     ("^" "superscript" org-menu-insert-superscript)
     ("_" "subscript" org-menu-insert-subscript)]
+   ["Block Options"
+    ("n" "name" org-menu-insert-name)
+    ("c" "caption" org-menu-insert-caption)
+    ]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
