@@ -213,16 +213,15 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-timestamp "org-menu" nil t)
 (transient-define-prefix org-menu-insert-timestamp ()
-  "A menu to insert timestamps in `org-mode'."
-  [["Timestamp"
-    ("." "active" org-time-stamp)
-    ("!" "inactive" org-time-stamp-inactive)]
-   ["Now"
-    ("n" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) t)))
-    ("N" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
-   ["Today"
-    ("t" "active" (lambda () (interactive) (org-insert-time-stamp (current-time) nil)))
-    ("T" "inactive" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))]
+  "A menu to insert timestamps in org-mode"
+  [["Active"
+    ("." "Time stamp" org-time-stamp)
+    ("t" "Today" (lambda () (interactive) (org-insert-time-stamp (current-time) nil nil)))
+    ("n" "Today + time" (lambda () (interactive) (org-insert-time-stamp (current-time) t nil)))]
+   ["Inactive"
+    ("!" "Time stamp (i)" org-time-stamp-inactive)
+    ("T" "Today (i)" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))
+    ("N" "Today + time (i)" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
