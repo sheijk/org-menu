@@ -228,3 +228,29 @@ foo *bar*
 [[file:~/Development/org-menu/org-menu.el][Source!]]
 [[Tables][Internal link]]
 
+* Inserting
+
+#+NAME: le_block
+#+CAPTION: An illustrative example of a program
+#+begin_src c++
+  int main(int argc, char const *argv[])
+  {
+      return 0;
+  }
+#+end_src
+
+Hello World, see [fn:2] and [fn:1]
+
+Another topic of importance is Foo [fn:foo] <2023-02-06 Mon 01:15>
+
+And here is an inline reference [fn:: the inline reference text]
+
+* Footnotes
+
+[fn:1: hello there this is a footnote]
+
+
+[fn:2] this is another footnote. Needs two empty lines to end
+
+
+[fn:foo: lorem ipsum]

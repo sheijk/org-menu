@@ -341,7 +341,7 @@ function to be used to cycle visibility of current element."
 ")))
 
 (defun org-menu-insert-option-line-smart (line)
-  "Will insert `LINE'. If inside a block move to right before it."
+  "Insert `LINE'.  If inside a block move to right before it."
   (beginning-of-line 1)
   (insert line "\n"))
 
@@ -354,6 +354,20 @@ function to be used to cycle visibility of current element."
   "Insert a #+CAPTION for the next element."
   (interactive "MCaption? ")
   (org-menu-insert-option-line-smart (format "#+CAPTION: %s" caption)))
+
+(defun org-menu-insert-footnote-definition (name definition)
+  "Insert a definition for a footnote.
+
+Named `NAME' using `DEFINITION'."
+  (interactive "MName? \nMDefinition? ")
+  (org-menu-insert-option-line-smart (format "[fn:%s] %s" name definition)))
+
+(defun org-menu-insert-footnote-inline (name definition)
+  "Insert a definition for an inline footnote.
+
+Named `NAME' with `DEFINITION'."
+  (interactive "MName? \nMDefinition? ")
+  (insert (format "[fn:%s: %s]" name definition)))
 
 ;;;###autoload (autoload 'org-menu-insert "org-menu" nil t)
 (transient-define-prefix org-menu-insert ()
@@ -372,6 +386,9 @@ function to be used to cycle visibility of current element."
    ["Format"
     ("^" "superscript" org-menu-insert-superscript)
     ("_" "subscript" org-menu-insert-subscript)]
+   ["Footnotes"
+    ("fd" "define" org-menu-insert-footnote-definition)
+    ("fi" "inline" org-menu-insert-footnote-inline)]
    ["Block Options"
     ("n" "name" org-menu-insert-name)
     ("c" "caption" org-menu-insert-caption)
@@ -422,8 +439,12 @@ the point will be at end of region.  Will add spaces before/after text if
   "Return whether we're at a time stamp or similar.
 
 Adapted from `org-goto-calendar'"
-  (or (org-at-timestamp-p 'lax)
-      (org-match-line (concat ".*" org-ts-regexp))))
+  (org-at-timestamp-p 'lax))
+
+(defun org-menu-in-footnote-p ()
+  "Return whether we're at a footnote."
+  (or (org-footnote-at-definition-p)
+      (org-footnote-at-reference-p)))
 
 ;;;###autoload (autoload 'org-menu-goto "org-menu" nil t)
 (transient-define-prefix org-menu-goto ()
@@ -764,6 +785,16 @@ Conditions have been adapted from `org-insert-link'"
      :if org-menu-in-time-p
      ("." "type" org-toggle-timestamp-type :transient t)
      ("e" "edit" org-time-stamp :transient t)]
+
+    ["Footnote"
+     :if org-menu-in-footnote-p
+     ("ed" "delete" (lambda () (interactive) (org-footnote-delete)))
+     ("es" "sort" (lambda () (interactive) (org-footnote-sort)))
+     ("er" "renumber" (lambda () (interactive) (org-footnote-renumber-fn:N)))
+     ("eS" "sort+renumber" (lambda () (interactive)
+                (org-footnote-renumber-fn:N)
+                (org-footnote-sort)))
+     ("en" "normalize" (lambda () (interactive) (org-footnote-normalize)))]
 
     ["Tasks"
      ("v" "visibility" org-menu-visibility)
