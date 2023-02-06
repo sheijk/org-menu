@@ -517,7 +517,7 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-in-link ()
+(defun org-menu-in-link-p ()
   "Return whether we are inside a link.
 
 Conditions have been adapted from `org-insert-link'"
@@ -778,7 +778,7 @@ Conditions have been adapted from `org-insert-link'"
     ,@(org-menu-eval-src-items)
 
     ["Link"
-     :if org-menu-in-link
+     :if org-menu-in-link-p
      ("e" "edit" org-insert-link :transient t)]
 
     ["Timestamp"
