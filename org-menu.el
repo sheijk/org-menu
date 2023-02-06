@@ -386,13 +386,15 @@ Named `NAME' with `DEFINITION'."
   ["Insert"
    ["Element"
     ("." "time" org-menu-insert-timestamp)
-    ("t" "table" org-menu-insert-table)
-    ("h" "heading" org-menu-insert-heading)
-    ("b" "block" org-menu-insert-blocks)
-    ("T" "templates" org-menu-insert-template)
     ("l" "link (new)" org-insert-link)
     ("L" "link (stored)" org-insert-last-stored-link :transient t)
-    ("-" "list" org-menu-insert-list)
+    ("T" "templates" org-menu-insert-template)]
+   ["Structure"
+    ("h" "heading" org-menu-insert-heading)
+    ("-" "list" org-menu-insert-list)]
+   ["Block/table"
+    ("b" "block" org-menu-insert-blocks)
+    ("t" "table" org-menu-insert-table)
     ("p" "plot" org-menu-insert-plot)]
    ["Format"
     ("^" "superscript" org-menu-insert-superscript)
