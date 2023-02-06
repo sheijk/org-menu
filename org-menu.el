@@ -355,6 +355,17 @@ function to be used to cycle visibility of current element."
   (interactive "MCaption? ")
   (org-menu-insert-option-line-smart (format "#+CAPTION: %s" caption)))
 
+(defun org-menu-insert-startup-setting (setting)
+  "Insert a buffer `SETTING'."
+  (interactive (list (completing-read "Startup setting? "
+                                (mapcar 'car org-startup-options))))
+  (org-menu-insert-option-line-smart (format "#+STARTUP: %s" setting)))
+
+(defun org-menu-insert-buffer-setting (setting)
+  "Insert a buffer `SETTING'."
+  (interactive (list (completing-read "Buffer setting? " org-options-keywords)))
+  (insert (format "#+%s " setting)))
+
 (defun org-menu-insert-footnote-definition (name definition)
   "Insert a definition for a footnote.
 
@@ -389,10 +400,11 @@ Named `NAME' with `DEFINITION'."
    ["Footnotes"
     ("fd" "define" org-menu-insert-footnote-definition)
     ("fi" "inline" org-menu-insert-footnote-inline)]
-   ["Block Options"
+   ["Options"
     ("n" "name" org-menu-insert-name)
     ("c" "caption" org-menu-insert-caption)
-    ]
+    ("s" "startup option" org-menu-insert-startup-setting)
+    ("o" "buffer option" org-menu-insert-buffer-setting)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
