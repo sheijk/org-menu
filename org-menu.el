@@ -163,6 +163,11 @@ function to be used to cycle visibility of current element."
   (interactive)
   (insert (format "#+begin_%s\n#+end_%s\n" str str)))
 
+(defun org-menu-insert-horizontal-rule ()
+  "Insert a horizontal rule."
+  (interactive)
+  (insert "-----"))
+
 (defun org-menu-expand-snippet (snippet)
   "Will expand the given snippet named `SNIPPET'."
   (interactive)
@@ -391,7 +396,8 @@ Named `NAME' with `DEFINITION'."
     ("T" "templates" org-menu-insert-template)]
    ["Structure"
     ("h" "heading" org-menu-insert-heading)
-    ("-" "list" org-menu-insert-list)]
+    ("-" "list" org-menu-insert-list)
+    ("H" "hor. rule" org-menu-insert-horizontal-rule)]
    ["Block/table"
     ("b" "block" org-menu-insert-blocks)
     ("t" "table" org-menu-insert-table)
