@@ -43,9 +43,6 @@
 (require 'org-capture)
 (require 'org-timer)
 
-(autoload 'yas-expand-snippet "yasnippet")
-(autoload 'yas-expand-from-trigger-key "yasnippet")
-
 (defgroup org-menu nil
   "Options for `org-menu'."
   :group 'org)
@@ -62,6 +59,15 @@ change some other bindings to use Q instead of q."
   "The number of heading levels to show when displaying the global content."
   :group 'org-menu
   :type 'integer)
+
+(defcustom org-menu-expand-snippet-function 'org-menu-expand-snippet-default
+  "The function used to expand a snippet.
+
+See `org-menu-expand-snippet-default' for a list of snippet ids
+which need to be supported. `org-menu-expand-snippet-yasnippet'
+shows how to invoke snippets."
+  :group 'org-menu
+n  :type 'function)
 
 (defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
@@ -80,6 +86,65 @@ function to be used to cycle visibility of current element."
      ("M-n" "next (same level)" org-forward-heading-same-level :transient t)
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]))
+
+(defun org-menu-expand-snippet-default (snippet-id)
+  "Insert a fixed text for each `SNIPPET-ID'."
+  (pcase snippet-id
+    ('block (insert "#+BEGIN:\n#+END:\n"))
+    ('option (insert "#+"))
+    ('subscript (insert "a_b"))
+    ('superscript (insert "a^b"))
+    ('plot
+     (insert
+      "#+plot: type:2d file:\"plot.svg\"
+| A |  B |
+|---+----|
+| 1 | 10 |
+| 2 |  8 |
+| 3 |  9 |
+
+#+attr_org: :width 400px
+[[file:plot.svg]]
+"))
+    (_ (insert (format "unknown snippet type %s" snippet-id)))))
+
+(autoload 'yas-expand-snippet "yasnippet")
+(autoload 'yas-expand-from-trigger-key "yasnippet")
+
+(defun org-menu-expand-snippet-yasnippet (snippet-id)
+  "Expand a yasnippet for each `SNIPPET-ID'."
+  (if (not (require 'yasnippet nil 'noerror))
+      (message "error: yasnippet not installed, could not expand %s" snippet-id)
+
+    (pcase snippet-id
+      ('block
+          (insert "beg")
+        (yas-expand-from-trigger-key))
+      ('option
+       (insert "opt")
+       (yas-expand-from-trigger-key))
+      ('subscript
+       (yas-expand-snippet "${1:text}_{${2:sub}}"))
+      ('superscript
+       (yas-expand-snippet "${1:text}^{${2:super}}"))
+      ('plot
+       (yas-expand-snippet
+        "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
+| A |  B |
+|---+----|
+| 1 | 10 |
+| 2 |  8 |
+| 3 |  9 |
+
+#+attr_org: :width ${3:400px}
+[[file:$2]]
+"))
+      (_
+       (insert (format "unknown snippet type %s" snippet-id))))))
+
+(defun org-menu-expand-snippet (snippet-id)
+  "Will expand the given snippet named `SNIPPET-ID' with `ARGS'."
+  (funcall org-menu-expand-snippet-function snippet-id))
 
 (defun org-menu-show-headline-content ()
   "Will show the complete content of the current headline and it's children."
@@ -168,15 +233,6 @@ function to be used to cycle visibility of current element."
   (interactive)
   (insert "-----"))
 
-(defun org-menu-expand-snippet (snippet)
-  "Will expand the given snippet named `SNIPPET'."
-  (interactive)
-  (if (require 'yasnippet nil 'noerror)
-      (progn
-        (insert snippet)
-        (yas-expand-from-trigger-key))
-    (message "error: yasnippet not installed, could not expand %s" snippet)))
-
 ;;;###autoload (autoload 'org-menu-insert-blocks "org-menu" nil t)
 (transient-define-prefix org-menu-insert-blocks ()
   "A menu to insert new blocks in `org-mode'."
@@ -210,8 +266,8 @@ function to be used to cycle visibility of current element."
   "A menu to insert new templates in `org-mode'."
   [["Templates"
     ("S" "structure template" org-insert-structure-template)
-    ("B" "yas blocks" (lambda () (interactive) (org-menu-expand-snippet "beg")))
-    ("O" "yas options" (lambda () (interactive) (org-menu-expand-snippet "opt")))]
+    ("B" "blocks" (lambda () (interactive) (org-menu-expand-snippet 'block)))
+    ("O" "options" (lambda () (interactive) (org-menu-expand-snippet 'option)))]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
@@ -262,16 +318,12 @@ function to be used to cycle visibility of current element."
 (defun org-menu-insert-superscript ()
   "Insert a text with superscript."
   (interactive)
-  (if (require 'yasnippet nil 'noerror)
-      (yas-expand-snippet "${1:text}^{${2:super}}")
-    (insert "a^b")))
+  (org-menu-expand-snippet 'superscript))
 
 (defun org-menu-insert-subscript ()
   "Insert a text with subscript."
   (interactive)
-  (if (require 'yasnippet nil 'noerror)
-      (yas-expand-snippet "${1:text}_{${2:sub}}")
-    (insert "a_b")))
+  (org-menu-expand-snippet 'subscript))
 
 (defun org-menu-parse-formatting (format-char)
   "Will return the bounds of the format markup `FORMAT-CHAR'."
@@ -321,29 +373,7 @@ function to be used to cycle visibility of current element."
   "Insert a small example plot for `gnu-plot'."
   (interactive)
   (beginning-of-line 1)
-  (if (require 'yasnippet nil 'noerror)
-      (yas-expand-snippet
-       "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
-| A |  B |
-|---+----|
-| 1 | 10 |
-| 2 |  8 |
-| 3 |  9 |
-
-#+attr_org: :width ${3:400px}
-[[file:$2]]
-")
-    (insert
-     "#+plot: type:2d file:\"plot.svg\"
-| A |  B |
-|---+----|
-| 1 | 10 |
-| 2 |  8 |
-| 3 |  9 |
-
-#+attr_org: :width 400px
-[[file:plot.svg]]
-")))
+  (org-menu-expand-snippet 'plot))
 
 (defun org-menu-insert-option-line-smart (line)
   "Insert `LINE'.  If inside a block move to right before it."
