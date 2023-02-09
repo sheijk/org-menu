@@ -142,6 +142,11 @@ function to be used to cycle visibility of current element."
       (_
        (insert (format "unknown snippet type %s" snippet-id))))))
 
+;; If yasnippet gets loaded it will be used automatically
+(with-eval-after-load 'yasnippet
+  (unless (equal org-menu-expand-snippet-function #'org-menu-expand-snippet-default)
+    (setq org-menu-expand-snippet-function #'org-menu-expand-snippet-yasnippet)))
+
 (defun org-menu-expand-snippet (snippet-id)
   "Will expand the given snippet named `SNIPPET-ID' with `ARGS'."
   (funcall org-menu-expand-snippet-function snippet-id))
