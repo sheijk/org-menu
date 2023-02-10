@@ -64,10 +64,10 @@ change some other bindings to use Q instead of q."
   "The function used to expand a snippet.
 
 See `org-menu-expand-snippet-default' for a list of snippet ids
-which need to be supported. `org-menu-expand-snippet-yasnippet'
+which need to be supported.  `org-menu-expand-snippet-yasnippet'
 shows how to invoke snippets."
   :group 'org-menu
-n  :type 'function)
+  :type 'function)
 
 (defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
@@ -279,7 +279,7 @@ function to be used to cycle visibility of current element."
 
 ;;;###autoload (autoload 'org-menu-insert-timestamp "org-menu" nil t)
 (transient-define-prefix org-menu-insert-timestamp ()
-  "A menu to insert timestamps in org-mode"
+  "A menu to insert timestamps in Org Mode."
   [["Active"
     ("." "Time stamp" org-time-stamp)
     ("t" "Today" (lambda () (interactive) (org-insert-time-stamp (current-time) nil nil)))
