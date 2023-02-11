@@ -224,6 +224,9 @@ function to be used to cycle visibility of current element."
      ("c" "update checkbox count" org-update-checkbox-count)]
     ["Plot"
      ("p" "gnuplot" org-menu-run-gnuplot)]
+    ["Export"
+     ("t" "tangle source files" org-babel-tangle)
+     ("x" "export" org-export-dispatch)]
     ["Quit"
      :if-non-nil org-menu-use-q-for-quit
      ("q" "quit" transient-quit-all)]])
