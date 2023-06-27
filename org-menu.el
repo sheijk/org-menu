@@ -653,7 +653,8 @@ Conditions have been adapted from `org-insert-link'"
     ("d" "deadlines" org-check-deadlines)
     ("b" "before date" org-check-before-date)
     ("a" "after date" org-check-after-date)
-    ("D" "dates range" org-check-dates-range)]
+    ("D" "dates range" org-check-dates-range)
+    ("r" "remove highlights" org-remove-occur-highlights :if-non-nil org-occur-highlights)]
    ["Agenda"
     ("A" "open" org-agenda)]
    ["Quit"
