@@ -22,3 +22,20 @@ Add this to your Emacs init file:
   (define-key org-mode-map (kbd "C-c m") 'org-menu))
 #+end_src
 
+* Releases
+** 0.5
+- Complete support for ~org-columns~
+- Snippet system can be configured
+- No more yasnippet (soft) dependency but use it if it's loaded
+- New menu items
+  - Easier removal of highlights
+  - Tangling source and exporting
+  - org-clone-subtree-with-time-shift
+  - Add notes
+  - mark checkbox partially done
+  - Toggle non-breaking space
+  - Repairing time stamps
+  - Insert horizontal rule
+  - Inserting startup and buffer options with completion
+- Cleanups and bugfixes (see commits)
+
