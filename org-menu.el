@@ -523,6 +523,17 @@ Adapted from `org-goto-calendar'"
            (org-in-item-p)
            (org-in-src-block-p))))
 
+(defun org-menu-toggle-nbspace ()
+  "Will remove non-breaking space before/after point or insert it if none found."
+  (interactive)
+  (cond
+   ((looking-back "​")
+    (backward-delete-char 1))
+   ((looking-at "​")
+    (delete-char 1))
+   (t
+    (insert "\u200b"))))
+
 (defun org-menu-text-format-items (check-for-table)
   "Items to format text.
 
@@ -544,7 +555,8 @@ Will add an ':if org-menu-at-text-p' criteria if `CHECK-FOR-TABLE' is true."
      ("*" "Bold" (lambda nil (interactive) (org-menu-toggle-format ?*)) :transient t)
      ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
      ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
-     ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)]
+     ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)
+     ("S-SPC" "non-breaking space" org-menu-toggle-nbspace :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-at-text-p))
      ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
