@@ -69,28 +69,28 @@ shows how to invoke snippets."
   :group 'org-menu
   :type 'function)
 
-(defun org-menu-in-columns-view-p ()
+(defun org-menu-show-columns-view-options-p ()
   "Return whether `org-columns' mode is active."
   (not (null org-columns-overlays)))
 
 (defun org-menu-show-heading-options-p ()
   "Whether to show commands operating on headings."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-at-heading-p)))
 
 (defun org-menu-show-table-options-p ()
   "Whether to show commands operating on tables."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-at-table-p)))
 
 (defun org-menu-show-list-options-p ()
   "Whether to show commands operating on lists."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-at-item-p)))
 
 (defun org-menu-show-text-options-p ()
   "Whether to show commands operating on text."
-  (not (or (org-menu-in-columns-view-p)
+  (not (or (org-menu-show-columns-view-options-p)
            (org-at-heading-p)
            (org-at-table-p)
            (org-in-item-p)
@@ -98,22 +98,22 @@ shows how to invoke snippets."
 
 (defun org-menu-show-src-options-p ()
   "Whether to show commands operating on src blocks."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-in-src-block-p)))
 
 (defun org-menu-show-link-options-p ()
   "Whether to show commands operating on links."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-menu-in-link-p)))
 
 (defun org-menu-show-timestamp-options-p ()
   "Whether to show commands operating on timestamps."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (org-at-timestamp-p 'lax)))
 
 (defun org-menu-show-footnote-options-p ()
   "Whether to show commands operating on footnotes."
-  (unless (org-menu-in-columns-view-p)
+  (unless (org-menu-show-columns-view-options-p)
     (or (org-footnote-at-definition-p)
         (org-footnote-at-reference-p))))
 
@@ -240,7 +240,7 @@ function to be used to cycle visibility of current element."
   "A menu to control visibility of `org-mode' items in `org-columns' mode."
   ["Visibility"
    ["Columns view"
-    :if org-menu-in-columns-view-p
+    :if org-menu-show-columns-view-options-p
     ("t" "content" org-columns-content :transient t)
     ("o" "overview" org-overview :transient t)
     ("g" "refresh" org-columns-redo :transient t)]
@@ -966,7 +966,7 @@ Code copied from lambda in org-colview.el after
 
     ;; Items for column view
     ["Navigate"
-     :if org-menu-in-columns-view-p
+     :if org-menu-show-columns-view-options-p
      ("p" "prev" org-menu-columns-previous :transient t)
      ("n" "next" org-menu-columns-next :transient t)
      ("f" "forward" org-menu-columns-forward :transient t)
@@ -974,14 +974,14 @@ Code copied from lambda in org-colview.el after
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]
     ["Value"
-     :if org-menu-in-columns-view-p
+     :if org-menu-show-columns-view-options-p
      ("e" "edit" org-columns-edit-value :transient t)
      ("v" "show" org-columns-show-value :transient t)
      ("M-n" "next" org-columns-next-allowed-value :transient t)
      ("M-p" "previous" org-columns-previous-allowed-value :transient t)
      ("a" "edit allowed" org-columns-edit-allowed :transient t)]
     ["Column"
-     :if org-menu-in-columns-view-p
+     :if org-menu-show-columns-view-options-p
      ("s" "edit column" org-columns-edit-attributes :transient t)
      ("{" "narrow" org-columns-narrow :transient t)
      ("}" "widen" org-columns-widen :transient t)
@@ -991,8 +991,8 @@ Code copied from lambda in org-colview.el after
      ("M-S-<left>" "delete" org-columns-delete :transient t)]
 
     ["Tasks"
-     ("v" "visibility" org-menu-visibility :if-not org-menu-in-columns-view-p)
-     ("v" "visibility" org-menu-visibility-columns :if org-menu-in-columns-view-p)
+     ("v" "visibility" org-menu-visibility :if-not org-menu-show-columns-view-options-p)
+     ("v" "visibility" org-menu-visibility-columns :if org-menu-show-columns-view-options-p)
      ("x" "evaluation" org-menu-eval)
      ("i" "insert" org-menu-insert)
      ("g" "go to" org-menu-goto)
