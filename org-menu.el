@@ -71,7 +71,8 @@ shows how to invoke snippets."
 
 (defun org-menu-show-columns-view-options-p ()
   "Return whether `org-columns' mode is active."
-  (not (null org-columns-overlays)))
+  (and (boundp 'org-columns-overlays)
+       (not (null org-columns-overlays))))
 
 (defun org-menu-show-heading-options-p ()
   "Whether to show commands operating on headings."
@@ -759,8 +760,8 @@ Code copied from lambda in org-colview.el after
    ["Views"
     ("A" "agenda" org-agenda)
     ("c" "columns" org-columns :if-nil org-columns-current-fmt)
-    ("gc" "whole buffer" org-menu-columns-globally :if-nil org-columns-current-fmt)
-    ("c" "columns off" org-columns-quit :if-non-nil org-columns-current-fmt)]
+    ("c" "columns off" org-columns-quit :if-non-nil org-columns-current-fmt)
+    ("gc" "whole buffer" org-menu-columns-globally :if-nil org-columns-current-fmt)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
@@ -972,13 +973,13 @@ Code copied from lambda in org-colview.el after
     ["Value"
      :if org-menu-show-columns-view-options-p
      ("e" "edit" org-columns-edit-value :transient t)
-     ("v" "show" org-columns-show-value :transient t)
+     ("V" "show" org-columns-show-value :transient t)
      ("M-n" "next" org-columns-next-allowed-value :transient t)
      ("M-p" "previous" org-columns-previous-allowed-value :transient t)
      ("a" "edit allowed" org-columns-edit-allowed :transient t)]
     ["Column"
      :if org-menu-show-columns-view-options-p
-     ("s" "edit column" org-columns-edit-attributes :transient t)
+     ("E" "edit column" org-columns-edit-attributes :transient t)
      ("{" "narrow" org-columns-narrow :transient t)
      ("}" "widen" org-columns-widen :transient t)
      ("M-<right>" "move right" org-columns-move-right :transient t)
