@@ -102,9 +102,18 @@ shows how to invoke snippets."
     (org-in-src-block-p)))
 
 (defun org-menu-show-link-options-p ()
-  "Whether to show commands operating on links."
+  "Whether to show commands operating on links.
+
+Conditions have been adapted from `org-insert-link'"
   (unless (org-menu-show-columns-view-options-p)
-    (org-menu-in-link-p)))
+    (or
+     ;; Use variable from org-compat to support Emacs 26
+     ;; this produces a warning in newer Emacs which we can't avoid
+     (org-in-regexp org-bracket-link-regexp 1)
+     (when (boundp 'org-link-angle-re)
+       (org-in-regexp org-link-angle-re))
+     (when (boundp 'org-link-plain-re)
+       (org-in-regexp org-link-plain-re)))))
 
 (defun org-menu-show-timestamp-options-p ()
   "Whether to show commands operating on timestamps."
@@ -629,19 +638,6 @@ Will add an ':if org-menu-show-text-options-p' criteria if
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
-
-(defun org-menu-in-link-p ()
-  "Return whether we are inside a link.
-
-Conditions have been adapted from `org-insert-link'"
-  (or
-   ;; Use variable from org-compat to support Emacs 26
-   ;; this produces a warning in newer Emacs which we can't avoid
-   (org-in-regexp org-bracket-link-regexp 1)
-   (when (boundp 'org-link-angle-re)
-     (org-in-regexp org-link-angle-re))
-   (when (boundp 'org-link-plain-re)
-     (org-in-regexp org-link-plain-re))))
 
 (defun org-menu-toggle-has-checkbox ()
   "Toggle whether the current list item has a checkbox."
