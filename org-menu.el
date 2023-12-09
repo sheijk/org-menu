@@ -847,8 +847,7 @@ Code copied from lambda in org-colview.el after
      ("D" "deadline" org-deadline :transient t)
      ("S" "schedule" org-schedule :transient t)
      ("/" "comment" org-toggle-comment :transient t)
-     ("C-w" "cut tree" org-cut-special :transient t)
-     ("C-y" "yank tree" org-paste-special :transient t)]
+     ("N" "add note" org-add-note)]
     ["Make new/delete"
      :if org-menu-show-heading-options-p
      ("mh" "make heading (before)" org-insert-heading)
@@ -858,7 +857,9 @@ Code copied from lambda in org-colview.el after
      ("mc" "clone with time shift" org-clone-subtree-with-time-shift)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)
-     ("a" "attachments" org-menu-attachments)]
+     ("a" "attachments" org-menu-attachments)
+     ("C-w" "cut tree" org-cut-special :transient t)
+     ("C-y" "yank tree" org-paste-special :transient t)]
 
     ;; Items for tables
     ["Navigate"
