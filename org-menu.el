@@ -651,10 +651,11 @@ Conditions have been adapted from `org-insert-link'"
     ("Q" "tags" org-tags-sparse-tree :if-non-nil org-menu-use-q-for-quit)
     ("t" "todos" org-show-todo-tree)
     ("d" "deadlines" org-check-deadlines)
-    ("b" "before date" org-check-before-date)
-    ("a" "after date" org-check-after-date)
-    ("D" "dates range" org-check-dates-range)
     ("r" "remove highlights" org-remove-occur-highlights :if-non-nil org-occur-highlights)]
+   ["Dates"
+    ("b" "before" org-check-before-date)
+    ("a" "after" org-check-after-date)
+    ("D" "range" org-check-dates-range)]
    ["Agenda"
     ("A" "open" org-agenda)]
    ["Quit"
