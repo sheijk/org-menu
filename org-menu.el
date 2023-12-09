@@ -236,6 +236,18 @@ function to be used to cycle visibility of current element."
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
+(transient-define-prefix org-menu-visibility-columns ()
+  "A menu to control visibility of `org-mode' items in `org-columns' mode."
+  ["Visibility"
+   ["Columns view"
+    :if org-menu-in-columns-view-p
+    ("t" "content" org-columns-content :transient t)
+    ("o" "overview" org-overview :transient t)
+    ("g" "refresh" org-columns-redo :transient t)]
+   ["Quit"
+    :if-non-nil org-menu-use-q-for-quit
+    ("q" "quit" transient-quit-all)]])
+
 (defun org-menu-eval-src-items ()
   "Return the items to evaluate a source block."
   (list
@@ -685,6 +697,55 @@ Conditions have been adapted from `org-insert-link'"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
+(defun org-menu-columns-globally ()
+  "Turn on `org-columns' globally."
+  (interactive)
+  (org-columns t))
+
+(defun org-menu-columns-next ()
+  "Move into the next row when org-columns is active.
+
+Code copied from lambda in org-colview.el after
+  (org-defkey org-columns-map [down]
+"
+  (interactive)
+  (let ((col (current-column)))
+    (beginning-of-line 2)
+    (while (and (org-invisible-p2) (not (eobp)))
+      (beginning-of-line 2))
+    (move-to-column col)
+    (if (derived-mode-p 'org-agenda-mode)
+        (org-agenda-do-context-action))))
+
+(defun org-menu-columns-previous ()
+  "Move into the previous row when org-columns is active.
+
+Code copied from lambda in org-colview.el after
+  (org-defkey org-columns-map [up]
+"
+  (interactive)
+  (let ((col (current-column)))
+    (beginning-of-line 0)
+    (while (and (org-invisible-p2) (not (bobp)))
+      (beginning-of-line 0))
+    (move-to-column col)
+    (if (eq major-mode 'org-agenda-mode)
+        (org-agenda-do-context-action))))
+
+(defun org-menu-columns-forward ()
+  "Move into the next column when org-columns is active.
+
+Code copied from lambda in org-colview.el after
+  (org-defkey org-columns-map [right]
+"
+  (interactive)
+  (goto-char (1+ (point))))
+
+(defun org-menu-columns-backward ()
+  "Move into the next column when org-columns is active."
+  (interactive)
+  (backward-char 1))
+
 (transient-define-prefix org-menu-search-and-filter ()
   "A menu to search and filter `org-mode' documents."
   ["Search and filter"
@@ -699,8 +760,11 @@ Conditions have been adapted from `org-insert-link'"
     ("b" "before" org-check-before-date)
     ("a" "after" org-check-after-date)
     ("D" "range" org-check-dates-range)]
-   ["Agenda"
-    ("A" "open" org-agenda)]
+   ["Views"
+    ("A" "agenda" org-agenda)
+    ("c" "columns" org-columns :if-nil org-columns-current-fmt)
+    ("gc" "whole buffer" org-menu-columns-globally :if-nil org-columns-current-fmt)
+    ("c" "columns off" org-columns-quit :if-non-nil org-columns-current-fmt)]
    ["Quit"
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
@@ -900,8 +964,35 @@ Conditions have been adapted from `org-insert-link'"
                 (org-footnote-sort)))
      ("en" "normalize" (lambda () (interactive) (org-footnote-normalize)))]
 
+    ;; Items for column view
+    ["Navigate"
+     :if org-menu-in-columns-view-p
+     ("p" "prev" org-menu-columns-previous :transient t)
+     ("n" "next" org-menu-columns-next :transient t)
+     ("f" "forward" org-menu-columns-forward :transient t)
+     ("b" "backward" org-menu-columns-backward :transient t)
+     ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
+     ("C-_" "undo" undo :transient t)]
+    ["Value"
+     :if org-menu-in-columns-view-p
+     ("e" "edit" org-columns-edit-value :transient t)
+     ("v" "show" org-columns-show-value :transient t)
+     ("M-n" "next" org-columns-next-allowed-value :transient t)
+     ("M-p" "previous" org-columns-previous-allowed-value :transient t)
+     ("a" "edit allowed" org-columns-edit-allowed :transient t)]
+    ["Column"
+     :if org-menu-in-columns-view-p
+     ("s" "edit column" org-columns-edit-attributes :transient t)
+     ("{" "narrow" org-columns-narrow :transient t)
+     ("}" "widen" org-columns-widen :transient t)
+     ("M-<right>" "move right" org-columns-move-right :transient t)
+     ("M-<left>" "move left" org-columns-move-left :transient t)
+     ("M-S-<right>" "new" org-columns-new :transient t)
+     ("M-S-<left>" "delete" org-columns-delete :transient t)]
+
     ["Tasks"
-     ("v" "visibility" org-menu-visibility)
+     ("v" "visibility" org-menu-visibility :if-not org-menu-in-columns-view-p)
+     ("v" "visibility" org-menu-visibility-columns :if org-menu-in-columns-view-p)
      ("x" "evaluation" org-menu-eval)
      ("i" "insert" org-menu-insert)
      ("g" "go to" org-menu-goto)
