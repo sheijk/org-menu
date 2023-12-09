@@ -758,6 +758,7 @@ Conditions have been adapted from `org-insert-link'"
      ("mH" "make heading (after)" org-insert-heading-after-current)
      ("mt" "make todo (before)" org-insert-todo-heading)
      ("mT" "make todo (after)" org-menu-insert-todo-heading-after-current)
+     ("mc" "clone with time shift" org-clone-subtree-with-time-shift)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)
      ("a" "attachments" org-menu-attachments :transient t)]
