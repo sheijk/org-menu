@@ -530,6 +530,11 @@ Named `NAME' with `DEFINITION'."
   (interactive)
   (save-excursion (comment-line 1)))
 
+(defun org-menu-fix-timestamp ()
+  "Fix the timestamp at `(point)'."
+  (interactive)
+  (org-timestamp-change 0 'day))
+
 (defun org-menu-insert-text (left right &optional surround-whitespace)
   "Will insert left|right and put the curser at |.
 
@@ -949,7 +954,8 @@ Code copied from lambda in org-colview.el after
     ["Timestamp"
      :if org-menu-show-timestamp-options-p
      ("." "type" org-toggle-timestamp-type :transient t)
-     ("e" "edit" org-time-stamp :transient t)]
+     ("e" "edit" org-time-stamp :transient t)
+     ("R" "repair" org-menu-fix-timestamp :transient t)]
 
     ["Footnote"
      :if org-menu-show-footnote-options-p
