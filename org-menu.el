@@ -853,7 +853,7 @@ Code copied from lambda in org-colview.el after
      ("mc" "clone with time shift" org-clone-subtree-with-time-shift)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)
-     ("a" "attachments" org-menu-attachments :transient t)]
+     ("a" "attachments" org-menu-attachments)]
 
     ;; Items for tables
     ["Navigate"
