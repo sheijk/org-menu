@@ -934,6 +934,9 @@ Code copied from lambda in org-colview.el after
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
      ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
      ("d" "done" org-toggle-checkbox :transient t)
+     ("h" "half-done"
+      (lambda () (interactive) (org-toggle-checkbox '(16)))
+      :transient t)
      ("m" "checkbox" org-menu-toggle-has-checkbox :transient t)]
 
     ;; Items for text
