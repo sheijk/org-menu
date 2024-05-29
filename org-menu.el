@@ -135,6 +135,7 @@ true the items will only be added if on a heading.  `CYCLE-FUNCTION' is the
 function to be used to cycle visibility of current element."
   (setq cycle-function (or cycle-function #'org-cycle))
   `(["Navigate"
+     :pad-keys t
      ,@(when check-for-heading '(:if org-menu-show-heading-options-p))
      ("p" "prev" org-previous-visible-heading :transient t)
      ("n" "next" org-next-visible-heading :transient t)
@@ -231,12 +232,14 @@ function to be used to cycle visibility of current element."
     ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
     ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
    ["Global"
+    :pad-keys t
     ("C" "cycle global" org-global-cycle :transient t)
     ("go" "overview" org-overview)
     ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
     ("ga" "all" org-show-all)
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    ["Narrow"
+    :pad-keys t
     ("nn" "toggle" org-toggle-narrow-to-subtree)
     ("nb" "to block" org-narrow-to-block :if org-at-block-p)
     ("ns" "to sub tree" org-narrow-to-subtree)
@@ -599,6 +602,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
   (list
    `["Navigate"
      ,@(when check-for-table '(:if org-menu-show-text-options-p))
+     :pad-keys t
      ("p" "up" previous-line :transient t)
      ("n" "down" next-line :transient t)
      ("b" "left" backward-word :transient t)
@@ -610,6 +614,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
      ,@(when check-for-table '(:if org-menu-show-text-options-p))
+     :pad-keys t
      ("*" "Bold" (lambda nil (interactive) (org-menu-toggle-format ?*)) :transient t)
      ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
      ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
@@ -671,6 +676,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
 (transient-define-prefix org-menu-clock ()
   "Time management using org-modes clock."
   [["Clock"
+    :pad-keys t
     ("<tab>" "in" org-clock-in :if-not org-clock-is-active)
     ("TAB" "in" org-clock-in :if-not org-clock-is-active)
     ("o" "out" org-clock-out :if org-clock-is-active)
@@ -850,6 +856,7 @@ Code copied from lambda in org-colview.el after
      ("N" "add note" org-add-note)]
     ["Make new/delete"
      :if org-menu-show-heading-options-p
+     :pad-keys t
      ("mh" "make heading (before)" org-insert-heading)
      ("mH" "make heading (after)" org-insert-heading-after-current)
      ("mt" "make todo (before)" org-insert-todo-heading)
@@ -864,6 +871,7 @@ Code copied from lambda in org-colview.el after
     ;; Items for tables
     ["Navigate"
      :if org-menu-show-table-options-p
+     :pad-keys t
      ("p" "up" previous-line :transient t)
      ("n" "down" next-line :transient t)
      ("b" "left" org-table-previous-field :transient t)
@@ -879,6 +887,7 @@ Code copied from lambda in org-colview.el after
      ("F" "right" org-table-move-column-right :transient t)]
     ["Field"
      :if org-menu-show-table-options-p
+     :pad-keys t
      ("'" "edit" org-table-edit-field)
      ("SPC" "blank" org-table-blank-field :transient t)
      ("RET" "from above" org-table-copy-down :transient t)
@@ -893,6 +902,7 @@ Code copied from lambda in org-colview.el after
      ("D" "debug" org-table-toggle-formula-debugger :transient t)]
     ["Table"
      :if org-menu-show-table-options-p
+     :pad-keys t
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
      ("m" "make" org-menu-insert-table)
@@ -907,6 +917,7 @@ Code copied from lambda in org-colview.el after
     ;; Items for lists
     ["Navigate"
      :if org-menu-show-list-options-p
+     :pad-keys t
      ("p" "prev" previous-line :transient t)
      ("n" "next" next-line :transient t)
      ("c" "cycle" org-cycle :transient t)
@@ -943,6 +954,7 @@ Code copied from lambda in org-colview.el after
     ,@(org-menu-text-format-items t)
     ["Line"
      :if org-menu-show-text-options-p
+     :pad-keys t
      (":" "fixed width" org-toggle-fixed-width :transient t)
      (";" "comment" org-menu-comment-line :transient t)
      ("--" "list" org-toggle-item :transient t)
@@ -974,6 +986,7 @@ Code copied from lambda in org-colview.el after
     ;; Items for column view
     ["Navigate"
      :if org-menu-show-columns-view-options-p
+     :pad-keys t
      ("p" "prev" org-menu-columns-previous :transient t)
      ("n" "next" org-menu-columns-next :transient t)
      ("f" "forward" org-menu-columns-forward :transient t)
@@ -982,6 +995,7 @@ Code copied from lambda in org-colview.el after
      ("C-_" "undo" undo :transient t)]
     ["Value"
      :if org-menu-show-columns-view-options-p
+     :pad-keys t
      ("e" "edit" org-columns-edit-value :transient t)
      ("V" "show" org-columns-show-value :transient t)
      ("M-n" "next" org-columns-next-allowed-value :transient t)
@@ -989,6 +1003,7 @@ Code copied from lambda in org-colview.el after
      ("a" "edit allowed" org-columns-edit-allowed :transient t)]
     ["Column"
      :if org-menu-show-columns-view-options-p
+     :pad-keys t
      ("E" "edit column" org-columns-edit-attributes :transient t)
      ("{" "narrow" org-columns-narrow :transient t)
      ("}" "widen" org-columns-widen :transient t)
