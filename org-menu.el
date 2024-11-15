@@ -577,16 +577,15 @@ the point will be at end of region.  Will add spaces before/after text if
     :if-non-nil org-menu-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-toggle-nbspace ()
-  "Will remove non-breaking space before/after point or insert it if none found."
+(defun org-menu-toggle-zwspace ()
+  "Will remove zero-width space before/after point or insert it if none found."
   (interactive)
-  (cond
-   ((looking-back "​")
-    (backward-delete-char 1))
-   ((looking-at "​")
-    (delete-char 1))
-   (t
-    (insert "\u200b"))))
+  (let ((zww (eval-when-compile (string (char-from-name "ZERO WIDTH SPACE")))))
+    (save-excursion
+      (skip-chars-backward zww)
+      (if (looking-at (rx (+ (literal zww))))
+      (replace-match "")
+    (insert zww)))))
 
 (defun org-menu-text-format-items (check-for-table)
   "Items to format text.
@@ -613,7 +612,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
      ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
      ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)
-     ("S-SPC" "non-breaking space" org-menu-toggle-nbspace :transient t)]
+     ("S-SPC" "non-breaking space" org-menu-toggle-zwspace :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-show-text-options-p))
      ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
