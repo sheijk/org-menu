@@ -210,7 +210,7 @@ function to be used to cycle visibility of current element."
   (interactive)
   (save-excursion
     (outline-hide-subtree)
-    (org-show-children 4)
+    (org-fold-show-children 4)
     (org-goto-first-child)
     (org-reveal '(4))))
 
@@ -760,7 +760,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
 
 (transient-insert-suffix 'org-menu-archive (list 0)
   `["Archive"
-    ,@(org-menu-heading-navigate-items nil #'org-force-cycle-archived)
+    ,@(org-menu-heading-navigate-items nil #'org-cycle-force-archived)
     ["Archive to"
      ("t" "tree" org-archive-subtree :transient t)
      ("s" "sibling" org-archive-to-archive-sibling :transient t)
