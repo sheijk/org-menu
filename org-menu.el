@@ -1,6 +1,6 @@
-;;; org-menu.el --- A discoverable menu for org-mode using transient -*- lexical-binding: t; coding: utf-8 -*-
+;;; org-menu.el --- A discoverable menu for org-mode using transient -*- lexical-binding: t -*-
 ;;
-;; Copyright 2021 Jan Rehders
+;; Copyright 2021  Jan Rehders
 ;;
 ;; Author: Jan Rehders <nospam@sheijk.net>
 ;; Version: 0.1alpha
@@ -23,25 +23,26 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;; Commentary:
-;;
-;; Usage:
-;;
+
+;;;; Usage:
+
 ;; Add this to your ~/.emacs to bind the menu to `C-c m':
 ;;
 ;; (with-eval-after-load 'org
 ;;   (require 'org-menu) ;; not needed if installing by package manager
-;;   (define-key org-mode-map (kbd "C-c m") 'org-menu))
+;;   (define-key org-mode-map (kbd "C-c m") #'org-menu))
 ;;
 ;; The menu should be pretty self-explanatory.  It is context dependent and
 ;; offers different commands for headlines, tables, timestamps, etc.
 ;; The task menu provides entry points for task that work from anywhere.
-;;
+
 ;;; Code:
 
 (require 'org)
 (require 'transient)
 (require 'org-capture)
 (require 'org-timer)
+(require 'cl-lib)
 
 (defgroup org-menu nil
   "Options for `org-menu'."
@@ -52,27 +53,23 @@
 
 Use this if you prefer to be consistent with magit.  It will also
 change some other bindings to use Q instead of q."
-  :group 'org-menu
   :type 'boolean)
 
 (defcustom org-menu-global-toc-depth 10
   "The number of heading levels to show when displaying the global content."
-  :group 'org-menu
-  :type 'integer)
+  :type 'natnum)
 
-(defcustom org-menu-expand-snippet-function 'org-menu-expand-snippet-default
+(defcustom org-menu-expand-snippet-function #'org-menu-expand-snippet-default
   "The function used to expand a snippet.
 
 See `org-menu-expand-snippet-default' for a list of snippet ids
 which need to be supported.  `org-menu-expand-snippet-yasnippet'
 shows how to invoke snippets."
-  :group 'org-menu
   :type 'function)
 
 (defun org-menu-show-columns-view-options-p ()
   "Return whether `org-columns' mode is active."
-  (and (boundp 'org-columns-overlays)
-       (not (null org-columns-overlays))))
+  (bound-and-true-p org-columns-overlays))
 
 (defun org-menu-show-heading-options-p ()
   "Whether to show commands operating on headings."
@@ -109,8 +106,7 @@ Conditions have been adapted from `org-insert-link'"
   (unless (org-menu-show-columns-view-options-p)
     (or
      ;; Use variable from org-compat to support Emacs 26
-     ;; this produces a warning in newer Emacs which we can't avoid
-     (org-in-regexp org-bracket-link-regexp 1)
+     (org-in-regexp (symbol-value 'org-bracket-link-regexp) 1)
      (when (boundp 'org-link-angle-re)
        (org-in-regexp org-link-angle-re))
      (when (boundp 'org-link-plain-re)
@@ -136,7 +132,7 @@ function to be used to cycle visibility of current element."
   (setq cycle-function (or cycle-function #'org-cycle))
   `(["Navigate"
      :pad-keys t
-     ,@(when check-for-heading '(:if org-menu-show-heading-options-p))
+     ,@(and check-for-heading '(:if org-menu-show-heading-options-p))
      ("p" "prev" org-previous-visible-heading :transient t)
      ("n" "next" org-next-visible-heading :transient t)
      ("c" "cycle" ,cycle-function :transient t)
@@ -165,30 +161,29 @@ function to be used to cycle visibility of current element."
 #+attr_org: :width 400px
 [[file:plot.svg]]
 "))
-    (_ (insert (format "unknown snippet type %s" snippet-id)))))
+    (_ (error "Unknown snippet type %s" snippet-id))))
 
 (autoload 'yas-expand-snippet "yasnippet")
 (autoload 'yas-expand-from-trigger-key "yasnippet")
 
 (defun org-menu-expand-snippet-yasnippet (snippet-id)
   "Expand a yasnippet for each `SNIPPET-ID'."
-  (if (not (require 'yasnippet nil 'noerror))
-      (message "error: yasnippet not installed, could not expand %s" snippet-id)
-
-    (pcase snippet-id
-      ('block
-          (insert "beg")
-        (yas-expand-from-trigger-key))
-      ('option
-       (insert "opt")
-       (yas-expand-from-trigger-key))
-      ('subscript
-       (yas-expand-snippet "${1:text}_{${2:sub}}"))
-      ('superscript
-       (yas-expand-snippet "${1:text}^{${2:super}}"))
-      ('plot
-       (yas-expand-snippet
-        "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
+  (unless (require 'yasnippet nil 'noerror)
+    (error "Yasnippet not installed, could not expand %s" snippet-id))
+  (pcase snippet-id
+    ('block
+     (insert "beg")
+     (yas-expand-from-trigger-key))
+    ('option
+     (insert "opt")
+     (yas-expand-from-trigger-key))
+    ('subscript
+     (yas-expand-snippet "${1:text}_{${2:sub}}"))
+    ('superscript
+     (yas-expand-snippet "${1:text}^{${2:super}}"))
+    ('plot
+     (yas-expand-snippet
+      "#+plot: type:${1:2d} file:\"${2:plot.svg}\"
 | A |  B |
 |---+----|
 | 1 | 10 |
@@ -198,8 +193,8 @@ function to be used to cycle visibility of current element."
 #+attr_org: :width ${3:400px}
 [[file:$2]]
 "))
-      (_
-       (insert (format "unknown snippet type %s" snippet-id))))))
+    (_
+     (error "Unknown snippet type %s" snippet-id))))
 
 ;; If yasnippet gets loaded it will be used automatically
 (with-eval-after-load 'yasnippet
@@ -544,7 +539,6 @@ Named `NAME' with `DEFINITION'."
 If region is active it will be surrounded by `LEFT' and `RIGHT' and
 the point will be at end of region.  Will add spaces before/after text if
 `SURROUND-WHITESPACE' is true and it's needed."
-
   (let ((start (point))
         (end (point)))
     (when (region-active-p)
@@ -552,8 +546,8 @@ the point will be at end of region.  Will add spaces before/after text if
             end (region-end))
       (deactivate-mark))
     (when (> start end)
-      ;; swap variables w/o importing cl-lib
-      (setq start (prog1 end (setq end start))))
+      (cl-psetq start end
+                end start))
 
     (goto-char start)
     (when (and surround-whitespace
