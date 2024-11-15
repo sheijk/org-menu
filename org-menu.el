@@ -704,50 +704,6 @@ Will add an ':if org-menu-show-text-options-p' criteria if
   (interactive)
   (org-columns t))
 
-(defun org-menu-columns-next ()
-  "Move into the next row when org-columns is active.
-
-Code copied from lambda in org-colview.el after
-  (org-defkey org-columns-map [down]
-"
-  (interactive)
-  (let ((col (current-column)))
-    (beginning-of-line 2)
-    (while (and (org-invisible-p2) (not (eobp)))
-      (beginning-of-line 2))
-    (move-to-column col)
-    (if (derived-mode-p 'org-agenda-mode)
-        (org-agenda-do-context-action))))
-
-(defun org-menu-columns-previous ()
-  "Move into the previous row when org-columns is active.
-
-Code copied from lambda in org-colview.el after
-  (org-defkey org-columns-map [up]
-"
-  (interactive)
-  (let ((col (current-column)))
-    (beginning-of-line 0)
-    (while (and (org-invisible-p2) (not (bobp)))
-      (beginning-of-line 0))
-    (move-to-column col)
-    (if (eq major-mode 'org-agenda-mode)
-        (org-agenda-do-context-action))))
-
-(defun org-menu-columns-forward ()
-  "Move into the next column when org-columns is active.
-
-Code copied from lambda in org-colview.el after
-  (org-defkey org-columns-map [right]
-"
-  (interactive)
-  (goto-char (1+ (point))))
-
-(defun org-menu-columns-backward ()
-  "Move into the next column when org-columns is active."
-  (interactive)
-  (backward-char 1))
-
 (transient-define-prefix org-menu-search-and-filter ()
   "A menu to search and filter `org-mode' documents."
   ["Search and filter"
@@ -981,10 +937,10 @@ Code copied from lambda in org-colview.el after
     ["Navigate"
      :if org-menu-show-columns-view-options-p
      :pad-keys t
-     ("p" "prev" org-menu-columns-previous :transient t)
-     ("n" "next" org-menu-columns-next :transient t)
-     ("f" "forward" org-menu-columns-forward :transient t)
-     ("b" "backward" org-menu-columns-backward :transient t)
+     ("p" "prev" org-columns-move-up :transient t)
+     ("n" "next" org-columns-move-down :transient t)
+     ("f" "forward" forward-char :transient t)
+     ("b" "backward" backward-char :transient t)
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]
     ["Value"
