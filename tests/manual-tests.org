@@ -254,3 +254,13 @@ And here is an inline reference [fn:: the inline reference text]
 
 
 [fn:foo: lorem ipsum]
+* Archived
+** This has been archived                                              :ARCHIVE:
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris rhoncus
+purus. Maecenas commodo massa id turpis. Duis ultrices pede a justo. Vivamus
+molestie, leo id semper aliquet, justo felis egestas lectus, ut tempor diam
+mauris at ante. Suspendisse potenti. Etiam purus turpis, pellentesque vel,
+tincidunt eu, faucibus quis, dui. Maecenas eu tortor at tortor vestibulum
+viverra. Proin pellentesque lorem sit amet massa. Nullam at erat. Proin suscipit
+scelerisque mauris. Donec lobortis. Vestibulum porta orci at lectus. Nunc enim.
+
