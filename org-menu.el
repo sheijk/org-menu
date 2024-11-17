@@ -23,9 +23,9 @@
 ;; Boston, MA 02111-1307, USA.
 ;;
 ;;; Commentary:
-
-;;;; Usage:
-
+;;
+;; Usage:
+;;
 ;; Add this to your ~/.emacs to bind the menu to `C-c m':
 ;;
 ;; (with-eval-after-load 'org

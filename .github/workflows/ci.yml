@@ -11,9 +11,18 @@ jobs:
           - ubuntu-latest
           # - windows-latest
         emacs:
+          - 29.3
           - 28.1
           - 27.2
           - 26.3
+        exclude:
+          # Older Emacs versions are not supported by emacs-setup CI github
+          # action, anymore.
+          # See https://github.com/purcell/setup-emacs/issues/48
+          - os: macos-latest
+            emacs: 27.2
+          - os: macos-latest
+            emacs: 26.3
 
     runs-on: ${{ matrix.os }}
 
