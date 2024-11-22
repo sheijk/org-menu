@@ -23,6 +23,11 @@ Add this to your Emacs init file:
 #+end_src
 
 * Releases
+** main
+
+- fixed key alignment
+- cleanups, fixes
+
 ** 0.5
 - Complete support for ~org-columns~
 - Snippet system can be configured
