@@ -581,7 +581,7 @@ the point will be at end of region.  Will add spaces before/after text if
 (defun org-menu-toggle-zwspace ()
   "Will remove zero-width space before/after point or insert it if none found."
   (interactive)
-  (let ((zww (eval-when-compile (string (char-from-name "ZERO WIDTH SPACE")))))
+  (let ((zww (string ?\N{ZERO WIDTH SPACE})))
     (save-excursion
       (skip-chars-backward zww)
       (if (looking-at (rx (+ (literal zww))))
@@ -613,7 +613,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
      ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
      ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)
-     ("S-SPC" "non-breaking space" org-menu-toggle-zwspace :transient t)]
+     ("S-SPC" "zero-width space" org-menu-toggle-zwspace :transient t)]
    `["Source"
      ,@(when check-for-table '(:if org-menu-show-text-options-p))
      ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
