@@ -809,7 +809,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("D" "deadline" org-deadline :transient t)
      ("S" "schedule" org-schedule :transient t)
      ("/" "comment" org-toggle-comment :transient t)
-     ("N" "add note" org-add-note)]
+     ("mn" "add note" org-add-note)]
     ["Make new/delete"
      :if org-menu-show-heading-options-p
      :pad-keys t
