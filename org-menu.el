@@ -778,6 +778,12 @@ Will add an ':if org-menu-show-text-options-p' criteria if
   (interactive)
   (org-insert-todo-heading '(16)))
 
+(defun org-menu-select-todo-state ()
+  "Select todo state with completion"
+  (interactive)
+  (org-todo
+   (completing-read "Todo state: " (flatten-tree org-todo-sets))))
+
 ;;;###autoload (autoload 'org-menu "org-menu" nil t)
 (transient-define-prefix org-menu ()
   "A discoverable menu to edit and view `org-mode' documents."
@@ -800,7 +806,8 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ["Change heading"
      :if org-menu-show-heading-options-p
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
-     ("t" "todo" org-todo :transient t)
+     ("T" "todo" org-menu-select-todo-state)
+     ("t" "next" org-todo :transient t)
      ("q" "tags" org-set-tags-command :transient t :if-nil org-menu-use-q-for-quit)
      ("Q" "tags" org-set-tags-command :transient t :if-non-nil org-menu-use-q-for-quit)
      ("y" "property" org-set-property :transient t)
