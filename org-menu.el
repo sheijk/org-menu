@@ -470,7 +470,7 @@ function to be used to cycle visibility of current element."
 (defun org-menu-insert-startup-setting (setting)
   "Insert a buffer `SETTING'."
   (interactive (list (completing-read "Startup setting? "
-                                (mapcar 'car org-startup-options))))
+                                      (mapcar 'car org-startup-options))))
   (org-menu-insert-option-line-smart (format "#+STARTUP: %s" setting)))
 
 (defun org-menu-insert-buffer-setting (setting)
@@ -585,8 +585,8 @@ the point will be at end of region.  Will add spaces before/after text if
     (save-excursion
       (skip-chars-backward zww)
       (if (looking-at (rx (+ (literal zww))))
-      (replace-match "")
-    (insert zww)))))
+          (replace-match "")
+        (insert zww)))))
 
 (defun org-menu-text-format-items (check-for-table)
   "Items to format text.
@@ -942,8 +942,8 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("es" "sort" (lambda () (interactive) (org-footnote-sort)))
      ("er" "renumber" (lambda () (interactive) (org-footnote-renumber-fn:N)))
      ("eS" "sort+renumber" (lambda () (interactive)
-                (org-footnote-renumber-fn:N)
-                (org-footnote-sort)))
+                             (org-footnote-renumber-fn:N)
+                             (org-footnote-sort)))
      ("en" "normalize" (lambda () (interactive) (org-footnote-normalize)))]
 
     ;; Items for column view
