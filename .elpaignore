@@ -1,5 +1,5 @@
 .github
 org-menu-headline.png
 org-menu-table.png
-org-menu-tests.el
+org-cockpit-tests.el
 tests

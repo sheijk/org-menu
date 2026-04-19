@@ -38,13 +38,13 @@ jobs:
       - name: Run checks
         uses: leotaku/elisp-check@master
         with:
-          file: org-menu.el
+          file: org-cockpit.el
           ignore_warnings: false
 
       - name: Run tests
         uses: leotaku/elisp-check@master
         with:
           check: ert
-          file: org-menu-tests.el
+          file: org-cockpit-tests.el
           ignore_warnings: false
 
