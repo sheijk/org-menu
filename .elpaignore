@@ -2,4 +2,5 @@
 org-cockpit-headline.png
 org-cockpit-table.png
 org-cockpit-tests.el
+org-menu.el
 tests
