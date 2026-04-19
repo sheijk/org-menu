@@ -25,8 +25,15 @@ Add this to your Emacs init file:
 * Releases
 ** main
 
+- renamed to org-cockpit to keep the very generic org-menu name free for
+  possible future modules by the org-mode project, itself
 - fixed key alignment
 - cleanups, fixes
+- filter for Elpa package to only include what's needed
+- code improvements thanks to feedback from Elpa mailing list
+- should work on older Emacs versions, again
+- key binding conflict for "N" fixed
+- set todo state using completion
 
 ** 0.5
 - Complete support for ~org-columns~
