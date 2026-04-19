@@ -1,11 +1,11 @@
-;;; org-menu.el --- A discoverable menu for org-mode using transient -*- lexical-binding: t -*-
+;;; org-cockpit.el --- A discoverable menu for org-mode using transient -*- lexical-binding: t -*-
 ;;
 ;; Copyright 2021  Jan Rehders
 ;;
 ;; Author: Jan Rehders <nospam@sheijk.net>
 ;; Version: 0.1alpha
 ;; Package-Requires: ((emacs "26.1") (transient "0.1"))
-;; URL: https://github.com/sheijk/org-menu
+;; URL: https://github.com/sheijk/org-cockpit
 ;;
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
 ;; Add this to your ~/.emacs to bind the menu to `C-c m':
 ;;
 ;; (with-eval-after-load 'org
-;;   (require 'org-menu) ;; not needed if installing by package manager
-;;   (define-key org-mode-map (kbd "C-c m") #'org-menu))
+;;   (require 'org-cockpit) ;; not needed if installing by package manager
+;;   (define-key org-mode-map (kbd "C-c m") #'org-cockpit))
 ;;
 ;; The menu should be pretty self-explanatory.  It is context dependent and
 ;; offers different commands for headlines, tables, timestamps, etc.
@@ -44,66 +44,66 @@
 (require 'org-timer)
 (require 'cl-lib)
 
-(defgroup org-menu nil
-  "Options for `org-menu'."
+(defgroup org-cockpit nil
+  "Options for `org-cockpit'."
   :group 'org)
 
-(defcustom org-menu-use-q-for-quit t
+(defcustom org-cockpit-use-q-for-quit t
   "Whether to add a q binding to quit to all menus.
 
 Use this if you prefer to be consistent with magit.  It will also
 change some other bindings to use Q instead of q."
   :type 'boolean)
 
-(defcustom org-menu-global-toc-depth 10
+(defcustom org-cockpit-global-toc-depth 10
   "The number of heading levels to show when displaying the global content."
   :type 'natnum)
 
-(defcustom org-menu-expand-snippet-function #'org-menu-expand-snippet-default
+(defcustom org-cockpit-expand-snippet-function #'org-cockpit-expand-snippet-default
   "The function used to expand a snippet.
 
-See `org-menu-expand-snippet-default' for a list of snippet ids
-which need to be supported.  `org-menu-expand-snippet-yasnippet'
+See `org-cockpit-expand-snippet-default' for a list of snippet ids
+which need to be supported.  `org-cockpit-expand-snippet-yasnippet'
 shows how to invoke snippets."
   :type 'function)
 
-(defun org-menu-show-columns-view-options-p ()
+(defun org-cockpit-show-columns-view-options-p ()
   "Return whether `org-columns' mode is active."
   (bound-and-true-p org-columns-overlays))
 
-(defun org-menu-show-heading-options-p ()
+(defun org-cockpit-show-heading-options-p ()
   "Whether to show commands operating on headings."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (org-at-heading-p)))
 
-(defun org-menu-show-table-options-p ()
+(defun org-cockpit-show-table-options-p ()
   "Whether to show commands operating on tables."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (org-at-table-p)))
 
-(defun org-menu-show-list-options-p ()
+(defun org-cockpit-show-list-options-p ()
   "Whether to show commands operating on lists."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (org-at-item-p)))
 
-(defun org-menu-show-text-options-p ()
+(defun org-cockpit-show-text-options-p ()
   "Whether to show commands operating on text."
-  (not (or (org-menu-show-columns-view-options-p)
+  (not (or (org-cockpit-show-columns-view-options-p)
            (org-at-heading-p)
            (org-at-table-p)
            (org-in-item-p)
            (org-in-src-block-p))))
 
-(defun org-menu-show-src-options-p ()
+(defun org-cockpit-show-src-options-p ()
   "Whether to show commands operating on src blocks."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (org-in-src-block-p)))
 
-(defun org-menu-show-link-options-p ()
+(defun org-cockpit-show-link-options-p ()
   "Whether to show commands operating on links.
 
 Conditions have been adapted from `org-insert-link'"
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (or
      ;; Use variable from org-compat to support Emacs 26
      (org-in-regexp (symbol-value 'org-bracket-link-regexp) 1)
@@ -112,18 +112,18 @@ Conditions have been adapted from `org-insert-link'"
      (when (boundp 'org-link-plain-re)
        (org-in-regexp org-link-plain-re)))))
 
-(defun org-menu-show-timestamp-options-p ()
+(defun org-cockpit-show-timestamp-options-p ()
   "Whether to show commands operating on timestamps."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (org-at-timestamp-p 'lax)))
 
-(defun org-menu-show-footnote-options-p ()
+(defun org-cockpit-show-footnote-options-p ()
   "Whether to show commands operating on footnotes."
-  (unless (org-menu-show-columns-view-options-p)
+  (unless (org-cockpit-show-columns-view-options-p)
     (or (org-footnote-at-definition-p)
         (org-footnote-at-reference-p))))
 
-(defun org-menu-heading-navigate-items (check-for-heading &optional cycle-function)
+(defun org-cockpit-heading-navigate-items (check-for-heading &optional cycle-function)
   "Items to navigate headings.
 
 These will be added to most sub menus.  If `CHECK-FOR-HEADING' is
@@ -132,7 +132,7 @@ function to be used to cycle visibility of current element."
   (setq cycle-function (or cycle-function #'org-cycle))
   `(["Navigate"
      :pad-keys t
-     ,@(and check-for-heading '(:if org-menu-show-heading-options-p))
+     ,@(and check-for-heading '(:if org-cockpit-show-heading-options-p))
      ("p" "prev" org-previous-visible-heading :transient t)
      ("n" "next" org-next-visible-heading :transient t)
      ("c" "cycle" ,cycle-function :transient t)
@@ -142,7 +142,7 @@ function to be used to cycle visibility of current element."
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]))
 
-(defun org-menu-expand-snippet-default (snippet-id)
+(defun org-cockpit-expand-snippet-default (snippet-id)
   "Insert a fixed text for each `SNIPPET-ID'."
   (pcase snippet-id
     ('block (insert "#+BEGIN:\n#+END:\n"))
@@ -166,14 +166,14 @@ function to be used to cycle visibility of current element."
 (autoload 'yas-expand-snippet "yasnippet")
 (autoload 'yas-expand-from-trigger-key "yasnippet")
 
-(defun org-menu-expand-snippet-yasnippet (snippet-id)
+(defun org-cockpit-expand-snippet-yasnippet (snippet-id)
   "Expand a yasnippet for each `SNIPPET-ID'."
   (unless (require 'yasnippet nil 'noerror)
     (error "Yasnippet not installed, could not expand %s" snippet-id))
   (pcase snippet-id
     ('block
-     (insert "beg")
-     (yas-expand-from-trigger-key))
+        (insert "beg")
+      (yas-expand-from-trigger-key))
     ('option
      (insert "opt")
      (yas-expand-from-trigger-key))
@@ -198,14 +198,14 @@ function to be used to cycle visibility of current element."
 
 ;; If yasnippet gets loaded it will be used automatically
 (with-eval-after-load 'yasnippet
-  (unless (equal org-menu-expand-snippet-function #'org-menu-expand-snippet-default)
-    (setq org-menu-expand-snippet-function #'org-menu-expand-snippet-yasnippet)))
+  (unless (equal org-cockpit-expand-snippet-function #'org-cockpit-expand-snippet-default)
+    (setq org-cockpit-expand-snippet-function #'org-cockpit-expand-snippet-yasnippet)))
 
-(defun org-menu-expand-snippet (snippet-id)
+(defun org-cockpit-expand-snippet (snippet-id)
   "Will expand the given snippet named `SNIPPET-ID' with `ARGS'."
-  (funcall org-menu-expand-snippet-function snippet-id))
+  (funcall org-cockpit-expand-snippet-function snippet-id))
 
-(defun org-menu-show-headline-content ()
+(defun org-cockpit-show-headline-content ()
   "Will show the complete content of the current headline and it's children."
   (interactive)
   (save-excursion
@@ -215,15 +215,15 @@ function to be used to cycle visibility of current element."
     (org-goto-first-child)
     (org-reveal '(4))))
 
-;;;###autoload (autoload 'org-menu-visibility "org-menu" nil t)
-(transient-define-prefix org-menu-visibility ()
+;;;###autoload (autoload 'org-cockpit-visibility "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-visibility ()
   "A menu to control visibility of `org-mode' items."
   ["Visibility"
    ["Heading"
     ("a" "all" org-show-subtree :if-not org-at-block-p :transient t)
     ("a" "all" org-hide-block-toggle :if org-at-block-p :transient t)
     ("c" "cycle" org-cycle :transient t)
-    ("t" "content" org-menu-show-headline-content :if-not org-at-block-p :transient t)
+    ("t" "content" org-cockpit-show-headline-content :if-not org-at-block-p :transient t)
     ("h" "hide" outline-hide-subtree :if-not org-at-block-p :transient t)
     ("h" "hide" org-hide-block-toggle :if org-at-block-p :transient t)
     ("r" "reveal" (lambda () (interactive) (org-reveal t)) :if-not org-at-block-p :transient t)]
@@ -231,7 +231,7 @@ function to be used to cycle visibility of current element."
     :pad-keys t
     ("C" "cycle global" org-global-cycle :transient t)
     ("go" "overview" org-overview)
-    ("gt" "content" (lambda () (interactive) (org-content org-menu-global-toc-depth)))
+    ("gt" "content" (lambda () (interactive) (org-content org-cockpit-global-toc-depth)))
     ("ga" "all" org-show-all)
     ("gd" "default" (lambda () (interactive) (org-set-startup-visibility)))]
    ["Narrow"
@@ -242,44 +242,44 @@ function to be used to cycle visibility of current element."
     ("ne" "to element" org-narrow-to-element)
     ("w" "widen" widen)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(transient-define-prefix org-menu-visibility-columns ()
+(transient-define-prefix org-cockpit-visibility-columns ()
   "A menu to control visibility of `org-mode' items in `org-columns' mode."
   ["Visibility"
    ["Columns view"
-    :if org-menu-show-columns-view-options-p
+    :if org-cockpit-show-columns-view-options-p
     ("t" "content" org-columns-content :transient t)
     ("o" "overview" org-overview :transient t)
     ("g" "refresh" org-columns-redo :transient t)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-eval-src-items ()
+(defun org-cockpit-eval-src-items ()
   "Return the items to evaluate a source block."
   (list
    ["Source"
-    :if org-menu-show-src-options-p
+    :if org-cockpit-show-src-options-p
     ("e" "run block" org-babel-execute-src-block)
     ("c" "check headers" org-babel-check-src-block)
     ("k" "clear results" org-babel-remove-result-one-or-many)
     ("'" "edit" org-edit-special)]))
 
-;;;###autoload (autoload 'org-menu-eval "org-menu" nil t)
-(transient-define-prefix org-menu-eval ()
+;;;###autoload (autoload 'org-cockpit-eval "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-eval ()
   "A menu to evaluate buffers, tables, etc. in `org-mode'."
   ["dummy"])
 
-(defun org-menu-run-gnuplot ()
+(defun org-cockpit-run-gnuplot ()
   "Will call `org-plot/gnuplot' and update inline images."
   (interactive)
   (org-plot/gnuplot)
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
 
-(transient-insert-suffix 'org-menu-eval (list 0)
+(transient-insert-suffix 'org-cockpit-eval (list 0)
   `["Evaluation"
     ["Table"
      :if org-at-table-p
@@ -287,46 +287,46 @@ function to be used to cycle visibility of current element."
      ("1" "one iteration" (lambda () (interactive) (org-table-recalculate t)))
      ("l" "line" (lambda () (interactive) (org-table-recalculate nil)))
      ("f" "format" org-table-align :if org-at-table-p)]
-    ,@(org-menu-eval-src-items)
+    ,@(org-cockpit-eval-src-items)
     ["Heading"
      :if-not org-in-src-block-p
      ("c" "update checkbox count" org-update-checkbox-count)]
     ["Plot"
-     ("p" "gnuplot" org-menu-run-gnuplot)]
+     ("p" "gnuplot" org-cockpit-run-gnuplot)]
     ["Export"
      ("t" "tangle source files" org-babel-tangle)
      ("x" "export" org-export-dispatch)]
     ["Quit"
-     :if-non-nil org-menu-use-q-for-quit
+     :if-non-nil org-cockpit-use-q-for-quit
      ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-insert-block (str)
+(defun org-cockpit-insert-block (str)
   "Insert an org mode block of type `STR'."
   (interactive)
   (insert (format "#+begin_%s\n#+end_%s\n" str str)))
 
-(defun org-menu-insert-horizontal-rule ()
+(defun org-cockpit-insert-horizontal-rule ()
   "Insert a horizontal rule."
   (interactive)
   (insert "-----"))
 
-;;;###autoload (autoload 'org-menu-insert-blocks "org-menu" nil t)
-(transient-define-prefix org-menu-insert-blocks ()
+;;;###autoload (autoload 'org-cockpit-insert-blocks "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-blocks ()
   "A menu to insert new blocks in `org-mode'."
   [["Insert block"
-    ("s" "source" (lambda () (interactive) (org-menu-insert-block "src")))
-    ("e" "example" (lambda () (interactive) (org-menu-insert-block "example")))
-    ("v" "verbatim" (lambda () (interactive) (org-menu-insert-block "verbatim")))
-    ("a" "ascii" (lambda () (interactive) (org-menu-insert-block "ascii")))
-    ("q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-nil org-menu-use-q-for-quit)
-    ("Q" "quote" (lambda () (interactive) (org-menu-insert-block "quote")) :if-non-nil org-menu-use-q-for-quit)
+    ("s" "source" (lambda () (interactive) (org-cockpit-insert-block "src")))
+    ("e" "example" (lambda () (interactive) (org-cockpit-insert-block "example")))
+    ("v" "verbatim" (lambda () (interactive) (org-cockpit-insert-block "verbatim")))
+    ("a" "ascii" (lambda () (interactive) (org-cockpit-insert-block "ascii")))
+    ("q" "quote" (lambda () (interactive) (org-cockpit-insert-block "quote")) :if-nil org-cockpit-use-q-for-quit)
+    ("Q" "quote" (lambda () (interactive) (org-cockpit-insert-block "quote")) :if-non-nil org-cockpit-use-q-for-quit)
     ("d" "dynamic block" org-dynamic-block-insert-dblock)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload (autoload 'org-menu-insert-heading "org-menu" nil t)
-(transient-define-prefix org-menu-insert-heading ()
+;;;###autoload (autoload 'org-cockpit-insert-heading "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-heading ()
   "A menu to insert new headings in `org-mode'."
   [["Heading"
     ("h" "heading" org-insert-heading)
@@ -335,22 +335,22 @@ function to be used to cycle visibility of current element."
    ["Items"
     ("d" "drawer" org-insert-drawer)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload (autoload 'org-menu-insert-template "org-menu" nil t)
-(transient-define-prefix org-menu-insert-template ()
+;;;###autoload (autoload 'org-cockpit-insert-template "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-template ()
   "A menu to insert new templates in `org-mode'."
   [["Templates"
     ("S" "structure template" org-insert-structure-template)
-    ("B" "blocks" (lambda () (interactive) (org-menu-expand-snippet 'block)))
-    ("O" "options" (lambda () (interactive) (org-menu-expand-snippet 'option)))]
+    ("B" "blocks" (lambda () (interactive) (org-cockpit-expand-snippet 'block)))
+    ("O" "options" (lambda () (interactive) (org-cockpit-expand-snippet 'option)))]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-;;;###autoload (autoload 'org-menu-insert-timestamp "org-menu" nil t)
-(transient-define-prefix org-menu-insert-timestamp ()
+;;;###autoload (autoload 'org-cockpit-insert-timestamp "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-timestamp ()
   "A menu to insert timestamps in Org Mode."
   [["Active"
     ("." "Time stamp" org-time-stamp)
@@ -361,22 +361,22 @@ function to be used to cycle visibility of current element."
     ("T" "Today (i)" (lambda () (interactive) (org-insert-time-stamp (current-time) nil t)))
     ("N" "Today + time (i)" (lambda () (interactive) (org-insert-time-stamp (current-time) t t)))]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-table-insert-row-below ()
+(defun org-cockpit-table-insert-row-below ()
   "Insert a new table column below point."
   (interactive)
   (org-table-insert-row '4))
 
-(defun org-menu-table-insert-column-left ()
+(defun org-cockpit-table-insert-column-left ()
   "Insert a new column to the left of point."
   (interactive)
   (org-table-insert-column)
   (org-table-move-column-right))
 
-;;;###autoload (autoload 'org-menu-insert-table "org-menu" nil t)
-(transient-define-prefix org-menu-insert-table ()
+;;;###autoload (autoload 'org-cockpit-insert-table "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-table ()
   "A menu to insert table items in `org-mode'."
   [["Table"
     ("t" "table" org-table-create-or-convert-from-region :if-not org-at-table-p)
@@ -384,25 +384,25 @@ function to be used to cycle visibility of current element."
    ["Rows/columns"
     :if org-at-table-p
     ("r" "row above" org-table-insert-row :transient t)
-    ("R" "row below" org-menu-table-insert-row-below :transient t)
+    ("R" "row below" org-cockpit-table-insert-row-below :transient t)
     ("c" "column left" org-table-insert-column :transient t)
-    ("C" "column right" org-menu-table-insert-column-left :transient t)
+    ("C" "column right" org-cockpit-table-insert-column-left :transient t)
     ("-" "horiz. line" org-table-insert-hline :transient t)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-insert-superscript ()
+(defun org-cockpit-insert-superscript ()
   "Insert a text with superscript."
   (interactive)
-  (org-menu-expand-snippet 'superscript))
+  (org-cockpit-expand-snippet 'superscript))
 
-(defun org-menu-insert-subscript ()
+(defun org-cockpit-insert-subscript ()
   "Insert a text with subscript."
   (interactive)
-  (org-menu-expand-snippet 'subscript))
+  (org-cockpit-expand-snippet 'subscript))
 
-(defun org-menu-parse-formatting (format-char)
+(defun org-cockpit-parse-formatting (format-char)
   "Will return the bounds of the format markup `FORMAT-CHAR'."
   (let ((original-point (point))
         start end)
@@ -418,19 +418,19 @@ function to be used to cycle visibility of current element."
             (setq end (point))
             (cons start end)))))))
 
-(defun org-menu-toggle-format (format-char)
+(defun org-cockpit-toggle-format (format-char)
   "Will either remove `FORMAT-CHAR' or add it around region/point."
-  (let ((range (org-menu-parse-formatting format-char))
+  (let ((range (org-cockpit-parse-formatting format-char))
         (format-string (format "%c" format-char)))
     (if (null range)
-        (org-menu-insert-text format-string format-string t)
+        (org-cockpit-insert-text format-string format-string t)
       (goto-char (cdr range))
       (delete-char -1)
       (goto-char (car range))
       (delete-char 1))))
 
-;;;###autoload (autoload 'org-menu-insert-list "org-menu" nil t)
-(transient-define-prefix org-menu-insert-list ()
+;;;###autoload (autoload 'org-cockpit-insert-list "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert-list ()
   "A menu to insert lists."
   [["List"
     ("-" "item" (lambda () (interactive) (insert "- ")))
@@ -443,98 +443,98 @@ function to be used to cycle visibility of current element."
     ("d" "done" (lambda () (interactive) (insert "- [X] ")))
     ("p" "partial" (lambda () (interactive) (insert "- [-] ")))]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-insert-plot ()
+(defun org-cockpit-insert-plot ()
   "Insert a small example plot for `gnu-plot'."
   (interactive)
   (beginning-of-line 1)
-  (org-menu-expand-snippet 'plot))
+  (org-cockpit-expand-snippet 'plot))
 
-(defun org-menu-insert-option-line-smart (line)
+(defun org-cockpit-insert-option-line-smart (line)
   "Insert `LINE'.  If inside a block move to right before it."
   (beginning-of-line 1)
   (insert line "\n"))
 
-(defun org-menu-insert-name (name)
+(defun org-cockpit-insert-name (name)
   "Insert a #+NAME for the next element."
   (interactive "MName? ")
-  (org-menu-insert-option-line-smart (format "#+NAME: %s" name)))
+  (org-cockpit-insert-option-line-smart (format "#+NAME: %s" name)))
 
-(defun org-menu-insert-caption (caption)
+(defun org-cockpit-insert-caption (caption)
   "Insert a #+CAPTION for the next element."
   (interactive "MCaption? ")
-  (org-menu-insert-option-line-smart (format "#+CAPTION: %s" caption)))
+  (org-cockpit-insert-option-line-smart (format "#+CAPTION: %s" caption)))
 
-(defun org-menu-insert-startup-setting (setting)
+(defun org-cockpit-insert-startup-setting (setting)
   "Insert a buffer `SETTING'."
   (interactive (list (completing-read "Startup setting? "
                                       (mapcar 'car org-startup-options))))
-  (org-menu-insert-option-line-smart (format "#+STARTUP: %s" setting)))
+  (org-cockpit-insert-option-line-smart (format "#+STARTUP: %s" setting)))
 
-(defun org-menu-insert-buffer-setting (setting)
+(defun org-cockpit-insert-buffer-setting (setting)
   "Insert a buffer `SETTING'."
   (interactive (list (completing-read "Buffer setting? " org-options-keywords)))
   (insert (format "#+%s " setting)))
 
-(defun org-menu-insert-footnote-definition (name definition)
+(defun org-cockpit-insert-footnote-definition (name definition)
   "Insert a definition for a footnote.
 
 Named `NAME' using `DEFINITION'."
   (interactive "MName? \nMDefinition? ")
-  (org-menu-insert-option-line-smart (format "[fn:%s] %s" name definition)))
+  (org-cockpit-insert-option-line-smart (format "[fn:%s] %s" name definition)))
 
-(defun org-menu-insert-footnote-inline (name definition)
+(defun org-cockpit-insert-footnote-inline (name definition)
   "Insert a definition for an inline footnote.
 
 Named `NAME' with `DEFINITION'."
   (interactive "MName? \nMDefinition? ")
   (insert (format "[fn:%s: %s]" name definition)))
 
-;;;###autoload (autoload 'org-menu-insert "org-menu" nil t)
-(transient-define-prefix org-menu-insert ()
+;;;###autoload (autoload 'org-cockpit-insert "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-insert ()
   "A menu to insert new items in `org-mode'."
   ["Insert"
    ["Element"
-    ("." "time" org-menu-insert-timestamp)
+    ("." "time" org-cockpit-insert-timestamp)
     ("l" "link (new)" org-insert-link)
     ("L" "link (stored)" org-insert-last-stored-link :transient t)
-    ("T" "templates" org-menu-insert-template)]
+    ("T" "templates" org-cockpit-insert-template)]
    ["Structure"
-    ("h" "heading" org-menu-insert-heading)
-    ("-" "list" org-menu-insert-list)
-    ("H" "hor. rule" org-menu-insert-horizontal-rule)]
+    ("h" "heading" org-cockpit-insert-heading)
+    ("-" "list" org-cockpit-insert-list)
+    ("H" "hor. rule" org-cockpit-insert-horizontal-rule)]
    ["Block/table"
-    ("b" "block" org-menu-insert-blocks)
-    ("t" "table" org-menu-insert-table)
-    ("p" "plot" org-menu-insert-plot)]
+    ("b" "block" org-cockpit-insert-blocks)
+    ("t" "table" org-cockpit-insert-table)
+    ("p" "plot" org-cockpit-insert-plot)]
    ["Format"
-    ("^" "superscript" org-menu-insert-superscript)
-    ("_" "subscript" org-menu-insert-subscript)]
+    ("^" "superscript" org-cockpit-insert-superscript)
+    ("_" "subscript" org-cockpit-insert-subscript)]
    ["Footnotes"
-    ("fd" "define" org-menu-insert-footnote-definition)
-    ("fi" "inline" org-menu-insert-footnote-inline)]
+    ("fd" "define" org-cockpit-insert-footnote-definition)
+    ("fi" "inline" org-cockpit-insert-footnote-inline)]
    ["Options"
-    ("n" "name" org-menu-insert-name)
-    ("c" "caption" org-menu-insert-caption)
-    ("s" "startup option" org-menu-insert-startup-setting)
-    ("o" "buffer option" org-menu-insert-buffer-setting)]
+    ("n" "name" org-cockpit-insert-name)
+    ("c" "caption" org-cockpit-insert-caption)
+    ("s" "startup option" org-cockpit-insert-startup-setting)
+    ("o" "buffer option" org-cockpit-insert-buffer-setting)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-comment-line ()
+(defun org-cockpit-comment-line ()
   "Toggle line comment w/o moving cursor."
   (interactive)
   (save-excursion (comment-line 1)))
 
-(defun org-menu-fix-timestamp ()
+(defun org-cockpit-fix-timestamp ()
   "Fix the timestamp at `(point)'."
   (interactive)
   (org-timestamp-change 0 'day))
 
-(defun org-menu-insert-text (left right &optional surround-whitespace)
+(defun org-cockpit-insert-text (left right &optional surround-whitespace)
   "Will insert left|right and put the curser at |.
 
 If region is active it will be surrounded by `LEFT' and `RIGHT' and
@@ -566,19 +566,19 @@ the point will be at end of region.  Will add spaces before/after text if
                  (not (looking-at " +")))
         (insert " ")))))
 
-;;;###autoload (autoload 'org-menu-goto "org-menu" nil t)
-(transient-define-prefix org-menu-goto ()
+;;;###autoload (autoload 'org-cockpit-goto "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-goto ()
   "Menu to go to different places by name."
   [["Go to"
     ("h" "heading" imenu)
     ("s" "source block" org-babel-goto-named-src-block)
     ("r" "result block" org-babel-goto-named-result)
-    ("." "calendar" org-goto-calendar :if org-menu-show-timestamp-options-p)]
+    ("." "calendar" org-goto-calendar :if org-cockpit-show-timestamp-options-p)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-toggle-zwspace ()
+(defun org-cockpit-toggle-zwspace ()
   "Will remove zero-width space before/after point or insert it if none found."
   (interactive)
   (let ((zww (string ?\N{ZERO WIDTH SPACE})))
@@ -588,14 +588,14 @@ the point will be at end of region.  Will add spaces before/after text if
           (replace-match "")
         (insert zww)))))
 
-(defun org-menu-text-format-items (check-for-table)
+(defun org-cockpit-text-format-items (check-for-table)
   "Items to format text.
 
-Will add an ':if org-menu-show-text-options-p' criteria if
+Will add an ':if org-cockpit-show-text-options-p' criteria if
 `CHECK-FOR-TABLE' is true."
   (list
    `["Navigate"
-     ,@(when check-for-table '(:if org-menu-show-text-options-p))
+     ,@(when check-for-table '(:if org-cockpit-show-text-options-p))
      :pad-keys t
      ("p" "up" previous-line :transient t)
      ("n" "down" next-line :transient t)
@@ -607,31 +607,31 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("SPC" "mark" set-mark-command :transient t)
      ("C-x C-x" "exchange" exchange-point-and-mark :transient t)]
    `["Formatting"
-     ,@(when check-for-table '(:if org-menu-show-text-options-p))
+     ,@(when check-for-table '(:if org-cockpit-show-text-options-p))
      :pad-keys t
-     ("*" "Bold" (lambda nil (interactive) (org-menu-toggle-format ?*)) :transient t)
-     ("/" "italic" (lambda nil (interactive) (org-menu-toggle-format ?/)) :transient t)
-     ("_" "underline" (lambda nil (interactive) (org-menu-toggle-format ?_)) :transient t)
-     ("+" "strikethrough" (lambda nil (interactive) (org-menu-toggle-format ?+)) :transient t)
-     ("S-SPC" "zero-width space" org-menu-toggle-zwspace :transient t)]
+     ("*" "Bold" (lambda nil (interactive) (org-cockpit-toggle-format ?*)) :transient t)
+     ("/" "italic" (lambda nil (interactive) (org-cockpit-toggle-format ?/)) :transient t)
+     ("_" "underline" (lambda nil (interactive) (org-cockpit-toggle-format ?_)) :transient t)
+     ("+" "strikethrough" (lambda nil (interactive) (org-cockpit-toggle-format ?+)) :transient t)
+     ("S-SPC" "zero-width space" org-cockpit-toggle-zwspace :transient t)]
    `["Source"
-     ,@(when check-for-table '(:if org-menu-show-text-options-p))
-     ("~" "code" (lambda nil (interactive) (org-menu-toggle-format ?~)) :transient t)
-     ("=" "verbatim" (lambda nil (interactive) (org-menu-toggle-format ?=)) :transient t)]))
+     ,@(when check-for-table '(:if org-cockpit-show-text-options-p))
+     ("~" "code" (lambda nil (interactive) (org-cockpit-toggle-format ?~)) :transient t)
+     ("=" "verbatim" (lambda nil (interactive) (org-cockpit-toggle-format ?=)) :transient t)]))
 
-;;;###autoload (autoload 'org-menu-text-in-element "org-menu" nil t)
-(transient-define-prefix org-menu-text-in-element ()
+;;;###autoload (autoload 'org-cockpit-text-in-element "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-text-in-element ()
   "Add formatting for text inside other elements like lists and tables."
   ["dummy"])
 
-(transient-insert-suffix 'org-menu-text-in-element (list 0)
-  `[,@(org-menu-text-format-items nil)
+(transient-insert-suffix 'org-cockpit-text-in-element (list 0)
+  `[,@(org-cockpit-text-format-items nil)
     ["Quit"
-     :if-non-nil org-menu-use-q-for-quit
+     :if-non-nil org-cockpit-use-q-for-quit
      ("q" "quit" transient-quit-all)]])
 
-;;;###autoload (autoload 'org-menu-options "org-menu" nil t)
-(transient-define-prefix org-menu-options ()
+;;;###autoload (autoload 'org-cockpit-options "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-options ()
   "A menu to toggle options."
   [["Display"
     ("l" "show links" org-toggle-link-display)
@@ -641,10 +641,10 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ("t" "timestamp overlay" org-toggle-time-stamp-overlays)
     ("n" "numbered headings" org-num-mode)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-toggle-has-checkbox ()
+(defun org-cockpit-toggle-has-checkbox ()
   "Toggle whether the current list item has a checkbox."
   (interactive)
   (save-excursion
@@ -654,20 +654,20 @@ Will add an ':if org-menu-show-text-options-p' criteria if
       (end-of-line 1)
       (org-ctrl-c-ctrl-c '(4)))))
 
-(defun org-menu-is-timer-running ()
+(defun org-cockpit-is-timer-running ()
   "Return whether a timer is currently running."
   (and org-timer-start-time
        (not org-timer-countdown-timer)
        (not org-timer-pause-time)))
 
-(defun org-menu-is-timer-paused ()
+(defun org-cockpit-is-timer-paused ()
   "Return whether a timer has been started and is paused."
   (and org-timer-start-time
        (not org-timer-countdown-timer)
        org-timer-pause-time))
 
-;;;###autoload (autoload 'org-menu-clock "org-menu" nil t)
-(transient-define-prefix org-menu-clock ()
+;;;###autoload (autoload 'org-cockpit-clock "org-cockpit" nil t)
+(transient-define-prefix org-cockpit-clock ()
   "Time management using org-modes clock."
   [["Clock"
     :pad-keys t
@@ -676,10 +676,10 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ("o" "out" org-clock-out :if org-clock-is-active)
     ("j" "goto" org-clock-goto :if org-clock-is-active)
     ("q" "cancel" org-clock-cancel
-     :if (lambda () (and (not org-menu-use-q-for-quit)
+     :if (lambda () (and (not org-cockpit-use-q-for-quit)
                          (org-clock-is-active))))
     ("Q" "cancel" org-clock-cancel
-     :if (lambda () (and org-menu-use-q-for-quit
+     :if (lambda () (and org-cockpit-use-q-for-quit
                          (org-clock-is-active))))
     ("d" "display" org-clock-display :if org-clock-is-active)
     ("x" "in again" org-clock-in-last :if-not org-clock-is-active)
@@ -689,28 +689,28 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ("_" "stop" org-timer-stop :if-non-nil org-timer-start-time)
     ("." "insert" org-timer :if-non-nil org-timer-start-time)
     ("-" "... item" org-timer-item :if-non-nil org-timer-start-time)
-    ("," "pause" org-timer-pause-or-continue :if org-menu-is-timer-running)
-    ("," "continue" org-timer-pause-or-continue :if org-menu-is-timer-paused)
+    ("," "pause" org-timer-pause-or-continue :if org-cockpit-is-timer-running)
+    ("," "continue" org-timer-pause-or-continue :if org-cockpit-is-timer-paused)
     (";" "countdown" org-timer-set-timer :if-nil org-timer-start-time)]
    ["Effort"
     ("e" "set effort" org-set-effort)
     ("E" "increase" org-inc-effort)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(defun org-menu-columns-globally ()
+(defun org-cockpit-columns-globally ()
   "Turn on `org-columns' globally."
   (interactive)
   (org-columns t))
 
-(transient-define-prefix org-menu-search-and-filter ()
+(transient-define-prefix org-cockpit-search-and-filter ()
   "A menu to search and filter `org-mode' documents."
   ["Search and filter"
    ["Filter"
     ("/" "only matching" org-sparse-tree)
-    ("q" "tags" org-tags-sparse-tree :if-nil org-menu-use-q-for-quit)
-    ("Q" "tags" org-tags-sparse-tree :if-non-nil org-menu-use-q-for-quit)
+    ("q" "tags" org-tags-sparse-tree :if-nil org-cockpit-use-q-for-quit)
+    ("Q" "tags" org-tags-sparse-tree :if-non-nil org-cockpit-use-q-for-quit)
     ("t" "todos" org-show-todo-tree)
     ("d" "deadlines" org-check-deadlines)
     ("r" "remove highlights" org-remove-occur-highlights :if-non-nil org-occur-highlights)]
@@ -722,12 +722,12 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ("A" "agenda" org-agenda)
     ("c" "columns" org-columns :if-nil org-columns-current-fmt)
     ("c" "columns off" org-columns-quit :if-non-nil org-columns-current-fmt)
-    ("gc" "whole buffer" org-menu-columns-globally :if-nil org-columns-current-fmt)]
+    ("gc" "whole buffer" org-cockpit-columns-globally :if-nil org-columns-current-fmt)]
    ["Quit"
-    :if-non-nil org-menu-use-q-for-quit
+    :if-non-nil org-cockpit-use-q-for-quit
     ("q" "quit" transient-quit-all)]])
 
-(transient-define-prefix org-menu-attachments ()
+(transient-define-prefix org-cockpit-attachments ()
   "A menu to manage attachments."
   ["Attachments"
    ["Add"
@@ -753,49 +753,49 @@ Will add an ':if org-menu-show-text-options-p' criteria if
     ("z" "synchronize" org-attach-sync)]]
   (interactive)
   (require 'org-attach)
-  (transient-setup 'org-menu-attachments))
+  (transient-setup 'org-cockpit-attachments))
 
-(transient-define-prefix org-menu-archive ()
+(transient-define-prefix org-cockpit-archive ()
   "A menu to archive items."
   ["dummy"])
 
-(defun org-menu-force-cycle-archived ()
+(defun org-cockpit-force-cycle-archived ()
   "Wrapper around deprecated `org-force-cycle-archived' to fix warning."
   (interactive)
   (with-no-warnings
     (org-force-cycle-archived)))
 
-(transient-insert-suffix 'org-menu-archive (list 0)
+(transient-insert-suffix 'org-cockpit-archive (list 0)
   `["Archive"
-    ,@(org-menu-heading-navigate-items nil #'org-menu-force-cycle-archived)
+    ,@(org-cockpit-heading-navigate-items nil #'org-cockpit-force-cycle-archived)
     ["Archive to"
      ("t" "tree" org-archive-subtree :transient t)
      ("s" "sibling" org-archive-to-archive-sibling :transient t)
      ("Q" "tag" org-toggle-archive-tag :transient t)]])
 
-(defun org-menu-insert-todo-heading-after-current ()
+(defun org-cockpit-insert-todo-heading-after-current ()
   "Insert a new todo heading with same level as current, after subtree."
   (interactive)
   (org-insert-todo-heading '(16)))
 
-(defun org-menu-select-todo-state ()
+(defun org-cockpit-select-todo-state ()
   "Select todo state with completion"
   (interactive)
   (org-todo
    (completing-read "Todo state: " (flatten-tree org-todo-sets))))
 
-;;;###autoload (autoload 'org-menu "org-menu" nil t)
-(transient-define-prefix org-menu ()
+;;;###autoload (autoload 'org-cockpit "org-cockpit" nil t)
+(transient-define-prefix org-cockpit ()
   "A discoverable menu to edit and view `org-mode' documents."
   ["dummy"])
 
-(transient-insert-suffix 'org-menu (list 0)
+(transient-insert-suffix 'org-cockpit (list 0)
   `["Org mode"
     ;; Items for headings
-    ,@(org-menu-heading-navigate-items t)
+    ,@(org-cockpit-heading-navigate-items t)
 
     ["Move heading"
-     :if org-menu-show-heading-options-p
+     :if org-cockpit-show-heading-options-p
      ("P" "up" org-metaup :transient t)
      ("N" "down" org-metadown :transient t)
      ("B" "left" org-shiftmetaleft :transient t)
@@ -804,36 +804,36 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("f" "right (line)" org-metaright :transient t)
      ("r" "refile" org-refile :transient t)]
     ["Change heading"
-     :if org-menu-show-heading-options-p
+     :if org-cockpit-show-heading-options-p
      ("*" "toggle" org-ctrl-c-star :if-not org-at-table-p :transient t)
-     ("T" "todo" org-menu-select-todo-state)
+     ("T" "todo" org-cockpit-select-todo-state)
      ("t" "next" org-todo :transient t)
-     ("q" "tags" org-set-tags-command :transient t :if-nil org-menu-use-q-for-quit)
-     ("Q" "tags" org-set-tags-command :transient t :if-non-nil org-menu-use-q-for-quit)
+     ("q" "tags" org-set-tags-command :transient t :if-nil org-cockpit-use-q-for-quit)
+     ("Q" "tags" org-set-tags-command :transient t :if-non-nil org-cockpit-use-q-for-quit)
      ("y" "property" org-set-property :transient t)
      ("," "priority" org-priority :transient t)
-     ("A" "archive" org-menu-archive :transient t)
+     ("A" "archive" org-cockpit-archive :transient t)
      ("D" "deadline" org-deadline :transient t)
      ("S" "schedule" org-schedule :transient t)
      ("/" "comment" org-toggle-comment :transient t)
      ("mn" "add note" org-add-note)]
     ["Make new/delete"
-     :if org-menu-show-heading-options-p
+     :if org-cockpit-show-heading-options-p
      :pad-keys t
      ("mh" "make heading (before)" org-insert-heading)
      ("mH" "make heading (after)" org-insert-heading-after-current)
      ("mt" "make todo (before)" org-insert-todo-heading)
-     ("mT" "make todo (after)" org-menu-insert-todo-heading-after-current)
+     ("mT" "make todo (after)" org-cockpit-insert-todo-heading-after-current)
      ("mc" "clone with time shift" org-clone-subtree-with-time-shift)
      ("dh" "delete heading" org-cut-subtree :transient t)
      ("dy" "delete property" org-delete-property :transient t)
-     ("a" "attachments" org-menu-attachments)
+     ("a" "attachments" org-cockpit-attachments)
      ("C-w" "cut tree" org-cut-special :transient t)
      ("C-y" "yank tree" org-paste-special :transient t)]
 
     ;; Items for tables
     ["Navigate"
-     :if org-menu-show-table-options-p
+     :if org-cockpit-show-table-options-p
      :pad-keys t
      ("p" "up" previous-line :transient t)
      ("n" "down" next-line :transient t)
@@ -843,20 +843,20 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]
     ["Move r/c"
-     :if org-menu-show-table-options-p
+     :if org-cockpit-show-table-options-p
      ("P" "up" org-table-move-row-up :transient t)
      ("N" "down" org-table-move-row-down :transient t)
      ("B" "left" org-table-move-column-left :transient t)
      ("F" "right" org-table-move-column-right :transient t)]
     ["Field"
-     :if org-menu-show-table-options-p
+     :if org-cockpit-show-table-options-p
      :pad-keys t
      ("'" "edit" org-table-edit-field)
      ("SPC" "blank" org-table-blank-field :transient t)
      ("RET" "from above" org-table-copy-down :transient t)
-     ("t" "text formatting" org-menu-text-in-element)]
+     ("t" "text formatting" org-cockpit-text-in-element)]
     ["Formulas"
-     :if org-menu-show-table-options-p
+     :if org-cockpit-show-table-options-p
      ("E" "edit all" org-table-edit-formulas :transient t)
      ("=" "field" (lambda () (interactive) (org-table-eval-formula '(4))) :transient t)
      ("+" "in place" (lambda () (interactive) (org-table-eval-formula '(16))))
@@ -864,11 +864,11 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("h" "coordinates" org-table-toggle-coordinate-overlays :transient t)
      ("D" "debug" org-table-toggle-formula-debugger :transient t)]
     ["Table"
-     :if org-menu-show-table-options-p
+     :if org-cockpit-show-table-options-p
      :pad-keys t
      ("dr" "delete row" org-shiftmetaup :transient t)
      ("dc" "delete column" org-shiftmetaleft :transient t)
-     ("m" "make" org-menu-insert-table)
+     ("m" "make" org-cockpit-insert-table)
      ,@(when (fboundp (function org-table-toggle-column-width))
          ;; This will emit a warning during byte compilation. We can ignore it
          (list '("S" "shrink column" org-table-toggle-column-width :transient t)))
@@ -879,7 +879,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
 
     ;; Items for lists
     ["Navigate"
-     :if org-menu-show-list-options-p
+     :if org-cockpit-show-list-options-p
      :pad-keys t
      ("p" "prev" previous-line :transient t)
      ("n" "next" next-line :transient t)
@@ -890,7 +890,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]
     ["Move list"
-     :if org-menu-show-list-options-p
+     :if org-cockpit-show-list-options-p
      ("P" "up" org-metaup :transient t)
      ("N" "down" org-metadown :transient t)
      ("B" "left" org-shiftmetaleft :transient t)
@@ -898,46 +898,46 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("b" "left (line)" org-metaleft :transient t)
      ("f" "right (line)" org-metaright :transient t)]
     ["List"
-     :if org-menu-show-list-options-p
+     :if org-cockpit-show-list-options-p
      ("R" "repair" org-list-repair)
      ("*" "turn into tree" org-list-make-subtree)
      ("S" "sort" org-sort-list :transient t)
-     ("t" "text formatting" org-menu-text-in-element)]
+     ("t" "text formatting" org-cockpit-text-in-element)]
     ["Toggle"
-     :if org-menu-show-list-options-p
+     :if org-cockpit-show-list-options-p
      ("-" "list item" org-toggle-item :if-not org-at-table-p :transient t)
      ("+" "list style" org-cycle-list-bullet :if-not org-at-table-p :transient t)
      ("d" "done" org-toggle-checkbox :transient t)
      ("h" "half-done"
       (lambda () (interactive) (org-toggle-checkbox '(16)))
       :transient t)
-     ("m" "checkbox" org-menu-toggle-has-checkbox :transient t)]
+     ("m" "checkbox" org-cockpit-toggle-has-checkbox :transient t)]
 
     ;; Items for text
-    ,@(org-menu-text-format-items t)
+    ,@(org-cockpit-text-format-items t)
     ["Line"
-     :if org-menu-show-text-options-p
+     :if org-cockpit-show-text-options-p
      :pad-keys t
      (":" "fixed width" org-toggle-fixed-width :transient t)
-     (";" "comment" org-menu-comment-line :transient t)
+     (";" "comment" org-cockpit-comment-line :transient t)
      ("--" "list" org-toggle-item :transient t)
      ("-*" "heading" org-ctrl-c-star :transient t)]
 
     ;; Items for source blocks
-    ,@(org-menu-eval-src-items)
+    ,@(org-cockpit-eval-src-items)
 
     ["Link"
-     :if org-menu-show-link-options-p
+     :if org-cockpit-show-link-options-p
      ("e" "edit" org-insert-link :transient t)]
 
     ["Timestamp"
-     :if org-menu-show-timestamp-options-p
+     :if org-cockpit-show-timestamp-options-p
      ("." "type" org-toggle-timestamp-type :transient t)
      ("e" "edit" org-time-stamp :transient t)
-     ("R" "repair" org-menu-fix-timestamp :transient t)]
+     ("R" "repair" org-cockpit-fix-timestamp :transient t)]
 
     ["Footnote"
-     :if org-menu-show-footnote-options-p
+     :if org-cockpit-show-footnote-options-p
      ("ed" "delete" (lambda () (interactive) (org-footnote-delete)))
      ("es" "sort" (lambda () (interactive) (org-footnote-sort)))
      ("er" "renumber" (lambda () (interactive) (org-footnote-renumber-fn:N)))
@@ -948,7 +948,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
 
     ;; Items for column view
     ["Navigate"
-     :if org-menu-show-columns-view-options-p
+     :if org-cockpit-show-columns-view-options-p
      :pad-keys t
      ("p" "prev" org-columns-move-up :transient t)
      ("n" "next" org-columns-move-down :transient t)
@@ -957,7 +957,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("M-w" "store link" org-store-link :transient t :if-not region-active-p)
      ("C-_" "undo" undo :transient t)]
     ["Value"
-     :if org-menu-show-columns-view-options-p
+     :if org-cockpit-show-columns-view-options-p
      :pad-keys t
      ("e" "edit" org-columns-edit-value :transient t)
      ("V" "show" org-columns-show-value :transient t)
@@ -965,7 +965,7 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("M-p" "previous" org-columns-previous-allowed-value :transient t)
      ("a" "edit allowed" org-columns-edit-allowed :transient t)]
     ["Column"
-     :if org-menu-show-columns-view-options-p
+     :if org-cockpit-show-columns-view-options-p
      :pad-keys t
      ("E" "edit column" org-columns-edit-attributes :transient t)
      ("{" "narrow" org-columns-narrow :transient t)
@@ -976,21 +976,21 @@ Will add an ':if org-menu-show-text-options-p' criteria if
      ("M-S-<left>" "delete" org-columns-delete :transient t)]
 
     ["Tasks"
-     ("v" "visibility" org-menu-visibility :if-not org-menu-show-columns-view-options-p)
-     ("v" "visibility" org-menu-visibility-columns :if org-menu-show-columns-view-options-p)
-     ("x" "evaluation" org-menu-eval)
-     ("i" "insert" org-menu-insert)
-     ("g" "go to" org-menu-goto)
-     ("s" "search" org-menu-search-and-filter)
-     ("o" "options" org-menu-options)
-     ("C" "clock (active)" org-menu-clock :if org-clock-is-active)
-     ("C" "clock" org-menu-clock :if-not org-clock-is-active)
+     ("v" "visibility" org-cockpit-visibility :if-not org-cockpit-show-columns-view-options-p)
+     ("v" "visibility" org-cockpit-visibility-columns :if org-cockpit-show-columns-view-options-p)
+     ("x" "evaluation" org-cockpit-eval)
+     ("i" "insert" org-cockpit-insert)
+     ("g" "go to" org-cockpit-goto)
+     ("s" "search" org-cockpit-search-and-filter)
+     ("o" "options" org-cockpit-options)
+     ("C" "clock (active)" org-cockpit-clock :if org-clock-is-active)
+     ("C" "clock" org-cockpit-clock :if-not org-clock-is-active)
      ,@(when (fboundp #'org-capture-finalize)
          (list '("C-c C-c" "confirm capture" org-capture-finalize :if-non-nil org-capture-mode)))
      ,@(when (fboundp #'org-capture-kill)
          (list '("C-c C-k" "abort capture" org-capture-kill :if-non-nil org-capture-mode)))
      ""
-     ("q" "quit" transient-quit-all :if-non-nil org-menu-use-q-for-quit)]])
+     ("q" "quit" transient-quit-all :if-non-nil org-cockpit-use-q-for-quit)]])
 
-(provide 'org-menu)
-;;; org-menu.el ends here
+(provide 'org-cockpit)
+;;; org-cockpit.el ends here

@@ -1,4 +1,4 @@
-#+TITLE: Org-menu
+#+TITLE: Org-cockpit
 
 #+STARTUP: indent
 
@@ -18,8 +18,8 @@ Add this to your Emacs init file:
 
 #+begin_src emacs-lisp
 (with-eval-after-load 'org
-  (require 'org-menu)
-  (define-key org-mode-map (kbd "C-c m") 'org-menu))
+  (require 'org-cockpit)
+  (define-key org-mode-map (kbd "C-c m") 'org-cockpit))
 #+end_src
 
 * Releases

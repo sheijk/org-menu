@@ -1,7 +1,7 @@
-#+TITLE: Manual testing steps for org-menu
+#+TITLE: Manual testing steps for org-cockpit
 #+STARTUP: showall
 
-These are manual tests to be done for each org-menu steps.
+These are manual tests to be done for each org-cockpit steps.
 
 * Headings
 
@@ -90,7 +90,7 @@ These are manual tests to be done for each org-menu steps.
 ** Creating
 
 - Mark one of those blocks
-- org-menu insert/table/table
+- org-cockpit insert/table/table
 - the result should look like table-create-result
 
 a b c d e f
@@ -112,7 +112,7 @@ one,two,three,four,five,six
 
 ** Import
 
-- org-menu insert/table/import
+- org-cockpit insert/table/import
 - should result in a table like table-create-result
 
 ** Copy/past rectangle
@@ -157,7 +157,7 @@ one,two,three,four,five,six
 
 * Formatting
 ** Can be applied to words
-   Check that the word bar can be marked, and then made bold from the org-menu
+   Check that the word bar can be marked, and then made bold from the org-cockpit
    (C-c m, f/b/SPC until marked, * to make bold)
 
    foo bar buzz
@@ -197,7 +197,7 @@ foo *bar*
 
 ** Can be removed
 
-   Marking either "*bar*" or "bar" in this text, then open org-menu, press *
+   Marking either "*bar*" or "bar" in this text, then open org-cockpit, press *
 
    foo *bar* buzz
 
@@ -225,7 +225,7 @@ foo *bar*
 #+END_SRC
 
 [[https://magit.vc/manual/transient.html#Comparison-With-Prefix-Keys-and-Prefix-Arguments][Transient doc]]
-[[file:~/Development/org-menu/org-menu.el][Source!]]
+[[file:~/Development/org-cockpit/org-cockpit.el][Source!]]
 [[Tables][Internal link]]
 
 * Inserting

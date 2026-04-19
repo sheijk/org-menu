@@ -1,4 +1,4 @@
-;;; org-menu-tests.el --- Tests for org-menu
+;;; org-cockpit-tests.el --- Tests for org-cockpit
 ;;
 ;; Copyright 2021 Jan Rehders
 ;;
@@ -22,12 +22,12 @@
 ;;
 ;;; Commentary:
 ;;
-;; Tests for org-menu. Load this file, run `(ert)' and search for org-menu
+;; Tests for org-cockpit. Load this file, run `(ert)' and search for org-cockpit
 
-(require 'org-menu)
+(require 'org-cockpit)
 (require 'ert)
 
-(defun org-menu-test-with-fn (left-text right-text function)
+(defun org-cockpit-test-with-fn (left-text right-text function)
   (with-temp-buffer
     (org-mode)
     (insert left-text)
@@ -36,26 +36,26 @@
       (goto-char center)
       (funcall function))))
 
-(defmacro org-menu-test-with (left-text right-text &rest code)
+(defmacro org-cockpit-test-with (left-text right-text &rest code)
   (declare (indent defun))
-  `(org-menu-test-with-fn ,left-text ,right-text (lambda () ,@code)))
+  `(org-cockpit-test-with-fn ,left-text ,right-text (lambda () ,@code)))
 
-(defun org-menu-test-formatting (format-char left-text right-text)
-  (org-menu-test-with left-text right-text
-    (let ((range (org-menu-parse-formatting format-char)))
+(defun org-cockpit-test-formatting (format-char left-text right-text)
+  (org-cockpit-test-with left-text right-text
+    (let ((range (org-cockpit-parse-formatting format-char)))
       (buffer-substring (car range) (cdr range)))))
 
-(ert-deftest org-menu-test-parse-formatting ()
+(ert-deftest org-cockpit-test-parse-formatting ()
   (should (string-equal "*foobar*"
-                        (org-menu-test-formatting ?* "*foo" "bar*")))
+                        (org-cockpit-test-formatting ?* "*foo" "bar*")))
   (should (string-equal "*/foobar/*"
-                        (org-menu-test-formatting ?* "*/foo" "bar/*")))
+                        (org-cockpit-test-formatting ?* "*/foo" "bar/*")))
   (should (string-equal "*/foobar/*"
-                        (org-menu-test-formatting ?* "=*/foo" "bar/*=")))
+                        (org-cockpit-test-formatting ?* "=*/foo" "bar/*=")))
   (should (string-equal "/foobar/"
-                        (org-menu-test-formatting ?/ "=*/foo" "bar/*=")))
-  (should (null (org-menu-test-with "foo" "bar"
-                  (org-menu-parse-formatting ?=)))))
+                        (org-cockpit-test-formatting ?/ "=*/foo" "bar/*=")))
+  (should (null (org-cockpit-test-with "foo" "bar"
+                  (org-cockpit-parse-formatting ?=)))))
 
-(provide 'org-menu-test)
-;;; org-menu-tests.el ends here
+(provide 'org-cockpit-test)
+;;; org-cockpit-tests.el ends here
