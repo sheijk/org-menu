@@ -3,8 +3,8 @@
 ;; Copyright 2021  Jan Rehders
 ;;
 ;; Author: Jan Rehders <nospam@sheijk.net>
-;; Version: 0.1alpha
-;; Package-Requires: ((emacs "26.1") (transient "0.1"))
+;; Version: 0.5
+;; Package-Requires: ((emacs "26.1") (transient "0.1") (compat "28.1"))
 ;; URL: https://github.com/sheijk/org-cockpit
 ;;
 ;; This file is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@
 (require 'org-capture)
 (require 'org-timer)
 (require 'cl-lib)
+(require 'compat)
 
 (defgroup org-cockpit nil
   "Options for `org-cockpit'."
@@ -779,7 +780,7 @@ Will add an ':if org-cockpit-show-text-options-p' criteria if
   (org-insert-todo-heading '(16)))
 
 (defun org-cockpit-select-todo-state ()
-  "Select todo state with completion"
+  "Select todo state with completion."
   (interactive)
   (org-todo
    (completing-read "Todo state: " (flatten-tree org-todo-sets))))
